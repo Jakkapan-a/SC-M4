@@ -128,20 +128,20 @@
             // masterListToolStripMenuItem
             // 
             this.masterListToolStripMenuItem.Name = "masterListToolStripMenuItem";
-            this.masterListToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.masterListToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.masterListToolStripMenuItem.Text = "Master List";
             // 
             // selectXYCAM1ToolStripMenuItem
             // 
             this.selectXYCAM1ToolStripMenuItem.Name = "selectXYCAM1ToolStripMenuItem";
-            this.selectXYCAM1ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.selectXYCAM1ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.selectXYCAM1ToolStripMenuItem.Text = "Select X-Y CAM 1";
             this.selectXYCAM1ToolStripMenuItem.Click += new System.EventHandler(this.selectXYCAM1ToolStripMenuItem_Click);
             // 
             // selectXYCAM2ToolStripMenuItem
             // 
             this.selectXYCAM2ToolStripMenuItem.Name = "selectXYCAM2ToolStripMenuItem";
-            this.selectXYCAM2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.selectXYCAM2ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.selectXYCAM2ToolStripMenuItem.Text = "Select X-Y CAM 2";
             this.selectXYCAM2ToolStripMenuItem.Click += new System.EventHandler(this.selectXYCAM2ToolStripMenuItem_Click);
             // 
@@ -618,6 +618,7 @@
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Main_FormClosed);
             this.Load += new System.EventHandler(this.Main_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

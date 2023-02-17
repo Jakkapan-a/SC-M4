@@ -1,10 +1,14 @@
 ﻿using DirectShowLib;
 using LogWriter;
 using SC_M4.Forms;
+using SC_M4.Modules;
+using SC_M4.Ocr;
+using SC_M4.OCR;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.IO.Ports;
@@ -15,6 +19,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using Color = System.Drawing.Color;
+using Windows.Media.Ocr;
 namespace SC_M4
 {
     public partial class Main : Form
@@ -34,6 +40,17 @@ namespace SC_M4
 
         public Rectangle rect_1;
         public Rectangle rect_2;
+
+        protected string curLangCode = "eng";
+        protected IList<Image> imageList;
+        protected string inputfilename;
+        protected int imageIndex;
+        protected float scaleX = 1f;
+        protected float scaleY = 1f;
+        protected string selectedPSM = "Auto"; // 3 - Fully automatic page segmentation, but no OSD (default)
+        protected string selectedOEM = "3"; // Default
+
+        private bool isStaetReset;
         private void Main_Load(object sender, EventArgs e)
         {
             // Create Folder
@@ -244,6 +261,8 @@ namespace SC_M4
         private string serialportName = string.Empty;
         private string serialportBaud = string.Empty;
         private Thread thread;
+
+        #region Start
         private void btStartStop_Click(object sender, EventArgs e)
         {
             this.isStart = !this.isStart;
@@ -303,8 +322,8 @@ namespace SC_M4
                         thread = null;
                     }
 
-                    //thread = new Thread(new ThreadStart(ProcessTesting));
-                    //thread.Start();
+                    thread = new Thread(new ThreadStart(ProcessTesting));
+                    thread.Start();
                     this.richTextBox1.Text = string.Empty;
                     this.richTextBox2.Text = string.Empty;
 
@@ -349,6 +368,162 @@ namespace SC_M4
             }
         }
 
+        private void ProcessTesting()
+        {
+            bool detection = false;
+            string result_1 = string.Empty;
+            string result_2 = string.Empty;
+            isStaetReset = true;
+            while (true)
+            {
+                if (capture_1._isRunning && capture_2._isRunning && bitmapCamaera_01 != null && bitmapCamaera_02 != null && isStaetReset)
+                {
+
+                    detection = !detection;
+                    if (detection)
+                    {
+                        Invoke(new Action(() =>
+                        {
+                            lbTitle.Text = "Wiat for detect..";
+                        }));
+                    }
+                    else
+                    {
+                        Invoke(new Action(() =>
+                        {
+                            lbTitle.Text = "Detecting...";
+                        }));
+                    }
+                    // Image 02
+                    imageList = new List<Image>();
+                    imageList.Add((Image)scrollablePictureBoxCamera01.Image.Clone());
+
+                    result_1 = performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty);
+                    
+                    var a = result_1.IndexOf("-731");
+                    result_1 = result_1.Substring(a + 1);
+                    a = result_1.IndexOf("|731");
+                    result_1 = result_1.Substring(a + 1);
+                    result_1 = result_1.Replace("T31TM", "731TM");
+                    result_1 = result_1.Replace("731THC", "731TMC");
+
+                    richTextBox1.Invoke(new Action(() =>
+                    {
+                        this.richTextBox1.Text = result_1.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
+                    }));
+                    // Image 02
+
+                    // OCR 2
+                    result_2 = string.Empty;
+                    imageList = new List<Image>();
+                    imageList.Add((Image)scrollablePictureBoxCamera02.Image.Clone());
+                    result_2 = performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty);
+                    richTextBox2.Invoke(new Action(() =>
+                    {
+                        this.richTextBox2.Text = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
+                    }));
+
+                   int result =  Compare_Master(result_1, result_2);
+                    if(result == 1 || result == 2)
+                    {
+                        //isStaetReset = false;   
+                    }
+                }
+                Thread.Sleep(5000);
+            }
+        }
+        
+        History history;
+        private bool is_Blink_NG = false;
+        private int Compare_Master(string txt_sw, string txt_lb)
+        {
+            // 0 = not fount, 1 = OK, 2 = NG
+            int result = 0;
+
+            LogWriter.SaveLog("TXT Read :" + txt_sw + ", " + txt_lb);
+            //lbTitle.Text;
+            history = new History();
+            //txt_lb = txt_lb.Replace("O", "0");
+            var lb = txt_lb.IndexOf("731TMC");
+            // If not found, IndexOf returns -1.
+            if (lb == -1)
+            {
+                // Return the original string.
+                result = 0;
+                Invoke(new Action(() =>
+                {
+                    this.richTextBox1.Text = string.Empty;
+                    this.richTextBox2.Text = string.Empty;
+                }));
+                return result;
+            }
+
+            int swa = txt_sw.IndexOf("731TMC");
+            // If not found, IndexOf returns -1.
+            if (swa == -1)
+            {
+                result = 0;
+                Invoke(new Action(() =>
+                {
+                    lbTitle.Text = "Not found 731TMC";
+                    this.richTextBox1.Text = string.Empty;
+                    this.richTextBox2.Text = string.Empty;
+                }));
+                return result;
+            }
+            var txt = txt_lb.Substring(0, lb);
+            txt = txt.Replace("O", "0");
+            var master_lb = MasterAll.GetMasterALLByLBName(txt);
+
+            bool check = false;
+            if (master_lb.Count > 0)
+            {
+                foreach (var item in master_lb)
+                {
+                    history.master_sw = item.nameSW;
+                    history.master_lb = item.nameModel;
+                    if (item.nameSW == txt_sw)
+                    {
+                        check = true;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                history.master_sw = "null";
+                history.master_lb = "null";
+            }
+
+            if (!check)
+            {
+                //lbTitle.Text = "NG";
+                //lbTitle.ForeColor = Color.White;
+                //lbTitle.BackColor = Color.Red;
+                is_Blink_NG = true;
+                //serialCommand("NG");
+                result = 1;
+            }
+            else
+            {
+                result = 2;
+                //lbTitle.Text = "OK";
+                //lbTitle.ForeColor = Color.White;
+                //lbTitle.BackColor = Color.Green;
+                //serialCommand("OK");
+            }
+            history.name = txtEmployee.Text.Trim();
+            history.name_lb = txt_lb;
+            history.name_sw = txt_sw;
+            history.result = check ? "OK" : "NG";
+            history.Save();
+            LogWriter.SaveLog("Result :" + history.result);
+            //isStaetReset = false;
+
+            return result;
+        }
+        #endregion
+
         #region SELECT X Y
 
         private Select_X_Y select_XY = null;
@@ -392,11 +567,69 @@ namespace SC_M4
 
         private void btConnect_Click(object sender, EventArgs e)
         {
-
+            btStartStop.PerformClick();
         }
+
+        private void Main_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (capture_1 != null)
+            {
+                if(capture_1.IsOpened)
+                    capture_1.Stop();
+                
+                capture_1.Dispose();
+            }
+
+            if (capture_2 != null)
+            {
+                if (capture_2.IsOpened)
+                    capture_2.Stop();
+
+                capture_2.Dispose();
+            }
+
+            if (thread != null)
+            {
+                if (thread.IsAlive)
+                    thread.Abort();
+                thread.DisableComObjectEagerCleanup();
+                thread = null;
+            }
+        }
+
+        private string performOCR(IList<Image> imageList, string inputfilename, int index, Rectangle rect)
+        {
+            try
+            {
+                if (curLangCode.Trim().Length == 0)
+                {
+                    MessageBox.Show(this, "curLangCode = 0");
+                    return "";
+                }
+                OCRImageEntity entity = new OCRImageEntity(imageList, inputfilename, index, rect, curLangCode);
+                entity.ScreenshotMode = false;
+                entity.Language = "eng";
+                OCR<Image> ocrEngine = new OCRImages();
+                ocrEngine.PageSegMode = selectedPSM;
+                ocrEngine.OcrEngineMode = selectedOEM;
+                ocrEngine.Language = entity.Language;
+
+                IList<Image> images = entity.ClonedImages;
+
+                string result = ocrEngine.RecognizeText(((List<Image>)images).GetRange(0, 1), entity.Inputfilename);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show(ex.Message, "Exclamation A00", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                LogWriter.SaveLog("A00 : " + ex.Message);
+            }
+            return "";
+        }
+        
     }
 
-
+    #region TCapture
     public class TCapture
     {
         public class Capture
@@ -616,4 +849,33 @@ namespace SC_M4
 
         }
     }
+    #endregion
+
+    /*
+    public static class SettingHandler
+    {
+        public static Dictionary<string, string> DefaultSetting = new Dictionary<string, string>(){
+            {"Language", ""},
+            {"WrapText", "newLine"},
+            {"IsTooltipShowed", "false"},
+            {"RecentAccessFolderToken", ""}
+        };
+
+        public static ApplicationDataContainer GetSetting()
+        {
+            var localSettings = ApplicationData.Current.LocalSettings;
+            //if no setting, set default value
+            foreach (var item in DefaultSetting)
+            {
+                if (localSettings.Values[item.Key] == null)
+                {
+                    localSettings.Values[item.Key] = item.Value;
+                }
+            }
+
+            return localSettings;
+        }
+    }
+    */
+    
 }
