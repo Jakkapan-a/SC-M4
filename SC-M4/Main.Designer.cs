@@ -32,6 +32,8 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.masterListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectXYCAM1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectXYCAM2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelHeader = new System.Windows.Forms.Panel();
             this.btStartStop = new System.Windows.Forms.Button();
             this.lbTitle = new System.Windows.Forms.Label();
@@ -68,8 +70,8 @@
             this.comboBoxBaud = new System.Windows.Forms.ComboBox();
             this.dataGridViewHistory = new System.Windows.Forms.DataGridView();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusRect1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusRect2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.panelHeader.SuspendLayout();
@@ -116,7 +118,9 @@
             // settingToolStripMenuItem
             // 
             this.settingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.masterListToolStripMenuItem});
+            this.masterListToolStripMenuItem,
+            this.selectXYCAM1ToolStripMenuItem,
+            this.selectXYCAM2ToolStripMenuItem});
             this.settingToolStripMenuItem.Name = "settingToolStripMenuItem";
             this.settingToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
             this.settingToolStripMenuItem.Text = "Setting";
@@ -126,6 +130,20 @@
             this.masterListToolStripMenuItem.Name = "masterListToolStripMenuItem";
             this.masterListToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.masterListToolStripMenuItem.Text = "Master List";
+            // 
+            // selectXYCAM1ToolStripMenuItem
+            // 
+            this.selectXYCAM1ToolStripMenuItem.Name = "selectXYCAM1ToolStripMenuItem";
+            this.selectXYCAM1ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.selectXYCAM1ToolStripMenuItem.Text = "Select X-Y CAM 1";
+            this.selectXYCAM1ToolStripMenuItem.Click += new System.EventHandler(this.selectXYCAM1ToolStripMenuItem_Click);
+            // 
+            // selectXYCAM2ToolStripMenuItem
+            // 
+            this.selectXYCAM2ToolStripMenuItem.Name = "selectXYCAM2ToolStripMenuItem";
+            this.selectXYCAM2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.selectXYCAM2ToolStripMenuItem.Text = "Select X-Y CAM 2";
+            this.selectXYCAM2ToolStripMenuItem.Click += new System.EventHandler(this.selectXYCAM2ToolStripMenuItem_Click);
             // 
             // panelHeader
             // 
@@ -525,6 +543,7 @@
             this.btConnect.TabIndex = 11;
             this.btConnect.Text = "Connect";
             this.btConnect.UseVisualStyleBackColor = true;
+            this.btConnect.Click += new System.EventHandler(this.btConnect_Click);
             // 
             // cbDriveCam02
             // 
@@ -559,8 +578,8 @@
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1,
-            this.toolStripStatusLabel2,
+            this.toolStripStatusRect1,
+            this.toolStripStatusRect2,
             this.toolStripStatusLabel3});
             this.statusStrip1.Location = new System.Drawing.Point(0, 629);
             this.statusStrip1.Name = "statusStrip1";
@@ -568,17 +587,17 @@
             this.statusStrip1.TabIndex = 5;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // toolStripStatusLabel1
+            // toolStripStatusRect1
             // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
-            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            this.toolStripStatusRect1.Name = "toolStripStatusRect1";
+            this.toolStripStatusRect1.Size = new System.Drawing.Size(118, 17);
+            this.toolStripStatusRect1.Text = "toolStripStatusLabel1";
             // 
-            // toolStripStatusLabel2
+            // toolStripStatusRect2
             // 
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(118, 17);
-            this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
+            this.toolStripStatusRect2.Name = "toolStripStatusRect2";
+            this.toolStripStatusRect2.Size = new System.Drawing.Size(118, 17);
+            this.toolStripStatusRect2.Text = "toolStripStatusLabel2";
             // 
             // toolStripStatusLabel3
             // 
@@ -672,11 +691,13 @@
         private TConstrols.ScrollablePictureBox pictureBoxCamera01;
         private TConstrols.ScrollablePictureBox pictureBoxCamera02;
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusRect1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusRect2;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
         private TConstrols.ScrollablePictureBox scrollablePictureBoxCamera01;
         private TConstrols.ScrollablePictureBox scrollablePictureBoxCamera02;
+        private System.Windows.Forms.ToolStripMenuItem selectXYCAM1ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectXYCAM2ToolStripMenuItem;
     }
 }
 

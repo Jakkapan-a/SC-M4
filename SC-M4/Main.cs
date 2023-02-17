@@ -1,5 +1,6 @@
 ﻿using DirectShowLib;
 using LogWriter;
+using SC_M4.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -57,6 +58,9 @@ namespace SC_M4
             LogWriter.path = Properties.Resources.path_log;
             LogWriter.SaveLog("Start Program");
             btRefresh.PerformClick();
+
+            loadRect(0);
+            loadRect(1);
         }
 
         private void btRefresh_Click(object sender, EventArgs e)
@@ -89,10 +93,21 @@ namespace SC_M4
 
         #region Video Capture
 
-   
         private void Capture_2_OnVideoStop()
         {
             Console.WriteLine("Video 2 Stop");
+            // Clear Image
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() =>
+                {
+                    pictureBoxCamera02.Image = null;
+                }));
+            }
+            else
+            {
+                pictureBoxCamera02.Image = null;
+            }
         }
 
         private void Capture_2_OnVideoStarted()
@@ -133,6 +148,17 @@ namespace SC_M4
         private void Capture_1_OnVideoStop()
         {
             Console.WriteLine("Video 1 Stop");
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() =>
+                {
+                    pictureBoxCamera01.Image = null;
+                }));
+            }
+            else
+            {
+                pictureBoxCamera01.Image = null;
+            }
         }
 
         private void Capture_1_OnVideoStarted()
@@ -141,6 +167,7 @@ namespace SC_M4
         }
         
         private Bitmap bmp1;
+        
         private void Capture_1_OnFrameHeadler(Bitmap bitmap)
         {
             if (pictureBoxCamera01.InvokeRequired)
@@ -172,7 +199,7 @@ namespace SC_M4
         
         public void saveRect(Rectangle rect, int _type)
         {
-            if (_type == 1)
+            if (_type == 0)
             {
                 rect_1 = rect;
                 Properties.Settings.Default.rect1_x = rect.X;
@@ -183,7 +210,7 @@ namespace SC_M4
 
                 Properties.Settings.Default.Save();
             }
-            else if (_type == 2)
+            else if (_type == 1)
             {
                 rect_2 = rect;
                 Properties.Settings.Default.rect2_x = rect.X;
@@ -199,13 +226,15 @@ namespace SC_M4
 
         public void loadRect(int _type)
         {
-            if (_type == 1 && Properties.Settings.Default.rect1_x != 0)
+            if (_type == 0 && Properties.Settings.Default.rect1_x != 0)
             {
                 rect_1 = new Rectangle(Properties.Settings.Default.rect1_x, Properties.Settings.Default.rect1_y, Properties.Settings.Default.rect1_w, Properties.Settings.Default.rect1_h);
+                toolStripStatusRect1.Text = "Rect 1 : X=" + rect_1.X.ToString() + ", Y=" + rect_1.Y.ToString() + ", H=" + rect_1.Height.ToString()+ ", W=" + rect_1.Width.ToString();
             }
-            else if (_type == 2 && Properties.Settings.Default.rect2_x != 0)
+            else if (_type == 1 && Properties.Settings.Default.rect2_x != 0)
             {
                 rect_2 = new Rectangle(Properties.Settings.Default.rect2_x, Properties.Settings.Default.rect2_y, Properties.Settings.Default.rect2_w, Properties.Settings.Default.rect2_h);
+                toolStripStatusRect2.Text = "Rect 2 : X=" + rect_2.X.ToString() + ", Y=" + rect_2.Y.ToString() + ", H=" + rect_2.Height.ToString() + ", W=" + rect_2.Width.ToString();
             }
         }
 
@@ -227,15 +256,15 @@ namespace SC_M4
                     if (txtEmployee.Text == string.Empty)
                     {
                         lbTitle.Text = "Please input employee ID"; // STATUS_PROCES_10
-                        MessageBox.Show("Please input employee ID", "Exclamation", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        return;
+                        throw new Exception("Please input employee ID");
+
                     }
 
                     if (cbDriveCam01.SelectedIndex == cbDriveCam02.SelectedIndex)
                     {
-                        lbTitle.Text = "Please select camera drive!"; // 
-                        MessageBox.Show("Please select camera drive!", "Exclamation", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        return;
+                        lbTitle.Text = "Please select camera drive!"; 
+                        throw new Exception("Please select camera drive!");
+
                     }
 
                     if (this.cbDriveCam01.SelectedIndex == -1 || this.cbDriveCam02.SelectedIndex == -1)
@@ -245,8 +274,9 @@ namespace SC_M4
                     if (txtEmployee.Text == string.Empty)
                     {
                         lbTitle.Text = "Please input employee ID"; // 
-                        MessageBox.Show("Please input employee ID", "Exclamation", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        return;
+                        this.ActiveControl = txtEmployee;
+                        this.txtEmployee.Focus();
+                        throw new Exception("Please input employee ID");
                     }
 
                     this.serialportName = comboBoxCOMPort.Text;
@@ -257,7 +287,7 @@ namespace SC_M4
                         capture_1.Stop();
                     if (capture_2.IsOpened)
                         capture_2.Stop();
-                    //openCamera();
+
                     driveindex_01 = cbDriveCam01.SelectedIndex;
                     driveindex_02 = cbDriveCam02.SelectedIndex;
                     Task.Factory.StartNew(() => capture_1.Start(driveindex_01));
@@ -317,6 +347,52 @@ namespace SC_M4
                 this.isStart = false;
                 btStartStop.Text = "START";
             }
+        }
+
+        #region SELECT X Y
+
+        private Select_X_Y select_XY = null;
+        private void selectXYCAM1ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (pictureBoxCamera01.Image == null)
+            {
+                MessageBox.Show("Please open camera 1", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (select_XY != null)
+            {
+                select_XY.Close();
+                select_XY = null;
+            }
+
+            select_XY = new Select_X_Y(this, 0);
+            select_XY.Show();
+        }
+
+        private void selectXYCAM2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (pictureBoxCamera02.Image == null)
+            {
+                MessageBox.Show("Please select camera 2", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (select_XY != null)
+            {
+                select_XY.Close();
+                select_XY = null;
+            }
+
+            select_XY = new Select_X_Y(this, 1);
+            select_XY.Show();
+        }
+
+        #endregion
+
+        private void btConnect_Click(object sender, EventArgs e)
+        {
+
         }
     }
 
