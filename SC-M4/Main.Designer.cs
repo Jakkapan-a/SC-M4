@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,7 +72,7 @@
             this.cbDriveCam02 = new System.Windows.Forms.ComboBox();
             this.comboBoxBaud = new System.Windows.Forms.ComboBox();
             this.dataGridViewHistory = new System.Windows.Forms.DataGridView();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.statusStripHome = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusRect1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusRect2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusTime = new System.Windows.Forms.ToolStripStatusLabel();
@@ -100,7 +101,7 @@
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFocus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewHistory)).BeginInit();
-            this.statusStrip1.SuspendLayout();
+            this.statusStripHome.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -136,6 +137,7 @@
             this.masterListToolStripMenuItem.Name = "masterListToolStripMenuItem";
             this.masterListToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.masterListToolStripMenuItem.Text = "Master List";
+            this.masterListToolStripMenuItem.Click += new System.EventHandler(this.masterListToolStripMenuItem_Click);
             // 
             // selectXYCAM1ToolStripMenuItem
             // 
@@ -449,6 +451,11 @@
             // numericUpDownFocus
             // 
             this.numericUpDownFocus.Location = new System.Drawing.Point(94, 230);
+            this.numericUpDownFocus.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
             this.numericUpDownFocus.Name = "numericUpDownFocus";
             this.numericUpDownFocus.Size = new System.Drawing.Size(125, 20);
             this.numericUpDownFocus.TabIndex = 16;
@@ -589,19 +596,19 @@
             this.dataGridViewHistory.Size = new System.Drawing.Size(801, 127);
             this.dataGridViewHistory.TabIndex = 0;
             // 
-            // statusStrip1
+            // statusStripHome
             // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusStripHome.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusRect1,
             this.toolStripStatusRect2,
             this.toolStripStatusTime,
             this.toolStripStatusConnectSerialPort,
             this.toolStripStatusSerialData});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 629);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(833, 22);
-            this.statusStrip1.TabIndex = 5;
-            this.statusStrip1.Text = "statusStrip1";
+            this.statusStripHome.Location = new System.Drawing.Point(0, 629);
+            this.statusStripHome.Name = "statusStripHome";
+            this.statusStripHome.Size = new System.Drawing.Size(833, 22);
+            this.statusStripHome.TabIndex = 5;
+            this.statusStripHome.Text = "statusStrip1";
             // 
             // toolStripStatusRect1
             // 
@@ -644,10 +651,11 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(833, 651);
-            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.statusStripHome);
             this.Controls.Add(this.splitContainerHomeMain);
             this.Controls.Add(this.panelHeader);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -679,8 +687,8 @@
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFocus)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewHistory)).EndInit();
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
+            this.statusStripHome.ResumeLayout(false);
+            this.statusStripHome.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -725,7 +733,7 @@
         private System.Windows.Forms.RichTextBox richTextBox1;
         private TConstrols.ScrollablePictureBox pictureBoxCamera01;
         private TConstrols.ScrollablePictureBox pictureBoxCamera02;
-        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.StatusStrip statusStripHome;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusRect1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusRect2;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusTime;

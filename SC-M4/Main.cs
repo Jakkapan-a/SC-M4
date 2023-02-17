@@ -62,6 +62,12 @@ namespace SC_M4
         private bool isStaetReset;
         private void Main_Load(object sender, EventArgs e)
         {
+
+            foreach (ToolStripItem item in statusStripHome.Items)
+            {
+                item.Text = "";
+            }
+
             SelectedLang = new Language("en-US");
             // Create Folder
             if (!Directory.Exists(Properties.Resources.path_temp))
@@ -88,6 +94,91 @@ namespace SC_M4
 
             loadRect(0);
             loadRect(1);
+            try
+            {
+                var s = Setting.GetSettingRemove();
+                if (s.Count > 0)
+                {
+                    foreach (var set in s)
+                    {
+                        if (File.Exists(set.path_image))
+                        {
+                            File.Delete(set.path_image);
+                            set.Delete();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogWriter.SaveLog("Error delete file : " + ex.Message);
+            }
+            timerMain.Start();
+            deletedFileTemp();
+            loadTableHistory();
+
+        }
+        private async void deletedFileTemp()
+        {
+            try
+            {
+                string _dir = Properties.Resources.path_temp;
+                string[] files = Directory.GetFiles(_dir);
+                int i = 0;
+                await Task.Delay(1);
+                foreach (string file in files)
+                {
+                    i++;
+                    FileInfo info = new FileInfo(file);
+                    if (info.LastAccessTime < DateTime.Now.AddMinutes(-30))
+                        info.Delete();
+                    if (i > 200)
+                        break;
+                }
+                i = 0;
+                files.Reverse();
+                foreach (string file in files)
+                {
+                    i++;
+                    FileInfo info = new FileInfo(file);
+                    if (info.LastAccessTime < DateTime.Now.AddMinutes(-30))
+                        info.Delete();
+                    if (i > 200)
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+        }
+
+        private void loadTableHistory()
+        {
+            var list = History.GetHistory();
+            dataGridViewHistory.DataSource = null;
+            int i = 0;
+            // Reverse the list to display the latest record first
+            var data = (from p in list
+                        select new
+                        {
+                            ID = p.id,
+                            No = ++i,
+                            Employee = p.name,
+                            MasterSW = p.master_sw,
+                            Software = p.name_sw,
+                            Master_Model = p.master_lb,
+                            Models = p.name_lb,
+                            Results = p.result,
+                            Update = p.created_at
+                        }).ToList();
+            dataGridViewHistory.DataSource = data;
+            dataGridViewHistory.Columns["ID"].Visible = false;
+            // 10% of the width of the DataGridView
+            dataGridViewHistory.Columns["No"].Width = dataGridViewHistory.Width * 10 / 100;
+            // last 20% of the width of the DataGridView
+            dataGridViewHistory.Columns["Update"].Width = dataGridViewHistory.Width * 20 / 100;
         }
 
         private void btRefresh_Click(object sender, EventArgs e)
@@ -204,6 +295,8 @@ namespace SC_M4
             }
             pictureBoxCamera01.SuspendLayout();
             pictureBoxCamera01.Image = new Bitmap(bitmap);
+            //pictureBoxCamera01.Image = new Bitmap(@"\C:\\Users\\Jakkapan\\OneDrive\\Pictures\\aaaaaaa.jpg\");
+
             bitmapCamaera_01 = (Bitmap)pictureBoxCamera01.Image.Clone();
             if (rect_1 != Rectangle.Empty && isStaetReset)
             {
@@ -284,7 +377,9 @@ namespace SC_M4
 
                     if (txtEmployee.Text == string.Empty)
                     {
-                        lbTitle.Text = "Please input employee ID"; // STATUS_PROCES_10
+                        lbTitle.Text = "Please input employee ID"; //
+                        this.ActiveControl = txtEmployee;
+                        txtEmployee.Focus();
                         throw new Exception("Please input employee ID");
 
                     }
@@ -293,7 +388,6 @@ namespace SC_M4
                     {
                         lbTitle.Text = "Please select camera drive!"; 
                         throw new Exception("Please select camera drive!");
-
                     }
 
                     if (this.cbDriveCam01.SelectedIndex == -1 || this.cbDriveCam02.SelectedIndex == -1)
@@ -351,6 +445,9 @@ namespace SC_M4
                     if (capture_2._isRunning)
                         capture_2.Stop();
 
+                    if (serialPort.IsOpen)
+                        serialPort.Close();
+
                     btStartStop.Text = "START";
                     btConnect.Text = "Connect";
                     pictureBoxCamera01.Image = null;
@@ -359,9 +456,15 @@ namespace SC_M4
                     this.richTextBox1.Text = string.Empty;
                     this.richTextBox2.Text = string.Empty;
 
+
+
                     scrollablePictureBoxCamera01.Image = null;
                     scrollablePictureBoxCamera02.Image = null;
                     lbTitle.Text = "Camera close.";
+                    lbTitle.ForeColor = Color.Black;
+                    lbTitle.BackColor = Color.Yellow;
+                    is_Blink_NG = false;
+
                     if (thread != null)
                     {
                         thread.Abort(true);
@@ -420,10 +523,10 @@ namespace SC_M4
                     result_1 = result_1.Substring(a + 1);
                     result_1 = result_1.Replace("T31TM", "731TM");
                     result_1 = result_1.Replace("731THC", "731TMC");
-
+                    result_1 = result_1.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "").Replace("\\", "");
                     richTextBox1.Invoke(new Action(() =>
                     {
-                        this.richTextBox1.Text = result_1.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
+                        this.richTextBox1.Text = result_1.Trim();
                     }));
                     // Image 02
 
@@ -436,11 +539,11 @@ namespace SC_M4
                         //result_2 = performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty);
                         var ocr = OcrProcessor.GetOcrResultFromBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(), SelectedLang);
                         result_2 = ocr.Result.Text;
-
+                        result_2 = "9U7310TM063-01731TMCasfea";
                         result_2 = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
                         result_2 = Regex.Replace(result_2, "[^a-zA-Z,0-9,(),:,-]", "");
 
-                        result_2 = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "").Replace("'", "").Replace("|", "");
+                        result_2 = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "").Replace("'", "").Replace("|", "").Replace(@"\", "");
                         result_2 = result_2.Replace(")9U", "9U");
 
                         richTextBox2.Invoke(new Action(() =>
@@ -483,11 +586,11 @@ namespace SC_M4
             {
                 // Return the original string.
                 result = 0;
-                Invoke(new Action(() =>
-                {
-                    this.richTextBox1.Text = string.Empty;
-                    this.richTextBox2.Text = string.Empty;
-                }));
+                //Invoke(new Action(() =>
+                //{
+                //    this.richTextBox1.Text = string.Empty;
+                //    this.richTextBox2.Text = string.Empty;
+                //}));
                 return result;
             }
 
@@ -496,11 +599,11 @@ namespace SC_M4
             if (swa == -1)
             {
                 result = 0;
-                Invoke(new Action(() =>
-                {
-                    this.richTextBox1.Text = string.Empty;
-                    this.richTextBox2.Text = string.Empty;
-                }));
+                //Invoke(new Action(() =>
+                //{
+                //    this.richTextBox1.Text = string.Empty;
+                //    this.richTextBox2.Text = string.Empty;
+                //}));
                 return result;
             }
             var txt = txt_lb.Substring(0, lb);
@@ -534,9 +637,11 @@ namespace SC_M4
                     lbTitle.Text = "NG";
                     lbTitle.ForeColor = Color.White;
                     lbTitle.BackColor = Color.Red;
+                    //loadTableHistory();
                 }));
                 is_Blink_NG = true;
                 serialCommand("NG");
+             
                 result = 1;
             }
             else
@@ -547,6 +652,7 @@ namespace SC_M4
                     lbTitle.Text = "OK";
                     lbTitle.ForeColor = Color.White;
                     lbTitle.BackColor = Color.Green;
+                    //loadTableHistory();
                 }));
                 result = 2;
                 serialCommand("OK");
@@ -560,6 +666,10 @@ namespace SC_M4
             LogWriter.SaveLog("SW :" + txt_lb);
             LogWriter.SaveLog("LABEL :" + txt_lb);
             isStaetReset = false;
+            Invoke(new Action(() =>
+            {
+                loadTableHistory();
+            }));
             return result;
         }
         #endregion
@@ -609,8 +719,7 @@ namespace SC_M4
 
             if (this.serialportName == string.Empty || this.serialportBaud == string.Empty)
             {
-                MessageBox.Show("Please select serial port and baud rate", "Exclamation", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
+               throw new Exception("Please select serial port and baud rate");
             }
             this.serialConnect(this.serialportName, int.Parse(this.serialportBaud));
         }
@@ -817,6 +926,18 @@ namespace SC_M4
             {
                 capture_2.AutoFocus();
             }
+        }
+        SettingModel setting;
+        private void masterListToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (setting != null)
+            {
+                setting.Close();
+                setting.Dispose();
+            }
+
+            setting = new SettingModel();
+            setting.Show();
         }
     }
 
