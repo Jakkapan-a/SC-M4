@@ -21,14 +21,23 @@ using System.Windows.Forms;
 
 using Color = System.Drawing.Color;
 using Windows.Media.Ocr;
+using Windows.Globalization;
+using Windows.Graphics.Imaging;
+using BitmapDecoder = Windows.Graphics.Imaging.BitmapDecoder;
+using System.Drawing.Imaging;
+
 namespace SC_M4
 {
     public partial class Main : Form
     {
+        private  Language SelectedLang = null;
+
+        private SerialPort serialPort;
         public Main()
         {
             InitializeComponent();
         }
+                
         public TCapture.Capture capture_1;
         public TCapture.Capture capture_2;
 
@@ -53,6 +62,7 @@ namespace SC_M4
         private bool isStaetReset;
         private void Main_Load(object sender, EventArgs e)
         {
+            SelectedLang = new Language("en-US");
             // Create Folder
             if (!Directory.Exists(Properties.Resources.path_temp))
                 Directory.CreateDirectory(Properties.Resources.path_temp);
@@ -145,7 +155,7 @@ namespace SC_M4
             pictureBoxCamera02.SuspendLayout();
             pictureBoxCamera02.Image = new Bitmap(bitmap);
             bitmapCamaera_02 = (Bitmap)pictureBoxCamera02.Image.Clone();
-            if (rect_2 != Rectangle.Empty)
+            if (rect_2 != Rectangle.Empty && isStaetReset)
             {
                 bmp2 = new Bitmap(rect_2.Width, rect_2.Height);
                 using (Graphics g = Graphics.FromImage(bmp2))
@@ -195,7 +205,7 @@ namespace SC_M4
             pictureBoxCamera01.SuspendLayout();
             pictureBoxCamera01.Image = new Bitmap(bitmap);
             bitmapCamaera_01 = (Bitmap)pictureBoxCamera01.Image.Clone();
-            if (rect_1 != Rectangle.Empty)
+            if (rect_1 != Rectangle.Empty && isStaetReset)
             {
                 bmp1 = new Bitmap(rect_1.Width, rect_1.Height);
                 using (Graphics g = Graphics.FromImage(bmp1))
@@ -300,7 +310,7 @@ namespace SC_M4
 
                     this.serialportName = comboBoxCOMPort.Text;
                     this.serialportBaud = comboBoxBaud.Text;
-                    //serialConnect();
+                    serialConnect();
 
                     if (capture_1.IsOpened)
                         capture_1.Stop();
@@ -309,6 +319,7 @@ namespace SC_M4
 
                     driveindex_01 = cbDriveCam01.SelectedIndex;
                     driveindex_02 = cbDriveCam02.SelectedIndex;
+
                     Task.Factory.StartNew(() => capture_1.Start(driveindex_01));
                     Task.Factory.StartNew(() => capture_2.Start(driveindex_02));
 
@@ -374,11 +385,14 @@ namespace SC_M4
             string result_1 = string.Empty;
             string result_2 = string.Empty;
             isStaetReset = true;
+            Stopwatch stopwatch = new Stopwatch();
             while (true)
             {
                 if (capture_1._isRunning && capture_2._isRunning && bitmapCamaera_01 != null && bitmapCamaera_02 != null && isStaetReset)
                 {
-
+                    // 
+                    stopwatch.Reset();
+                    stopwatch.Start();
                     detection = !detection;
                     if (detection)
                     {
@@ -413,27 +427,46 @@ namespace SC_M4
                     }));
                     // Image 02
 
-                    // OCR 2
-                    result_2 = string.Empty;
-                    imageList = new List<Image>();
-                    imageList.Add((Image)scrollablePictureBoxCamera02.Image.Clone());
-                    result_2 = performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty);
-                    richTextBox2.Invoke(new Action(() =>
+                    if(result_1 != string.Empty)
                     {
-                        this.richTextBox2.Text = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
-                    }));
+                        // OCR 2
+                        result_2 = string.Empty;
+                        //imageList = new List<Image>();
+                        //imageList.Add((Image)scrollablePictureBoxCamera02.Image.Clone());
+                        //result_2 = performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty);
+                        var ocr = OcrProcessor.GetOcrResultFromBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(), SelectedLang);
+                        result_2 = ocr.Result.Text;
 
-                   int result =  Compare_Master(result_1, result_2);
-                    if(result == 1 || result == 2)
-                    {
-                        //isStaetReset = false;   
+                        result_2 = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
+                        result_2 = Regex.Replace(result_2, "[^a-zA-Z,0-9,(),:,-]", "");
+
+                        result_2 = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "").Replace("'", "").Replace("|", "");
+                        result_2 = result_2.Replace(")9U", "9U");
+
+                        richTextBox2.Invoke(new Action(() =>
+                        {
+                            this.richTextBox2.Text = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
+                        }));
+                        int result = Compare_Master(result_1, result_2);
+                        if (result == 1 || result == 2)
+                        {
+                            isStaetReset = false;
+                        }
                     }
+
+                    stopwatch.Stop();
+                    Console.WriteLine("Elapsed Time is {0} ms", stopwatch.ElapsedMilliseconds);
+                    Invoke(new Action(() =>
+                    {
+                        toolStripStatusTime.Text = "Load " + stopwatch.ElapsedMilliseconds.ToString() + "ms";
+                    }));
                 }
                 Thread.Sleep(5000);
             }
         }
         
         History history;
+
         private bool is_Blink_NG = false;
         private int Compare_Master(string txt_sw, string txt_lb)
         {
@@ -444,7 +477,7 @@ namespace SC_M4
             //lbTitle.Text;
             history = new History();
             //txt_lb = txt_lb.Replace("O", "0");
-            var lb = txt_lb.IndexOf("731TMC");
+            int lb = txt_lb.IndexOf("731TMC");
             // If not found, IndexOf returns -1.
             if (lb == -1)
             {
@@ -465,7 +498,6 @@ namespace SC_M4
                 result = 0;
                 Invoke(new Action(() =>
                 {
-                    lbTitle.Text = "Not found 731TMC";
                     this.richTextBox1.Text = string.Empty;
                     this.richTextBox2.Text = string.Empty;
                 }));
@@ -497,20 +529,27 @@ namespace SC_M4
 
             if (!check)
             {
-                //lbTitle.Text = "NG";
-                //lbTitle.ForeColor = Color.White;
-                //lbTitle.BackColor = Color.Red;
+                Invoke(new Action(() =>
+                {
+                    lbTitle.Text = "NG";
+                    lbTitle.ForeColor = Color.White;
+                    lbTitle.BackColor = Color.Red;
+                }));
                 is_Blink_NG = true;
-                //serialCommand("NG");
+                serialCommand("NG");
                 result = 1;
             }
             else
             {
+
+                Invoke(new Action(() =>
+                {
+                    lbTitle.Text = "OK";
+                    lbTitle.ForeColor = Color.White;
+                    lbTitle.BackColor = Color.Green;
+                }));
                 result = 2;
-                //lbTitle.Text = "OK";
-                //lbTitle.ForeColor = Color.White;
-                //lbTitle.BackColor = Color.Green;
-                //serialCommand("OK");
+                serialCommand("OK");
             }
             history.name = txtEmployee.Text.Trim();
             history.name_lb = txt_lb;
@@ -518,10 +557,122 @@ namespace SC_M4
             history.result = check ? "OK" : "NG";
             history.Save();
             LogWriter.SaveLog("Result :" + history.result);
-            //isStaetReset = false;
-
+            LogWriter.SaveLog("SW :" + txt_lb);
+            LogWriter.SaveLog("LABEL :" + txt_lb);
+            isStaetReset = false;
             return result;
         }
+        #endregion
+
+        #region Serial Port 
+
+        //private string serialportName = string.Empty;
+
+        public void setSerialPort(string portName, string baud)
+        {
+            this.serialportName = portName;
+            this.serialportBaud = baud;
+        }
+
+        private void serialConnect(string portName, int baud)
+        {
+            try
+            {
+                if (this.serialPort != null && this.serialPort.IsOpen)
+                {
+                    this.serialPort.Close();
+                    this.serialPort.Dispose();
+                }
+                this.serialPort = new SerialPort();
+                this.serialPort.PortName = portName;
+                this.serialPort.BaudRate = baud;
+                this.serialPort.Open();
+                this.serialCommand("conn");
+                Thread.Sleep(50);
+                this.serialCommand("conn");
+                this.toolStripStatusConnectSerialPort.Text = "Serial Connected"; // Serial Connected
+                this.toolStripStatusConnectSerialPort.ForeColor = Color.Green;
+
+            }
+            catch (Exception ex)
+            {
+                LogWriter.SaveLog("Error :" + ex.Message);
+                this.toolStripStatusConnectSerialPort.Text = "Serial Port: Disconnect"; // "Serial Port: Disconnect";
+                this.toolStripStatusConnectSerialPort.ForeColor = Color.Red;
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        public void serialConnect()
+        {
+
+            if (this.serialportName == string.Empty || this.serialportBaud == string.Empty)
+            {
+                MessageBox.Show("Please select serial port and baud rate", "Exclamation", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            this.serialConnect(this.serialportName, int.Parse(this.serialportBaud));
+        }
+
+        public void serialCommand(string command)
+        {
+            if (this.serialPort.IsOpen)
+            {
+                this.serialPort.Write(">" + command + "<#");
+                LogWriter.SaveLog("Serial send : " + command);
+            }
+        }
+
+        private string readDataSerial = string.Empty;
+        private string dataSerialReceived = string.Empty;
+        private void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            try
+            {
+                readDataSerial = this.serialPort.ReadExisting();
+                this.Invoke(new EventHandler(dataReceived));
+            }
+            catch (Exception ex)
+            {
+                LogWriter.SaveLog("Error :" + ex.Message);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void dataReceived(object sender, EventArgs e)
+        {
+            this.dataSerialReceived += readDataSerial;
+            if (dataSerialReceived.Contains(">") && dataSerialReceived.Contains("<"))
+            {
+                string data = this.dataSerialReceived.Replace("\r", string.Empty).Replace("\n", string.Empty);
+                data = data.Substring(data.IndexOf(">") + 1, data.IndexOf("<") - 1);
+                this.dataSerialReceived = string.Empty;
+                Console.WriteLine("RST : " + data);
+                data = data.Replace(">", "").Replace("<", "");
+                toolStripStatusSerialData.Text = "DATA :" + data;
+                LogWriter.SaveLog("Serial Received : " + data);
+                if (data == "rst" || data.Contains("rst"))
+                {
+
+                    isStaetReset = true;
+                    is_Blink_NG = false;
+                    if (capture_1.IsOpened && capture_1.IsOpened)
+                    {
+                        lbTitle.Text = "Wiat for detect...."; // Wiat for detect....
+                    }
+                    lbTitle.ForeColor = Color.Black;
+                    lbTitle.BackColor = Color.Yellow;
+                    richTextBox1.Text = "";
+                    richTextBox2.Text = "";
+                }
+            }
+            else if (!dataSerialReceived.Contains(">"))
+            {
+                this.dataSerialReceived = string.Empty;
+            }
+        }
+
         #endregion
 
         #region SELECT X Y
@@ -626,7 +777,47 @@ namespace SC_M4
             }
             return "";
         }
-        
+
+        private void testOCRToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+           //var  result_2 = OcrProcessor.GetOcrResultFromBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(),SelectedLang);
+
+        }
+        private bool toggle_blink_ng = false;
+        private void timerMain_Tick(object sender, EventArgs e)
+        {
+            if (is_Blink_NG)
+            {
+                toggle_blink_ng = !toggle_blink_ng;
+                if (toggle_blink_ng)
+                {
+                    lbTitle.BackColor = Color.Red;
+                    lbTitle.ForeColor = Color.White;
+                }
+                else
+                {
+                    lbTitle.BackColor = Color.White;
+                    lbTitle.ForeColor = Color.Red;
+                }
+            }
+            else if (lbTitle.BackColor != Color.Yellow && isStaetReset)
+            {
+                lbTitle.BackColor = Color.Yellow;
+                lbTitle.ForeColor = Color.Black;
+            }
+        }
+
+        private void numericUpDownFocus_ValueChanged(object sender, EventArgs e)
+        {
+            if (!checkBoxAutoFocus.Checked)
+            {
+                capture_2.SetFocus((int)numericUpDownFocus.Value);
+            }
+            else
+            {
+                capture_2.AutoFocus();
+            }
+        }
     }
 
     #region TCapture
@@ -877,5 +1068,60 @@ namespace SC_M4
         }
     }
     */
-    
+    public static class OcrProcessor
+    {
+            public static IReadOnlyList<Language> GetOcrLangList()
+            {
+                return OcrEngine.AvailableRecognizerLanguages;
+            }
+        
+            public static async Task<List<string>> GetText(SoftwareBitmap imageItem, Language SelectedLang)
+            {
+                //check item is null
+                //check no selectedLang
+                //check image is too large
+                if (imageItem == null ||
+                    SelectedLang == null ||
+                    imageItem.PixelWidth > OcrEngine.MaxImageDimension ||
+                    imageItem.PixelHeight > OcrEngine.MaxImageDimension
+                    )
+                {
+                    return new List<string> { "" };
+                }
+
+
+                //check ocr image exist
+                var ocrEngine = OcrEngine.TryCreateFromLanguage(SelectedLang);
+                if (ocrEngine == null)
+                {
+                    return new List<string> { "" };
+                }
+
+
+                var ocrResult = await ocrEngine.RecognizeAsync(imageItem);
+
+
+                List<string> textList = new List<string>() { };
+                foreach (var line in ocrResult.Lines)
+                {
+                    textList.Add(line.Text);
+                }
+                return textList;
+            }
+        public async static Task<OcrResult> GetOcrResultFromBitmap(Bitmap scaledBitmap, Language selectedLanguage)
+        {
+            MemoryStream memory = new MemoryStream();
+
+            scaledBitmap.Save(memory, ImageFormat.Bmp);
+            memory.Position = 0;
+            BitmapDecoder bmpDecoder = await BitmapDecoder.CreateAsync(memory.AsRandomAccessStream());
+            SoftwareBitmap softwareBmp = await bmpDecoder.GetSoftwareBitmapAsync();
+
+            await memory.FlushAsync();
+
+            OcrEngine ocrEngine = OcrEngine.TryCreateFromLanguage(selectedLanguage);
+            return await ocrEngine.RecognizeAsync(softwareBmp);
+        }
+
+    }
 }

@@ -28,12 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.masterListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectXYCAM1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectXYCAM2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.testOCRToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelHeader = new System.Windows.Forms.Panel();
             this.btStartStop = new System.Windows.Forms.Button();
             this.lbTitle = new System.Windows.Forms.Label();
@@ -72,7 +74,10 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusRect1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusRect2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusTime = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusConnectSerialPort = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusSerialData = new System.Windows.Forms.ToolStripStatusLabel();
+            this.timerMain = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerHomeMain)).BeginInit();
@@ -120,7 +125,8 @@
             this.settingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.masterListToolStripMenuItem,
             this.selectXYCAM1ToolStripMenuItem,
-            this.selectXYCAM2ToolStripMenuItem});
+            this.selectXYCAM2ToolStripMenuItem,
+            this.testOCRToolStripMenuItem});
             this.settingToolStripMenuItem.Name = "settingToolStripMenuItem";
             this.settingToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
             this.settingToolStripMenuItem.Text = "Setting";
@@ -128,22 +134,29 @@
             // masterListToolStripMenuItem
             // 
             this.masterListToolStripMenuItem.Name = "masterListToolStripMenuItem";
-            this.masterListToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.masterListToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.masterListToolStripMenuItem.Text = "Master List";
             // 
             // selectXYCAM1ToolStripMenuItem
             // 
             this.selectXYCAM1ToolStripMenuItem.Name = "selectXYCAM1ToolStripMenuItem";
-            this.selectXYCAM1ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.selectXYCAM1ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.selectXYCAM1ToolStripMenuItem.Text = "Select X-Y CAM 1";
             this.selectXYCAM1ToolStripMenuItem.Click += new System.EventHandler(this.selectXYCAM1ToolStripMenuItem_Click);
             // 
             // selectXYCAM2ToolStripMenuItem
             // 
             this.selectXYCAM2ToolStripMenuItem.Name = "selectXYCAM2ToolStripMenuItem";
-            this.selectXYCAM2ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.selectXYCAM2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.selectXYCAM2ToolStripMenuItem.Text = "Select X-Y CAM 2";
             this.selectXYCAM2ToolStripMenuItem.Click += new System.EventHandler(this.selectXYCAM2ToolStripMenuItem_Click);
+            // 
+            // testOCRToolStripMenuItem
+            // 
+            this.testOCRToolStripMenuItem.Name = "testOCRToolStripMenuItem";
+            this.testOCRToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.testOCRToolStripMenuItem.Text = "Test OCR";
+            this.testOCRToolStripMenuItem.Click += new System.EventHandler(this.testOCRToolStripMenuItem_Click);
             // 
             // panelHeader
             // 
@@ -444,6 +457,7 @@
             0,
             0,
             0});
+            this.numericUpDownFocus.ValueChanged += new System.EventHandler(this.numericUpDownFocus_ValueChanged);
             // 
             // label4
             // 
@@ -580,7 +594,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusRect1,
             this.toolStripStatusRect2,
-            this.toolStripStatusLabel3});
+            this.toolStripStatusTime,
+            this.toolStripStatusConnectSerialPort,
+            this.toolStripStatusSerialData});
             this.statusStrip1.Location = new System.Drawing.Point(0, 629);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(833, 22);
@@ -599,11 +615,29 @@
             this.toolStripStatusRect2.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusRect2.Text = "toolStripStatusLabel2";
             // 
-            // toolStripStatusLabel3
+            // toolStripStatusTime
             // 
-            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            this.toolStripStatusLabel3.Size = new System.Drawing.Size(118, 17);
-            this.toolStripStatusLabel3.Text = "toolStripStatusLabel3";
+            this.toolStripStatusTime.ForeColor = System.Drawing.Color.Blue;
+            this.toolStripStatusTime.Name = "toolStripStatusTime";
+            this.toolStripStatusTime.Size = new System.Drawing.Size(118, 17);
+            this.toolStripStatusTime.Text = "toolStripStatusLabel3";
+            // 
+            // toolStripStatusConnectSerialPort
+            // 
+            this.toolStripStatusConnectSerialPort.Name = "toolStripStatusConnectSerialPort";
+            this.toolStripStatusConnectSerialPort.Size = new System.Drawing.Size(118, 17);
+            this.toolStripStatusConnectSerialPort.Text = "toolStripStatusLabel1";
+            // 
+            // toolStripStatusSerialData
+            // 
+            this.toolStripStatusSerialData.Name = "toolStripStatusSerialData";
+            this.toolStripStatusSerialData.Size = new System.Drawing.Size(118, 17);
+            this.toolStripStatusSerialData.Text = "toolStripStatusLabel1";
+            // 
+            // timerMain
+            // 
+            this.timerMain.Interval = 1000;
+            this.timerMain.Tick += new System.EventHandler(this.timerMain_Tick);
             // 
             // Main
             // 
@@ -617,7 +651,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form1";
+            this.Text = "SC-M4";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Main_FormClosed);
             this.Load += new System.EventHandler(this.Main_Load);
             this.menuStrip1.ResumeLayout(false);
@@ -694,11 +728,15 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusRect1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusRect2;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusTime;
         private TConstrols.ScrollablePictureBox scrollablePictureBoxCamera01;
         private TConstrols.ScrollablePictureBox scrollablePictureBoxCamera02;
         private System.Windows.Forms.ToolStripMenuItem selectXYCAM1ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem selectXYCAM2ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem testOCRToolStripMenuItem;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusConnectSerialPort;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusSerialData;
+        private System.Windows.Forms.Timer timerMain;
     }
 }
 
