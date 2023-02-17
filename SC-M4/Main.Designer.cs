@@ -32,7 +32,6 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.masterListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.laoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelHeader = new System.Windows.Forms.Panel();
             this.btStartStop = new System.Windows.Forms.Button();
             this.lbTitle = new System.Windows.Forms.Label();
@@ -41,9 +40,16 @@
             this.label6 = new System.Windows.Forms.Label();
             this.txtEmployee = new System.Windows.Forms.TextBox();
             this.splitContainerHomeBody = new System.Windows.Forms.SplitContainer();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanelChild01 = new System.Windows.Forms.TableLayoutPanel();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.scrollablePictureBoxCamera01 = new TConstrols.ScrollablePictureBox();
+            this.pictureBoxCamera01 = new TConstrols.ScrollablePictureBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelChild02 = new System.Windows.Forms.TableLayoutPanel();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+            this.scrollablePictureBoxCamera02 = new TConstrols.ScrollablePictureBox();
+            this.pictureBoxCamera02 = new TConstrols.ScrollablePictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.checkBoxAutoFocus = new System.Windows.Forms.CheckBox();
             this.numericUpDownFocus = new System.Windows.Forms.NumericUpDown();
@@ -61,11 +67,6 @@
             this.cbDriveCam02 = new System.Windows.Forms.ComboBox();
             this.comboBoxBaud = new System.Windows.Forms.ComboBox();
             this.dataGridViewHistory = new System.Windows.Forms.DataGridView();
-            this.tableLayoutPanelChild01 = new System.Windows.Forms.TableLayoutPanel();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.pictureBoxCamera01 = new TConstrols.ScrollablePictureBox();
-            this.pictureBoxCamera02 = new TConstrols.ScrollablePictureBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -81,15 +82,17 @@
             this.splitContainerHomeBody.Panel1.SuspendLayout();
             this.splitContainerHomeBody.Panel2.SuspendLayout();
             this.splitContainerHomeBody.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanelChild01.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.scrollablePictureBoxCamera01)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCamera01)).BeginInit();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanelChild02.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.scrollablePictureBoxCamera02)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCamera02)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFocus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewHistory)).BeginInit();
-            this.tableLayoutPanelChild01.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCamera01)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCamera02)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -113,8 +116,7 @@
             // settingToolStripMenuItem
             // 
             this.settingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.masterListToolStripMenuItem,
-            this.laoutToolStripMenuItem});
+            this.masterListToolStripMenuItem});
             this.settingToolStripMenuItem.Name = "settingToolStripMenuItem";
             this.settingToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
             this.settingToolStripMenuItem.Text = "Setting";
@@ -122,14 +124,8 @@
             // masterListToolStripMenuItem
             // 
             this.masterListToolStripMenuItem.Name = "masterListToolStripMenuItem";
-            this.masterListToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.masterListToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.masterListToolStripMenuItem.Text = "Master List";
-            // 
-            // laoutToolStripMenuItem
-            // 
-            this.laoutToolStripMenuItem.Name = "laoutToolStripMenuItem";
-            this.laoutToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
-            this.laoutToolStripMenuItem.Text = "Laout";
             // 
             // panelHeader
             // 
@@ -238,6 +234,78 @@
             this.splitContainerHomeBody.SplitterDistance = 287;
             this.splitContainerHomeBody.TabIndex = 1;
             // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanelChild01, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.pictureBoxCamera01, 0, 0);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 63.1769F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 36.8231F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(279, 345);
+            this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // tableLayoutPanelChild01
+            // 
+            this.tableLayoutPanelChild01.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanelChild01.ColumnCount = 2;
+            this.tableLayoutPanelChild01.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanelChild01.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanelChild01.Controls.Add(this.richTextBox1, 1, 0);
+            this.tableLayoutPanelChild01.Controls.Add(this.scrollablePictureBoxCamera01, 0, 0);
+            this.tableLayoutPanelChild01.Location = new System.Drawing.Point(3, 220);
+            this.tableLayoutPanelChild01.Name = "tableLayoutPanelChild01";
+            this.tableLayoutPanelChild01.RowCount = 1;
+            this.tableLayoutPanelChild01.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanelChild01.Size = new System.Drawing.Size(273, 122);
+            this.tableLayoutPanelChild01.TabIndex = 1;
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBox1.Location = new System.Drawing.Point(139, 3);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(131, 116);
+            this.richTextBox1.TabIndex = 0;
+            this.richTextBox1.Text = "";
+            // 
+            // scrollablePictureBoxCamera01
+            // 
+            this.scrollablePictureBoxCamera01.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.scrollablePictureBoxCamera01.Location = new System.Drawing.Point(3, 3);
+            this.scrollablePictureBoxCamera01.Name = "scrollablePictureBoxCamera01";
+            this.scrollablePictureBoxCamera01.SegmentedRegions = null;
+            this.scrollablePictureBoxCamera01.Size = new System.Drawing.Size(130, 116);
+            this.scrollablePictureBoxCamera01.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.scrollablePictureBoxCamera01.TabIndex = 1;
+            this.scrollablePictureBoxCamera01.TabStop = false;
+            // 
+            // pictureBoxCamera01
+            // 
+            this.pictureBoxCamera01.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBoxCamera01.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.pictureBoxCamera01.Location = new System.Drawing.Point(3, 3);
+            this.pictureBoxCamera01.Name = "pictureBoxCamera01";
+            this.pictureBoxCamera01.SegmentedRegions = null;
+            this.pictureBoxCamera01.Size = new System.Drawing.Size(273, 211);
+            this.pictureBoxCamera01.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxCamera01.TabIndex = 2;
+            this.pictureBoxCamera01.TabStop = false;
+            // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -264,6 +332,7 @@
             this.tableLayoutPanelChild02.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanelChild02.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanelChild02.Controls.Add(this.richTextBox2, 1, 0);
+            this.tableLayoutPanelChild02.Controls.Add(this.scrollablePictureBoxCamera02, 0, 0);
             this.tableLayoutPanelChild02.Location = new System.Drawing.Point(3, 219);
             this.tableLayoutPanelChild02.Name = "tableLayoutPanelChild02";
             this.tableLayoutPanelChild02.RowCount = 1;
@@ -281,6 +350,33 @@
             this.richTextBox2.Size = new System.Drawing.Size(125, 114);
             this.richTextBox2.TabIndex = 0;
             this.richTextBox2.Text = "";
+            // 
+            // scrollablePictureBoxCamera02
+            // 
+            this.scrollablePictureBoxCamera02.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.scrollablePictureBoxCamera02.Location = new System.Drawing.Point(3, 3);
+            this.scrollablePictureBoxCamera02.Name = "scrollablePictureBoxCamera02";
+            this.scrollablePictureBoxCamera02.SegmentedRegions = null;
+            this.scrollablePictureBoxCamera02.Size = new System.Drawing.Size(124, 114);
+            this.scrollablePictureBoxCamera02.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.scrollablePictureBoxCamera02.TabIndex = 1;
+            this.scrollablePictureBoxCamera02.TabStop = false;
+            // 
+            // pictureBoxCamera02
+            // 
+            this.pictureBoxCamera02.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBoxCamera02.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.pictureBoxCamera02.Location = new System.Drawing.Point(3, 3);
+            this.pictureBoxCamera02.Name = "pictureBoxCamera02";
+            this.pictureBoxCamera02.SegmentedRegions = null;
+            this.pictureBoxCamera02.Size = new System.Drawing.Size(261, 210);
+            this.pictureBoxCamera02.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxCamera02.TabIndex = 2;
+            this.pictureBoxCamera02.TabStop = false;
             // 
             // groupBox1
             // 
@@ -419,6 +515,7 @@
             this.btRefresh.Size = new System.Drawing.Size(23, 21);
             this.btRefresh.TabIndex = 11;
             this.btRefresh.UseVisualStyleBackColor = true;
+            this.btRefresh.Click += new System.EventHandler(this.btRefresh_Click);
             // 
             // btConnect
             // 
@@ -458,76 +555,6 @@
             this.dataGridViewHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewHistory.Size = new System.Drawing.Size(801, 127);
             this.dataGridViewHistory.TabIndex = 0;
-            // 
-            // tableLayoutPanelChild01
-            // 
-            this.tableLayoutPanelChild01.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanelChild01.ColumnCount = 2;
-            this.tableLayoutPanelChild01.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanelChild01.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanelChild01.Controls.Add(this.richTextBox1, 1, 0);
-            this.tableLayoutPanelChild01.Location = new System.Drawing.Point(3, 220);
-            this.tableLayoutPanelChild01.Name = "tableLayoutPanelChild01";
-            this.tableLayoutPanelChild01.RowCount = 1;
-            this.tableLayoutPanelChild01.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanelChild01.Size = new System.Drawing.Size(273, 122);
-            this.tableLayoutPanelChild01.TabIndex = 1;
-            // 
-            // richTextBox1
-            // 
-            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBox1.Location = new System.Drawing.Point(139, 3);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(131, 116);
-            this.richTextBox1.TabIndex = 0;
-            this.richTextBox1.Text = "";
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanelChild01, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.pictureBoxCamera01, 0, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 63.1769F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 36.8231F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(279, 345);
-            this.tableLayoutPanel1.TabIndex = 0;
-            // 
-            // pictureBoxCamera01
-            // 
-            this.pictureBoxCamera01.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBoxCamera01.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.pictureBoxCamera01.Location = new System.Drawing.Point(3, 3);
-            this.pictureBoxCamera01.Name = "pictureBoxCamera01";
-            this.pictureBoxCamera01.SegmentedRegions = null;
-            this.pictureBoxCamera01.Size = new System.Drawing.Size(273, 211);
-            this.pictureBoxCamera01.TabIndex = 2;
-            this.pictureBoxCamera01.TabStop = false;
-            // 
-            // pictureBoxCamera02
-            // 
-            this.pictureBoxCamera02.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBoxCamera02.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.pictureBoxCamera02.Location = new System.Drawing.Point(3, 3);
-            this.pictureBoxCamera02.Name = "pictureBoxCamera02";
-            this.pictureBoxCamera02.SegmentedRegions = null;
-            this.pictureBoxCamera02.Size = new System.Drawing.Size(261, 210);
-            this.pictureBoxCamera02.TabIndex = 2;
-            this.pictureBoxCamera02.TabStop = false;
             // 
             // statusStrip1
             // 
@@ -586,16 +613,18 @@
             this.splitContainerHomeBody.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerHomeBody)).EndInit();
             this.splitContainerHomeBody.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanelChild01.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.scrollablePictureBoxCamera01)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCamera01)).EndInit();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanelChild02.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.scrollablePictureBoxCamera02)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCamera02)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFocus)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewHistory)).EndInit();
-            this.tableLayoutPanelChild01.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCamera01)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCamera02)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -637,7 +666,6 @@
         private System.Windows.Forms.ComboBox cbDriveCam02;
         private System.Windows.Forms.ComboBox comboBoxBaud;
         private System.Windows.Forms.DataGridView dataGridViewHistory;
-        private System.Windows.Forms.ToolStripMenuItem laoutToolStripMenuItem;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelChild01;
         private System.Windows.Forms.RichTextBox richTextBox1;
@@ -647,6 +675,8 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
+        private TConstrols.ScrollablePictureBox scrollablePictureBoxCamera01;
+        private TConstrols.ScrollablePictureBox scrollablePictureBoxCamera02;
     }
 }
 

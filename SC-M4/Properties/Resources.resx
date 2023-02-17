@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="msg_select_camera" xml:space="preserve">
+    <value>Please select drive camera</value>
+  </data>
   <data name="path_images" xml:space="preserve">
     <value>./system/images</value>
   </data>

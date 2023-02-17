@@ -71,6 +71,15 @@ namespace SC_M4.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please select drive camera.
+        /// </summary>
+        internal static string msg_select_camera {
+            get {
+                return ResourceManager.GetString("msg_select_camera", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ./system/images.
         /// </summary>
         internal static string path_images {
