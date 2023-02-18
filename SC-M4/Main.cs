@@ -523,23 +523,22 @@ namespace SC_M4
                     result_1 = result_1.Substring(a + 1);
                     result_1 = result_1.Replace("T31TM", "731TM");
                     result_1 = result_1.Replace("731THC", "731TMC");
-                    result_1 = result_1.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "").Replace("\\", "");
+                    result_1 = result_1.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "").Replace("\\", "").Replace("|", "").Replace(@"\", "");
                     richTextBox1.Invoke(new Action(() =>
                     {
+                        this.richTextBox1.Text = string.Empty;
                         this.richTextBox1.Text = result_1.Trim();
                     }));
                     // Image 02
-
-                    if(result_1 != string.Empty)
+                    int lb = result_1.IndexOf("731TMC");
+                    if (result_1 != string.Empty && lb != -1)
                     {
                         // OCR 2
                         result_2 = string.Empty;
                         //imageList = new List<Image>();
-                        //imageList.Add((Image)scrollablePictureBoxCamera02.Image.Clone());
-                        //result_2 = performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty);
                         var ocr = OcrProcessor.GetOcrResultFromBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(), SelectedLang);
                         result_2 = ocr.Result.Text;
-                        result_2 = "9U7310TM063-01731TMCasfea";
+                        //result_2 = "9U7310TM063-01731TMCasfea";
                         result_2 = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
                         result_2 = Regex.Replace(result_2, "[^a-zA-Z,0-9,(),:,-]", "");
 
@@ -548,6 +547,7 @@ namespace SC_M4
 
                         richTextBox2.Invoke(new Action(() =>
                         {
+                            this.richTextBox2.Text = string.Empty;
                             this.richTextBox2.Text = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
                         }));
                         int result = Compare_Master(result_1, result_2);
@@ -564,7 +564,7 @@ namespace SC_M4
                         toolStripStatusTime.Text = "Load " + stopwatch.ElapsedMilliseconds.ToString() + "ms";
                     }));
                 }
-                Thread.Sleep(5000);
+                Thread.Sleep(1000);
             }
         }
         

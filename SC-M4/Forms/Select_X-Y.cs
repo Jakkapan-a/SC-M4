@@ -53,7 +53,7 @@ namespace SC_M4.Forms
             if(rect != Rectangle.Empty)
             {
                this.main.saveRect(rect, _type);
-               
+               this.Close();
             }
             else
             {
