@@ -3,28 +3,28 @@
   <Profiles />
   <Settings>
     <Setting Name="rect1_x" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">437</Value>
     </Setting>
     <Setting Name="rect1_y" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">376</Value>
     </Setting>
     <Setting Name="rect1_w" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">297</Value>
     </Setting>
     <Setting Name="rect1_h" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">79</Value>
     </Setting>
     <Setting Name="rect2_x" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">316</Value>
     </Setting>
     <Setting Name="rect2_y" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">79</Value>
     </Setting>
     <Setting Name="rect2_w" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">408</Value>
     </Setting>
     <Setting Name="rect2_h" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">575</Value>
     </Setting>
   </Settings>
 </SettingsFile>

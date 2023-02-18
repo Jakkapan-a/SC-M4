@@ -25,7 +25,7 @@ namespace SC_M4.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("437")]
         public int rect1_x {
             get {
                 return ((int)(this["rect1_x"]));
@@ -37,7 +37,7 @@ namespace SC_M4.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("376")]
         public int rect1_y {
             get {
                 return ((int)(this["rect1_y"]));
@@ -49,7 +49,7 @@ namespace SC_M4.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("297")]
         public int rect1_w {
             get {
                 return ((int)(this["rect1_w"]));
@@ -61,7 +61,7 @@ namespace SC_M4.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("79")]
         public int rect1_h {
             get {
                 return ((int)(this["rect1_h"]));
@@ -73,7 +73,7 @@ namespace SC_M4.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("316")]
         public int rect2_x {
             get {
                 return ((int)(this["rect2_x"]));
@@ -85,7 +85,7 @@ namespace SC_M4.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("79")]
         public int rect2_y {
             get {
                 return ((int)(this["rect2_y"]));
@@ -97,7 +97,7 @@ namespace SC_M4.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("408")]
         public int rect2_w {
             get {
                 return ((int)(this["rect2_w"]));
@@ -109,7 +109,7 @@ namespace SC_M4.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("575")]
         public int rect2_h {
             get {
                 return ((int)(this["rect2_h"]));

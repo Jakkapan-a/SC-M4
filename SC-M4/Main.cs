@@ -32,7 +32,7 @@ namespace SC_M4
     {
         private  Language SelectedLang = null;
 
-        private SerialPort serialPort;
+        //private SerialPort serialPort;
         public Main()
         {
             InitializeComponent();
@@ -214,6 +214,7 @@ namespace SC_M4
         private void Capture_2_OnVideoStop()
         {
             Console.WriteLine("Video 2 Stop");
+            LogWriter.SaveLog("Video 2 Stop");
             // Clear Image
             if (InvokeRequired)
             {
@@ -231,6 +232,7 @@ namespace SC_M4
         private void Capture_2_OnVideoStarted()
         {
             Console.WriteLine("Video 2 Start");
+            LogWriter.SaveLog("Video 2 Start");
         }
         
         private Bitmap bmp2;
@@ -266,6 +268,7 @@ namespace SC_M4
         private void Capture_1_OnVideoStop()
         {
             Console.WriteLine("Video 1 Stop");
+            LogWriter.SaveLog("Video 1 Stop");
             if (InvokeRequired)
             {
                 Invoke(new Action(() =>
@@ -282,6 +285,7 @@ namespace SC_M4
         private void Capture_1_OnVideoStarted()
         {
             Console.WriteLine("Video 1 Start");
+            LogWriter.SaveLog("Video 1 Start");
         }
         
         private Bitmap bmp1;
@@ -377,9 +381,9 @@ namespace SC_M4
 
                     if (txtEmployee.Text == string.Empty)
                     {
-                        lbTitle.Text = "Please input employee ID"; //
                         this.ActiveControl = txtEmployee;
                         txtEmployee.Focus();
+                        lbTitle.Text = "Please input employee ID"; //
                         throw new Exception("Please input employee ID");
 
                     }
@@ -550,7 +554,7 @@ namespace SC_M4
                             this.richTextBox2.Text = string.Empty;
                             this.richTextBox2.Text = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
                         }));
-                        int result = Compare_Master(result_1, result_2);
+                        int result = Compare_Master(this.richTextBox1.Text, this.richTextBox2.Text);
                         if (result == 1 || result == 2)
                         {
                             isStaetReset = false;
@@ -576,7 +580,7 @@ namespace SC_M4
             // 0 = not fount, 1 = OK, 2 = NG
             int result = 0;
 
-            LogWriter.SaveLog("TXT Read :" + txt_sw + ", " + txt_lb);
+            LogWriter.SaveLog("TXT Read :" + txt_sw.Replace("\r","").Replace("\n", "") + ", " + txt_lb.Replace("\r", "").Replace("\n", ""));
             //lbTitle.Text;
             history = new History();
             //txt_lb = txt_lb.Replace("O", "0");
@@ -691,9 +695,8 @@ namespace SC_M4
                 if (this.serialPort != null && this.serialPort.IsOpen)
                 {
                     this.serialPort.Close();
-                    this.serialPort.Dispose();
                 }
-                this.serialPort = new SerialPort();
+                //this.serialPort = new SerialPort();
                 this.serialPort.PortName = portName;
                 this.serialPort.BaudRate = baud;
                 this.serialPort.Open();
@@ -909,7 +912,7 @@ namespace SC_M4
                     lbTitle.ForeColor = Color.Red;
                 }
             }
-            else if (lbTitle.BackColor != Color.Yellow && isStaetReset)
+            else if (lbTitle.BackColor != Color.Yellow && isStaetReset && (lbTitle.Text != "OK" || lbTitle.Text != "NG"))
             {
                 lbTitle.BackColor = Color.Yellow;
                 lbTitle.ForeColor = Color.Black;
