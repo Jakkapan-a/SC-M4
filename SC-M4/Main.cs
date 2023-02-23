@@ -60,6 +60,8 @@ namespace SC_M4
         protected string selectedOEM = "3"; // Default
 
         private bool isStaetReset;
+
+        private bool isOCR1 = false;
         private void Main_Load(object sender, EventArgs e)
         {
 
@@ -493,11 +495,13 @@ namespace SC_M4
             string result_2 = string.Empty;
             isStaetReset = true;
             Stopwatch stopwatch = new Stopwatch();
+            bool continue_1 = false;
             while (true)
             {
-                if (capture_1._isRunning && capture_2._isRunning && bitmapCamaera_01 != null && bitmapCamaera_02 != null && isStaetReset)
+                if (capture_1._isRunning && capture_2._isRunning && bitmapCamaera_01 != null && bitmapCamaera_02 != null && isStaetReset && scrollablePictureBoxCamera01.Image != null && scrollablePictureBoxCamera02.Image != null)
                 {
-                    // 
+                    //
+                    continue_1 = false;
                     stopwatch.Reset();
                     stopwatch.Start();
                     detection = !detection;
@@ -515,7 +519,7 @@ namespace SC_M4
                             lbTitle.Text = "Detecting...";
                         }));
                     }
-                    // Image 02
+                    // Image 01
                     imageList = new List<Image>();
                     imageList.Add((Image)scrollablePictureBoxCamera01.Image.Clone());
 
@@ -528,11 +532,22 @@ namespace SC_M4
                     result_1 = result_1.Replace("T31TM", "731TM");
                     result_1 = result_1.Replace("731THC", "731TMC");
                     result_1 = result_1.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "").Replace("\\", "").Replace("|", "").Replace(@"\", "");
+                    result_1 = result_1.Replace("7731TMC", "731TMC");
+                    result_1 = result_1.Replace("731TMCO", "731TMC6");
+                    result_1 = result_1.Replace("-S-", "-5-");
+                    if (isOCR1 && result_1 == string.Empty)
+                    {
+                        result_1 = "731TMC";
+                        isOCR1 = false;
+                    }
+
                     richTextBox1.Invoke(new Action(() =>
                     {
                         this.richTextBox1.Text = string.Empty;
                         this.richTextBox1.Text = result_1.Trim();
+                        
                     }));
+                    
                     // Image 02
                     int lb = result_1.IndexOf("731TMC");
                     if (result_1 != string.Empty && lb != -1)
@@ -547,14 +562,17 @@ namespace SC_M4
                         result_2 = Regex.Replace(result_2, "[^a-zA-Z,0-9,(),:,-]", "");
 
                         result_2 = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "").Replace("'", "").Replace("|", "").Replace(@"\", "");
-                        result_2 = result_2.Replace(")9U", "9U");
-
+                        result_2 = result_2.Replace("91J7", "9U7");
+                        result_2 = result_2.Replace("7OO731", "7-00731");
+                        result_2 = result_2.Replace("-OO", "-00");
+                        result_2 = result_2.Replace(")9U7", "9U7").Replace("\n", "");
+                        result_2= result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
                         richTextBox2.Invoke(new Action(() =>
                         {
                             this.richTextBox2.Text = string.Empty;
                             this.richTextBox2.Text = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
                         }));
-                        int result = Compare_Master(this.richTextBox1.Text, this.richTextBox2.Text);
+                        int result = Compare_Master(result_1, result_2);
                         if (result == 1 || result == 2)
                         {
                             isStaetReset = false;
@@ -568,6 +586,7 @@ namespace SC_M4
                         toolStripStatusTime.Text = "Load " + stopwatch.ElapsedMilliseconds.ToString() + "ms";
                     }));
                 }
+                
                 Thread.Sleep(1000);
             }
         }
@@ -766,7 +785,6 @@ namespace SC_M4
                 LogWriter.SaveLog("Serial Received : " + data);
                 if (data == "rst" || data.Contains("rst"))
                 {
-
                     isStaetReset = true;
                     is_Blink_NG = false;
                     if (capture_1.IsOpened && capture_1.IsOpened)
@@ -892,8 +910,7 @@ namespace SC_M4
 
         private void testOCRToolStripMenuItem_Click(object sender, EventArgs e)
         {
-           //var  result_2 = OcrProcessor.GetOcrResultFromBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(),SelectedLang);
-
+            isOCR1 = true;
         }
         private bool toggle_blink_ng = false;
         private void timerMain_Tick(object sender, EventArgs e)
@@ -912,7 +929,7 @@ namespace SC_M4
                     lbTitle.ForeColor = Color.Red;
                 }
             }
-            else if (lbTitle.BackColor != Color.Yellow && isStaetReset && (lbTitle.Text != "OK" || lbTitle.Text != "NG"))
+            else if (lbTitle.BackColor != Color.Yellow && isStaetReset && lbTitle.Text != "OK" && lbTitle.Text != "NG")
             {
                 lbTitle.BackColor = Color.Yellow;
                 lbTitle.ForeColor = Color.Black;
