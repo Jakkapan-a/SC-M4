@@ -564,6 +564,8 @@ namespace SC_M4
                         result_2 = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "").Replace("'", "").Replace("|", "").Replace(@"\", "");
                         result_2 = result_2.Replace("91J7", "9U7");
                         result_2 = result_2.Replace("7OO731", "7-00731");
+                        result_2 = result_2.Replace("8OO731T", "8-00731T");
+                        result_2 = result_2.Replace("9OO731T", "9-00731T");
                         result_2 = result_2.Replace("-OO", "-00");
                         result_2 = result_2.Replace(")9U7", "9U7").Replace("\n", "");
                         result_2= result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
