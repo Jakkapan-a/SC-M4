@@ -563,12 +563,10 @@ namespace SC_M4
 
                         result_2 = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "").Replace("'", "").Replace("|", "").Replace(@"\", "");
                         result_2 = result_2.Replace("91J7", "9U7");
-                        result_2 = result_2.Replace("7OO731", "7-00731");
-                        result_2 = result_2.Replace("8OO731T", "8-00731T");
-                        result_2 = result_2.Replace("9OO731T", "9-00731T");
                         result_2 = result_2.Replace("-OO", "-00");
                         result_2 = result_2.Replace(")9U7", "9U7").Replace("\n", "");
                         result_2= result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
+                        result_2 = ReplaceName(result_2);
                         richTextBox2.Invoke(new Action(() =>
                         {
                             this.richTextBox2.Text = string.Empty;
@@ -592,7 +590,60 @@ namespace SC_M4
                 Thread.Sleep(1000);
             }
         }
-        
+        private string ReplaceName(string input)
+        {
+            input = input.Replace("731OTM", "7310TM");
+            
+            
+            input = input.Replace("3O1731", "3-01731");
+            input = input.Replace("3-O1731", "3-01731");
+
+            input = input.Replace("4O1731", "4-01731");
+            input = input.Replace("4-O1731", "4-01731");
+
+            input = input.Replace("5O1731", "5-01731");
+            input = input.Replace("5-O1731", "5-01731");
+
+            input = input.Replace("6O3731", "6-03731");
+            input = input.Replace("6-O3731", "6-03731");
+
+            input = input.Replace("2O1731", "2-01731");
+            input = input.Replace("2-O1731", "2-01731");
+
+            input = input.Replace("7O1731", "7-01731");
+            input = input.Replace("7-O1731", "7-01731");
+
+            input = input.Replace("5O2731", "5-02731");
+            input = input.Replace("5-O2731", "5-02731");
+
+            input = input.Replace("4O4731", "4-04731");
+            input = input.Replace("4-O4731", "4-04731");
+
+            input = input.Replace("8OO731", "8-00731");
+            input = input.Replace("8-OO731", "8-00731");
+
+            input = input.Replace("8OO731", "8-00731");
+            input = input.Replace("8-OO731", "8-00731");
+
+            input = input.Replace("8OA731", "8-0A731");
+            input = input.Replace("8-OA731", "8-0A731");
+
+            input = input.Replace("9OA731", "9-0A731");
+            input = input.Replace("9-OA731", "9-0A731");
+
+            input = input.Replace("6O1731", "6-01731");
+            input = input.Replace("6-O1731", "6-01731");
+
+            input = input.Replace("7OA731", "7-0A731");
+            input = input.Replace("7-OA731", "7-0A731");
+            
+            input = input.Replace("7OO731", "7-00731");
+            input = input.Replace("7-OO731", "7-00731");
+
+            input = input.Replace("2OA731", "2-0A731");
+            input = input.Replace("2-OA731", "2-0A731");
+            return input;
+        }
         History history;
 
         private bool is_Blink_NG = false;
