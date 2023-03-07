@@ -25,6 +25,7 @@ using Windows.Globalization;
 using Windows.Graphics.Imaging;
 using BitmapDecoder = Windows.Graphics.Imaging.BitmapDecoder;
 using System.Drawing.Imaging;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 
 namespace SC_M4
 {
@@ -62,6 +63,9 @@ namespace SC_M4
         private bool isStaetReset;
 
         private bool isOCR1 = false;
+
+        private BackgroundWorker background;
+        private System.Windows.Forms.Timer timerOCR;
         private void Main_Load(object sender, EventArgs e)
         {
 
@@ -69,6 +73,19 @@ namespace SC_M4
             {
                 item.Text = "";
             }
+
+            background = new BackgroundWorker();
+            background.WorkerReportsProgress = true;
+            background.WorkerSupportsCancellation = true;
+
+            background.DoWork += Background_DoWork;
+            background.RunWorkerCompleted += Background_RunWorkerCompleted;
+            background.ProgressChanged += Background_ProgressChanged;
+
+            timerOCR = new System.Windows.Forms.Timer(components);
+            timerOCR.Interval = 500;
+
+            timerOCR.Tick += TimerOCR_Tick;
 
             SelectedLang = new Language("en-US");
             // Create Folder
@@ -120,6 +137,15 @@ namespace SC_M4
             loadTableHistory();
 
         }
+
+        private void TimerOCR_Tick(object sender, EventArgs e)
+        {
+           if(background.IsBusy != true && !isStaetReset)
+            {
+                background.RunWorkerAsync();
+            }
+        }
+
         private async void deletedFileTemp()
         {
             try
@@ -372,6 +398,7 @@ namespace SC_M4
         private Thread thread;
 
         #region Start
+
         private void btStartStop_Click(object sender, EventArgs e)
         {
             this.isStart = !this.isStart;
@@ -380,14 +407,12 @@ namespace SC_M4
 
                 if (this.isStart)
                 {
-
                     if (txtEmployee.Text == string.Empty)
                     {
                         this.ActiveControl = txtEmployee;
                         txtEmployee.Focus();
                         lbTitle.Text = "Please input employee ID"; //
                         throw new Exception("Please input employee ID");
-
                     }
 
                     if (cbDriveCam01.SelectedIndex == cbDriveCam02.SelectedIndex)
@@ -433,8 +458,8 @@ namespace SC_M4
                         thread = null;
                     }
 
-                    thread = new Thread(new ThreadStart(ProcessTesting));
-                    thread.Start();
+                    // thread = new Thread(new ThreadStart(ProcessTesting));
+                    // thread.Start();
                     this.richTextBox1.Text = string.Empty;
                     this.richTextBox2.Text = string.Empty;
 
@@ -442,6 +467,8 @@ namespace SC_M4
                     scrollablePictureBoxCamera02.Image = null;
 
                     btConnect.Text = "Disconnect";
+
+                    timerOCR.Start();
                 }
                 else
                 {
@@ -453,6 +480,10 @@ namespace SC_M4
 
                     if (serialPort.IsOpen)
                         serialPort.Close();
+
+                    timerOCR.Stop();
+                    if (background.WorkerSupportsCancellation)
+                        background.CancelAsync();
 
                     btStartStop.Text = "START";
                     btConnect.Text = "Connect";
@@ -590,6 +621,116 @@ namespace SC_M4
                 Thread.Sleep(1000);
             }
         }
+
+
+        private void Background_DoWork(object sender, DoWorkEventArgs e)
+        {
+            bool detection = false;
+            string result_1 = string.Empty;
+            string result_2 = string.Empty;
+            isStaetReset = true;
+            Stopwatch stopwatch = new Stopwatch();
+
+            if (capture_1._isRunning && capture_2._isRunning && bitmapCamaera_01 != null && bitmapCamaera_02 != null && isStaetReset && scrollablePictureBoxCamera01.Image != null && scrollablePictureBoxCamera02.Image != null)
+            {
+                stopwatch.Reset();
+                stopwatch.Start();
+                detection = !detection;
+                if (detection)
+                {
+                    Invoke(new Action(() =>
+                    {
+                        lbTitle.Text = "Wiat for detect..";
+                    }));
+                }
+                else
+                {
+                    Invoke(new Action(() =>
+                    {
+                        lbTitle.Text = "Detecting...";
+                    }));
+                }
+                // Image 01
+                imageList = new List<Image>();
+                imageList.Add((Image)scrollablePictureBoxCamera01.Image.Clone());
+
+                result_1 = performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty);
+
+                var a = result_1.IndexOf("-731");
+                result_1 = result_1.Substring(a + 1);
+                a = result_1.IndexOf("|731");
+                result_1 = result_1.Substring(a + 1);
+                result_1 = result_1.Replace("T31TM", "731TM");
+                result_1 = result_1.Replace("731THC", "731TMC");
+                result_1 = result_1.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "").Replace("\\", "").Replace("|", "").Replace(@"\", "");
+                result_1 = result_1.Replace("7731TMC", "731TMC");
+                result_1 = result_1.Replace("731TMCO", "731TMC6");
+                result_1 = result_1.Replace("-S-", "-5-");
+                if (isOCR1 && result_1 == string.Empty)
+                {
+                    result_1 = "731TMC";
+                    isOCR1 = false;
+                }
+
+                richTextBox1.Invoke(new Action(() =>
+                {
+                    this.richTextBox1.Text = string.Empty;
+                    this.richTextBox1.Text = result_1.Trim();
+
+                }));
+
+                // Image 02
+                int lb = result_1.IndexOf("731TMC");
+                if (result_1 != string.Empty && lb != -1)
+                {
+                    // OCR 2
+                    result_2 = string.Empty;
+                    //imageList = new List<Image>();
+                    var ocr = OcrProcessor.GetOcrResultFromBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(), SelectedLang);
+                    result_2 = ocr.Result.Text;
+                    //result_2 = "9U7310TM063-01731TMCasfea";
+                    result_2 = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
+                    result_2 = Regex.Replace(result_2, "[^a-zA-Z,0-9,(),:,-]", "");
+
+                    result_2 = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "").Replace("'", "").Replace("|", "").Replace(@"\", "");
+                    result_2 = result_2.Replace("91J7", "9U7");
+                    result_2 = result_2.Replace("-OO", "-00");
+                    result_2 = result_2.Replace(")9U7", "9U7").Replace("\n", "");
+                    result_2 = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
+                    result_2 = ReplaceName(result_2);
+                    richTextBox2.Invoke(new Action(() =>
+                    {
+                        this.richTextBox2.Text = string.Empty;
+                        this.richTextBox2.Text = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
+                    }));
+                    int result = Compare_Master(result_1, result_2);
+                    if (result == 1 || result == 2)
+                    {
+                        isStaetReset = false;
+                    }
+                }
+
+                stopwatch.Stop();
+                Console.WriteLine("Elapsed Time is {0} ms", stopwatch.ElapsedMilliseconds);
+                Invoke(new Action(() =>
+                {
+                    toolStripStatusTime.Text = "Load " + stopwatch.ElapsedMilliseconds.ToString() + "ms";
+                }));
+            }
+        }
+
+        private void Background_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+
+        }
+
+        private void Background_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+
+        }
+
+
+
         private string ReplaceName(string input)
         {
             input = input.Replace("731OTM", "7310TM");
@@ -687,6 +828,7 @@ namespace SC_M4
             var master_lb = MasterAll.GetMasterALLByLBName(txt);
 
             bool check = false;
+
             if (master_lb.Count > 0)
             {
                 foreach (var item in master_lb)
@@ -713,13 +855,13 @@ namespace SC_M4
                     lbTitle.Text = "NG";
                     lbTitle.ForeColor = Color.White;
                     lbTitle.BackColor = Color.Red;
-                    //loadTableHistory();
                 }));
                 is_Blink_NG = true;
                 serialCommand("NG");
              
                 result = 1;
             }
+
             else
             {
 
