@@ -14,9 +14,6 @@ namespace SC_M4.Modules
         public int _type { get; set; }
         public string created_at { get; set; }
         public string updated_at { get; set; }
-        public ReplaceName()
-        {
-        }
 
         public void Save()
         {
@@ -57,6 +54,15 @@ namespace SC_M4.Modules
             parameters.Add("@oldName", oldName);
             return SQliteDataAccess.Query<ReplaceName>(sql, parameters).Count;
         }
+
+        public static int isExist(string oldName,int _type)
+        {
+            string sql = "SELECT * FROM replace_name WHERE oldName = @oldName AND _type = @_type";
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@oldName", oldName);
+            parameters.Add("@_type", _type);
+            return SQliteDataAccess.Query<ReplaceName>(sql, parameters).Count;
+        }        
 
         public static List<ReplaceName> GetList()
         {
