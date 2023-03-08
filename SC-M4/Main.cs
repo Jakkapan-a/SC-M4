@@ -26,14 +26,13 @@ using Windows.Graphics.Imaging;
 using BitmapDecoder = Windows.Graphics.Imaging.BitmapDecoder;
 using System.Drawing.Imaging;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
+//using Windows.UI.Xaml.Controls;
 
 namespace SC_M4
 {
     public partial class Main : Form
     {
         private  Language SelectedLang = null;
-
-        //private SerialPort serialPort;
         public Main()
         {
             InitializeComponent();
@@ -52,7 +51,7 @@ namespace SC_M4
         public Rectangle rect_2;
 
         protected string curLangCode = "eng";
-        protected IList<Image> imageList;
+        protected IList<System.Drawing.Image> imageList;
         protected string inputfilename;
         protected int imageIndex;
         protected float scaleX = 1f;
@@ -140,7 +139,7 @@ namespace SC_M4
 
         private void TimerOCR_Tick(object sender, EventArgs e)
         {
-           if(background.IsBusy != true && !isStaetReset)
+           if(background != null && background.IsBusy != true && isStaetReset)
             {
                 background.RunWorkerAsync();
             }
@@ -391,6 +390,7 @@ namespace SC_M4
         }
 
         private bool isStart = false;
+        private bool isStarted = false;
         private int driveindex_01 = -1;
         private int driveindex_02 = -1;
         private string serialportName = string.Empty;
@@ -451,15 +451,13 @@ namespace SC_M4
                     lbTitle.Text = "Camera opening...";
 
                     btStartStop.Text = "STOP";
-                    if (thread != null)
-                    {
-                        thread.Abort();
-                        thread.DisableComObjectEagerCleanup();
-                        thread = null;
-                    }
+                    //if (thread != null)
+                    //{
+                    //    thread.Abort();
+                    //    thread.DisableComObjectEagerCleanup();
+                    //    thread = null;
+                    //}
 
-                    // thread = new Thread(new ThreadStart(ProcessTesting));
-                    // thread.Start();
                     this.richTextBox1.Text = string.Empty;
                     this.richTextBox2.Text = string.Empty;
 
@@ -467,8 +465,24 @@ namespace SC_M4
                     scrollablePictureBoxCamera02.Image = null;
 
                     btConnect.Text = "Disconnect";
+                    if(background == null)
+                    {
+                        background = new BackgroundWorker();
+                        background.WorkerReportsProgress = true;
+                        background.WorkerSupportsCancellation = true;
+
+                        background.DoWork += Background_DoWork;
+                        background.RunWorkerCompleted += Background_RunWorkerCompleted;
+                        background.ProgressChanged += Background_ProgressChanged;
+                    }
 
                     timerOCR.Start();
+
+                    checkBoxAutoFocus.Checked = false;
+                    numericUpDownFocus.Value = 68;
+
+                    isStarted = true;
+                    isStaetReset = true;
                 }
                 else
                 {
@@ -482,8 +496,17 @@ namespace SC_M4
                         serialPort.Close();
 
                     timerOCR.Stop();
-                    if (background.WorkerSupportsCancellation)
+                    if (background.IsBusy)
+                    {
                         background.CancelAsync();
+                        background.Dispose();
+                    }
+
+                    if(background != null)
+                    {
+                        background.Dispose();
+                    }
+
 
                     btStartStop.Text = "START";
                     btConnect.Text = "Connect";
@@ -502,10 +525,10 @@ namespace SC_M4
                     lbTitle.BackColor = Color.Yellow;
                     is_Blink_NG = false;
 
-                    if (thread != null)
-                    {
-                        thread.Abort(true);
-                    }
+                    //if (thread != null)
+                    //{
+                    //    thread.Abort(true);
+                    //}
                 }
                 lbTitle.BackColor = Color.Yellow;
                 lbTitle.ForeColor = Color.Black;
@@ -622,17 +645,27 @@ namespace SC_M4
             }
         }
 
+        private bool detection = false;
+        private string result_1 = string.Empty;
+        private string result_2 = string.Empty;
 
-        private void Background_DoWork(object sender, DoWorkEventArgs e)
+        private Stopwatch stopwatch = new Stopwatch();
+        private async void Background_DoWork(object sender, DoWorkEventArgs e)
         {
-            bool detection = false;
-            string result_1 = string.Empty;
-            string result_2 = string.Empty;
-            isStaetReset = true;
-            Stopwatch stopwatch = new Stopwatch();
+            BackgroundWorker worker = (BackgroundWorker)sender;
 
             if (capture_1._isRunning && capture_2._isRunning && bitmapCamaera_01 != null && bitmapCamaera_02 != null && isStaetReset && scrollablePictureBoxCamera01.Image != null && scrollablePictureBoxCamera02.Image != null)
             {
+                // Console.WriteLine("1");
+                if (worker.CancellationPending == true)
+                {
+                    e.Cancel = true;
+                }
+                if (isStarted)
+                {
+                    capture_2.SetFocus((int)numericUpDownFocus.Value);
+                    isStarted = false;
+                }
                 stopwatch.Reset();
                 stopwatch.Start();
                 detection = !detection;
@@ -650,12 +683,9 @@ namespace SC_M4
                         lbTitle.Text = "Detecting...";
                     }));
                 }
-                // Image 01
-                // imageList = new List<Image>();
-                // imageList.Add(Sharpen((Bitmap)scrollablePictureBoxCamera01.Image));
-
-                var ocr_1 = OcrProcessor.GetOcrResultFromBitmap(Sharpen((Bitmap)scrollablePictureBoxCamera01.Image), SelectedLang);
-                result_1 = ocr_1.Result.Text; // performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty);
+                // Console.WriteLine("2");
+                var ocr_1 = await OcrProcessor.GetOcrResultFromBitmap(Sharpen((Bitmap)scrollablePictureBoxCamera01.Image), SelectedLang);
+                result_1 = ocr_1.Text; // performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty);
                 var a = result_1.IndexOf("-731");
                 result_1 = result_1.Substring(a + 1);
                 a = result_1.IndexOf("|731");
@@ -664,8 +694,9 @@ namespace SC_M4
                 result_1 = result_1.Replace("731THC", "731TMC");
                 result_1 = result_1.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "").Replace("\\", "").Replace("|", "").Replace(@"\", "");
                 result_1 = result_1.Replace("7731TMC", "731TMC");
-                result_1 = result_1.Replace("731TMCO", "731TMC6");
+                result_1 = result_1.Replace("731TMCO", "731TMC6").Replace("-I", "-1");
                 result_1 = result_1.Replace("-S-", "-5-");
+                result_1 = result_1.Replace("G.22", "G:22");
                 if (isOCR1 && result_1 == string.Empty)
                 {
                     result_1 = "731TMC";
@@ -678,17 +709,14 @@ namespace SC_M4
                     this.richTextBox1.Text = result_1.Trim();
 
                 }));
-
                 // Image 02
                 int lb = result_1.IndexOf("731TMC");
                 if (result_1 != string.Empty && lb != -1)
                 {
                     // OCR 2
                     result_2 = string.Empty;
-                    //imageList = new List<Image>();
-                    var ocr = OcrProcessor.GetOcrResultFromBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(), SelectedLang);
-                    result_2 = ocr.Result.Text;
-                    //result_2 = "9U7310TM063-01731TMCasfea";
+                    var ocr = await OcrProcessor.GetOcrResultFromBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(), SelectedLang);
+                    result_2 = ocr.Text;
                     result_2 = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
                     result_2 = Regex.Replace(result_2, "[^a-zA-Z,0-9,(),:,-]", "");
 
@@ -709,7 +737,9 @@ namespace SC_M4
                         isStaetReset = false;
                     }
                 }
+                // Console.WriteLine("5");
 
+                await Task.Delay(100);
                 stopwatch.Stop();
                 Console.WriteLine("Elapsed Time is {0} ms", stopwatch.ElapsedMilliseconds);
                 Invoke(new Action(() =>
@@ -803,11 +833,6 @@ namespace SC_M4
             {
                 // Return the original string.
                 result = 0;
-                //Invoke(new Action(() =>
-                //{
-                //    this.richTextBox1.Text = string.Empty;
-                //    this.richTextBox2.Text = string.Empty;
-                //}));
                 return result;
             }
 
@@ -816,11 +841,6 @@ namespace SC_M4
             if (swa == -1)
             {
                 result = 0;
-                //Invoke(new Action(() =>
-                //{
-                //    this.richTextBox1.Text = string.Empty;
-                //    this.richTextBox2.Text = string.Empty;
-                //}));
                 return result;
             }
             var txt = txt_lb.Substring(0, lb);
@@ -933,11 +953,9 @@ namespace SC_M4
 
         public void serialConnect()
         {
-
             if (this.serialportName == string.Empty || this.serialportBaud == string.Empty)
-            {
-               throw new Exception("Please select serial port and baud rate");
-            }
+                throw new Exception("Please select serial port and baud rate");
+            
             this.serialConnect(this.serialportName, int.Parse(this.serialportBaud));
         }
 
@@ -1048,32 +1066,9 @@ namespace SC_M4
 
         private void Main_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (capture_1 != null)
-            {
-                if(capture_1.IsOpened)
-                    capture_1.Stop();
-                
-                capture_1.Dispose();
-            }
-
-            if (capture_2 != null)
-            {
-                if (capture_2.IsOpened)
-                    capture_2.Stop();
-
-                capture_2.Dispose();
-            }
-
-            if (thread != null)
-            {
-                if (thread.IsAlive)
-                    thread.Abort();
-                thread.DisableComObjectEagerCleanup();
-                thread = null;
-            }
         }
 
-        private string performOCR(IList<Image> imageList, string inputfilename, int index, Rectangle rect)
+        private string performOCR(IList<System.Drawing.Image> imageList, string inputfilename, int index, Rectangle rect)
         {
             try
             {
@@ -1258,6 +1253,39 @@ namespace SC_M4
             return bmpNew;
         }
 
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+
+            if (capture_1 != null)
+            {
+                if (capture_1.IsOpened)
+                    capture_1.Stop();
+
+                capture_1.Dispose();
+            }
+
+            if (capture_2 != null)
+            {
+                if (capture_2.IsOpened)
+                    capture_2.Stop();
+
+                capture_2.Dispose();
+            }
+
+            if (thread != null)
+            {
+                if (thread.IsAlive)
+                    thread.Abort();
+                thread.DisableComObjectEagerCleanup();
+                thread = null;
+            }
+
+            timerOCR.Stop();
+
+            if(background.IsBusy)
+                background.Dispose();
+
+        }
     }
 
     #region TCapture
@@ -1331,16 +1359,20 @@ namespace SC_M4
                 _thread = new Thread(FrameCapture);
                 _thread.Start();
             }
-
+            
             private void FrameCapture()
             {
                 try
                 {
                     while (_isRunning)
                     {
-
                         if (_videoCapture.IsOpened())
                         {
+                            if (_onStarted)
+                            {
+                                OnVideoStarted?.Invoke();
+                                _onStarted = false;
+                            }
                             using (OpenCvSharp.Mat frame = _videoCapture.RetrieveMat())
                             {
                                 if (frame.Empty())
@@ -1353,11 +1385,7 @@ namespace SC_M4
                                     OnFrameHeadler?.Invoke(bitmap);
                                 }
                             }
-                            if (_onStarted)
-                            {
-                                OnVideoStarted?.Invoke();
-                                _onStarted = false;
-                            }
+                           
                         }
 
                         Thread.Sleep(_frameRate);
@@ -1548,6 +1576,7 @@ namespace SC_M4
                 }
                 return textList;
             }
+
         public async static Task<OcrResult> GetOcrResultFromBitmap(Bitmap scaledBitmap, Language selectedLanguage)
         {
             MemoryStream memory = new MemoryStream();
@@ -1560,8 +1589,11 @@ namespace SC_M4
             await memory.FlushAsync();
 
             OcrEngine ocrEngine = OcrEngine.TryCreateFromLanguage(selectedLanguage);
-            return await ocrEngine.RecognizeAsync(softwareBmp);
+            var result = await ocrEngine.RecognizeAsync(softwareBmp);
+            softwareBmp.Dispose();
+            scaledBitmap.Dispose();
+            return result;
         }
-
+      
     }
 }

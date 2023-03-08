@@ -6,6 +6,11 @@
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <configuration>
+        <runtime>
+            <NGenReserveForJumpStubs value="5" />
+        </runtime>
+    </configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{5A097DDC-08CA-4B32-9A32-266ADF251AA5}</ProjectGuid>
     <OutputType>WinExe</OutputType>
