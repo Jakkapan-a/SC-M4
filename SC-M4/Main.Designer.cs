@@ -48,10 +48,12 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelChild01 = new System.Windows.Forms.TableLayoutPanel();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.scrollablePictureBoxCamera01 = new System.Windows.Forms.PictureBox();
             this.pictureBoxCamera01 = new TConstrols.ScrollablePictureBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelChild02 = new System.Windows.Forms.TableLayoutPanel();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+            this.scrollablePictureBoxCamera02 = new System.Windows.Forms.PictureBox();
             this.pictureBoxCamera02 = new TConstrols.ScrollablePictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.checkBoxAutoFocus = new System.Windows.Forms.CheckBox();
@@ -78,8 +80,7 @@
             this.toolStripStatusSerialData = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerMain = new System.Windows.Forms.Timer(this.components);
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
-            this.scrollablePictureBoxCamera01 = new System.Windows.Forms.PictureBox();
-            this.scrollablePictureBoxCamera02 = new System.Windows.Forms.PictureBox();
+            this.changeNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerHomeMain)).BeginInit();
@@ -93,16 +94,16 @@
             this.splitContainerHomeBody.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanelChild01.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.scrollablePictureBoxCamera01)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCamera01)).BeginInit();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanelChild02.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.scrollablePictureBoxCamera02)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCamera02)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFocus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewHistory)).BeginInit();
             this.statusStripHome.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.scrollablePictureBoxCamera01)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.scrollablePictureBoxCamera02)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -128,7 +129,8 @@
             this.masterListToolStripMenuItem,
             this.selectXYCAM1ToolStripMenuItem,
             this.selectXYCAM2ToolStripMenuItem,
-            this.testOCRToolStripMenuItem});
+            this.testOCRToolStripMenuItem,
+            this.changeNameToolStripMenuItem});
             this.settingToolStripMenuItem.Name = "settingToolStripMenuItem";
             this.settingToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
             this.settingToolStripMenuItem.Text = "Setting";
@@ -136,28 +138,28 @@
             // masterListToolStripMenuItem
             // 
             this.masterListToolStripMenuItem.Name = "masterListToolStripMenuItem";
-            this.masterListToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.masterListToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.masterListToolStripMenuItem.Text = "Master List";
             this.masterListToolStripMenuItem.Click += new System.EventHandler(this.masterListToolStripMenuItem_Click);
             // 
             // selectXYCAM1ToolStripMenuItem
             // 
             this.selectXYCAM1ToolStripMenuItem.Name = "selectXYCAM1ToolStripMenuItem";
-            this.selectXYCAM1ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.selectXYCAM1ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.selectXYCAM1ToolStripMenuItem.Text = "Select X-Y CAM 1";
             this.selectXYCAM1ToolStripMenuItem.Click += new System.EventHandler(this.selectXYCAM1ToolStripMenuItem_Click);
             // 
             // selectXYCAM2ToolStripMenuItem
             // 
             this.selectXYCAM2ToolStripMenuItem.Name = "selectXYCAM2ToolStripMenuItem";
-            this.selectXYCAM2ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.selectXYCAM2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.selectXYCAM2ToolStripMenuItem.Text = "Select X-Y CAM 2";
             this.selectXYCAM2ToolStripMenuItem.Click += new System.EventHandler(this.selectXYCAM2ToolStripMenuItem_Click);
             // 
             // testOCRToolStripMenuItem
             // 
             this.testOCRToolStripMenuItem.Name = "testOCRToolStripMenuItem";
-            this.testOCRToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.testOCRToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.testOCRToolStripMenuItem.Text = "Test OCR";
             this.testOCRToolStripMenuItem.Visible = false;
             this.testOCRToolStripMenuItem.Click += new System.EventHandler(this.testOCRToolStripMenuItem_Click);
@@ -314,6 +316,18 @@
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
+            // scrollablePictureBoxCamera01
+            // 
+            this.scrollablePictureBoxCamera01.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.scrollablePictureBoxCamera01.Location = new System.Drawing.Point(3, 3);
+            this.scrollablePictureBoxCamera01.Name = "scrollablePictureBoxCamera01";
+            this.scrollablePictureBoxCamera01.Size = new System.Drawing.Size(130, 116);
+            this.scrollablePictureBoxCamera01.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.scrollablePictureBoxCamera01.TabIndex = 1;
+            this.scrollablePictureBoxCamera01.TabStop = false;
+            // 
             // pictureBoxCamera01
             // 
             this.pictureBoxCamera01.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -372,6 +386,18 @@
             this.richTextBox2.Size = new System.Drawing.Size(125, 114);
             this.richTextBox2.TabIndex = 0;
             this.richTextBox2.Text = "";
+            // 
+            // scrollablePictureBoxCamera02
+            // 
+            this.scrollablePictureBoxCamera02.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.scrollablePictureBoxCamera02.Location = new System.Drawing.Point(3, 3);
+            this.scrollablePictureBoxCamera02.Name = "scrollablePictureBoxCamera02";
+            this.scrollablePictureBoxCamera02.Size = new System.Drawing.Size(124, 114);
+            this.scrollablePictureBoxCamera02.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.scrollablePictureBoxCamera02.TabIndex = 1;
+            this.scrollablePictureBoxCamera02.TabStop = false;
             // 
             // pictureBoxCamera02
             // 
@@ -626,29 +652,12 @@
             // 
             this.serialPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort_DataReceived);
             // 
-            // scrollablePictureBoxCamera01
+            // changeNameToolStripMenuItem
             // 
-            this.scrollablePictureBoxCamera01.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.scrollablePictureBoxCamera01.Location = new System.Drawing.Point(3, 3);
-            this.scrollablePictureBoxCamera01.Name = "scrollablePictureBoxCamera01";
-            this.scrollablePictureBoxCamera01.Size = new System.Drawing.Size(130, 116);
-            this.scrollablePictureBoxCamera01.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.scrollablePictureBoxCamera01.TabIndex = 1;
-            this.scrollablePictureBoxCamera01.TabStop = false;
-            // 
-            // scrollablePictureBoxCamera02
-            // 
-            this.scrollablePictureBoxCamera02.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.scrollablePictureBoxCamera02.Location = new System.Drawing.Point(3, 3);
-            this.scrollablePictureBoxCamera02.Name = "scrollablePictureBoxCamera02";
-            this.scrollablePictureBoxCamera02.Size = new System.Drawing.Size(124, 114);
-            this.scrollablePictureBoxCamera02.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.scrollablePictureBoxCamera02.TabIndex = 1;
-            this.scrollablePictureBoxCamera02.TabStop = false;
+            this.changeNameToolStripMenuItem.Name = "changeNameToolStripMenuItem";
+            this.changeNameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.changeNameToolStripMenuItem.Text = "Conditions Change";
+            this.changeNameToolStripMenuItem.Click += new System.EventHandler(this.changeNameToolStripMenuItem_Click);
             // 
             // Main
             // 
@@ -682,9 +691,11 @@
             this.splitContainerHomeBody.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanelChild01.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.scrollablePictureBoxCamera01)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCamera01)).EndInit();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanelChild02.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.scrollablePictureBoxCamera02)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCamera02)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -692,8 +703,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewHistory)).EndInit();
             this.statusStripHome.ResumeLayout(false);
             this.statusStripHome.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.scrollablePictureBoxCamera01)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.scrollablePictureBoxCamera02)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -751,6 +760,7 @@
         private System.IO.Ports.SerialPort serialPort;
         private System.Windows.Forms.PictureBox scrollablePictureBoxCamera01;
         private System.Windows.Forms.PictureBox scrollablePictureBoxCamera02;
+        private System.Windows.Forms.ToolStripMenuItem changeNameToolStripMenuItem;
     }
 }
 

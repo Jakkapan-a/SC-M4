@@ -398,7 +398,8 @@ namespace SC_M4
         private Thread thread;
 
         #region Start
-
+        private List<ReplaceName> repleaceNames1 = new List<ReplaceName>();
+        private List<ReplaceName> repleaceNames2 = new List<ReplaceName>();
         private void btStartStop_Click(object sender, EventArgs e)
         {
             this.isStart = !this.isStart;
@@ -442,6 +443,13 @@ namespace SC_M4
                     if (capture_2.IsOpened)
                         capture_2.Stop();
 
+                    repleaceNames1.Clear();
+                    repleaceNames1 = Modules.ReplaceName.GetList(0);
+
+                    repleaceNames2.Clear();
+                    repleaceNames2 = Modules.ReplaceName.GetList(1);
+
+
                     driveindex_01 = cbDriveCam01.SelectedIndex;
                     driveindex_02 = cbDriveCam02.SelectedIndex;
 
@@ -451,12 +459,6 @@ namespace SC_M4
                     lbTitle.Text = "Camera opening...";
 
                     btStartStop.Text = "STOP";
-                    //if (thread != null)
-                    //{
-                    //    thread.Abort();
-                    //    thread.DisableComObjectEagerCleanup();
-                    //    thread = null;
-                    //}
 
                     this.richTextBox1.Text = string.Empty;
                     this.richTextBox2.Text = string.Empty;
@@ -483,6 +485,8 @@ namespace SC_M4
 
                     isStarted = true;
                     isStaetReset = true;
+
+
                 }
                 else
                 {
@@ -813,7 +817,6 @@ namespace SC_M4
             return input;
         }
         History history;
-
         private bool is_Blink_NG = false;
         private int Compare_Master(string txt_sw, string txt_lb)
         {
@@ -1152,9 +1155,10 @@ namespace SC_M4
         /// </summary>
         /// <param name="image"></param>
         /// <returns></returns>
-        public static Bitmap Sharpen(Bitmap image)
+        Bitmap sharpenImage;
+        public Bitmap Sharpen(Bitmap image)
         {
-            Bitmap sharpenImage = CloneImage(image);
+            sharpenImage = (Bitmap)image.Clone();
 
             int filterWidth = 3;
             int filterHeight = 3;
@@ -1229,6 +1233,7 @@ namespace SC_M4
             // Release image bits.
             sharpenImage.UnlockBits(pbits);
 
+           
             return sharpenImage;
         }
 
@@ -1282,6 +1287,19 @@ namespace SC_M4
             if(background.IsBusy)
                 background.Dispose();
 
+        }
+        NameList nameList;
+        private void changeNameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(nameList != null)
+            {
+                nameList.Close();
+                nameList.Dispose();
+                nameList = null;
+            }
+
+            nameList = new NameList();
+            nameList.Show();
         }
     }
 
@@ -1410,17 +1428,6 @@ namespace SC_M4
                 OnVideoStop?.Invoke();
             }
 
-            public void Resumed()
-            {
-                _isRunning = true;
-                if (_thread != null)
-                {
-                    _thread.Abort();
-                }
-                _thread = new Thread(FrameCapture);
-                _thread.Start();
-            }
-
             public void Dispose()
             {
                 _isRunning = false;
@@ -1507,6 +1514,7 @@ namespace SC_M4
     }
     #endregion
 
+    #region Old
     /*
     public static class SettingHandler
     {
@@ -1533,6 +1541,7 @@ namespace SC_M4
         }
     }
     */
+    #endregion
     public static class OcrProcessor
     {
             public static IReadOnlyList<Language> GetOcrLangList()
