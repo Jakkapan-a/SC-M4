@@ -152,6 +152,12 @@
     <Compile Include="Forms\NameList.Designer.cs">
       <DependentUpon>NameList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\NameListForms.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\NameListForms.Designer.cs">
+      <DependentUpon>NameListForms.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Rename.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -196,6 +202,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\NameList.resx">
       <DependentUpon>NameList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\NameListForms.resx">
+      <DependentUpon>NameListForms.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Rename.resx">
       <DependentUpon>Rename.cs</DependentUpon>

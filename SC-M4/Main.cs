@@ -541,7 +541,7 @@ namespace SC_M4
                 btStartStop.Text = "START";
             }
         }
-
+        /*
         private void ProcessTesting()
         {
             bool detection = false;
@@ -549,13 +549,10 @@ namespace SC_M4
             string result_2 = string.Empty;
             isStaetReset = true;
             Stopwatch stopwatch = new Stopwatch();
-            bool continue_1 = false;
             while (true)
             {
                 if (capture_1._isRunning && capture_2._isRunning && bitmapCamaera_01 != null && bitmapCamaera_02 != null && isStaetReset && scrollablePictureBoxCamera01.Image != null && scrollablePictureBoxCamera02.Image != null)
                 {
-                    //
-                    continue_1 = false;
                     stopwatch.Reset();
                     stopwatch.Start();
                     detection = !detection;
@@ -644,7 +641,7 @@ namespace SC_M4
                 Thread.Sleep(1000);
             }
         }
-
+        */
         private bool detection = false;
         private string result_1 = string.Empty;
         private string result_2 = string.Empty;

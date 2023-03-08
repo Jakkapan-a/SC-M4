@@ -47,6 +47,22 @@ namespace SC_M4.Modules
             parameters.Add("@id", id);
             SQliteDataAccess.Execute(sql, parameters);
         }
+        public static void Delete(int id)
+        {
+            string sql = "DELETE FROM replace_name WHERE id = @id";
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@id", id);
+            SQliteDataAccess.Execute(sql, parameters);
+        }
+        public void Validate()
+        {
+            if (oldName == "")
+                throw new Exception("Old name is required");
+            if(newName == "")
+                throw new Exception("New name is required");
+            if(_type == -1)
+                throw new Exception("Type is required");
+        }
         public static int isExist(string oldName)
         {
             string sql = "SELECT * FROM replace_name WHERE oldName = @oldName";
@@ -62,8 +78,18 @@ namespace SC_M4.Modules
             parameters.Add("@oldName", oldName);
             parameters.Add("@_type", _type);
             return SQliteDataAccess.Query<ReplaceName>(sql, parameters).Count;
-        }        
-
+        }
+        
+        public static int isExist(string oldName, int _type,int id)
+        {
+            string sql = "SELECT * FROM replace_name WHERE oldName = @oldName AND _type = @_type AND id NOT IN( @id )";
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@oldName", oldName);
+            parameters.Add("@_type", _type);
+            parameters.Add("@id", id);
+            return SQliteDataAccess.Query<ReplaceName>(sql, parameters).Count;
+        }
+        
         public static List<ReplaceName> GetList()
         {
             string sql = "SELECT * FROM replace_name";
