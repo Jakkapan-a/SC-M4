@@ -37,6 +37,7 @@
             this.selectXYCAM1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectXYCAM2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testOCRToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelHeader = new System.Windows.Forms.Panel();
             this.btStartStop = new System.Windows.Forms.Button();
             this.lbTitle = new System.Windows.Forms.Label();
@@ -80,7 +81,6 @@
             this.toolStripStatusSerialData = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerMain = new System.Windows.Forms.Timer(this.components);
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
-            this.changeNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerHomeMain)).BeginInit();
@@ -163,6 +163,13 @@
             this.testOCRToolStripMenuItem.Text = "Test OCR";
             this.testOCRToolStripMenuItem.Visible = false;
             this.testOCRToolStripMenuItem.Click += new System.EventHandler(this.testOCRToolStripMenuItem_Click);
+            // 
+            // changeNameToolStripMenuItem
+            // 
+            this.changeNameToolStripMenuItem.Name = "changeNameToolStripMenuItem";
+            this.changeNameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.changeNameToolStripMenuItem.Text = "Setting";
+            this.changeNameToolStripMenuItem.Click += new System.EventHandler(this.changeNameToolStripMenuItem_Click);
             // 
             // panelHeader
             // 
@@ -651,13 +658,6 @@
             // serialPort
             // 
             this.serialPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort_DataReceived);
-            // 
-            // changeNameToolStripMenuItem
-            // 
-            this.changeNameToolStripMenuItem.Name = "changeNameToolStripMenuItem";
-            this.changeNameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.changeNameToolStripMenuItem.Text = "Conditions Change";
-            this.changeNameToolStripMenuItem.Click += new System.EventHandler(this.changeNameToolStripMenuItem_Click);
             // 
             // Main
             // 

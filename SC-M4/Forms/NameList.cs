@@ -18,11 +18,22 @@ namespace SC_M4.Forms
         }
         public int _type = 0;
         public int _id = -1;
+
+        public bool _login = false;
+        private Login login;
         private void NameList_Load(object sender, EventArgs e)
         {
             btnCam1.BackColor = Color.FromArgb(192, 192, 192);
             randersTable();
             toolStripStatusLabelType.Text = "Type :" + _type;
+
+            login = new Login(this);
+            login.ShowDialog();
+
+            if (!_login)
+            {
+                this.Close();
+            }
         }
 
         private void btnCam1_Click(object sender, EventArgs e)

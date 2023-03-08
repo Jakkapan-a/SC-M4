@@ -698,6 +698,12 @@ namespace SC_M4
                 result_1 = result_1.Replace("731TMCO", "731TMC6").Replace("-I", "-1");
                 result_1 = result_1.Replace("-S-", "-5-");
                 result_1 = result_1.Replace("G.22", "G:22");
+
+                foreach(var item in repleaceNames1)
+                {
+                    result_1 = result_1.Replace(item.oldName, item.newName);
+                }
+
                 if (isOCR1 && result_1 == string.Empty)
                 {
                     result_1 = "731TMC";
@@ -727,6 +733,10 @@ namespace SC_M4
                     result_2 = result_2.Replace(")9U7", "9U7").Replace("\n", "");
                     result_2 = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
                     result_2 = ReplaceName(result_2);
+                    foreach (var item in repleaceNames2)
+                    {
+                        result_2 = result_2.Replace(item.oldName, item.newName);
+                    }
                     richTextBox2.Invoke(new Action(() =>
                     {
                         this.richTextBox2.Text = string.Empty;
