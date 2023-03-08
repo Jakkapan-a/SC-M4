@@ -57,7 +57,14 @@ namespace SC_M4.Modules
             }
         }
 
-
+        // Update to Db
+        public static void Execute(string sql, Dictionary<string, object> parameters)
+        {
+            using (IDbConnection con = new SQLiteConnection(LoadConnectionString()))
+            {
+                con.Execute(sql, parameters);
+            }
+        }
         private static string LoadConnectionString(string id = "Default")
         {
             return "Data Source=" + System.IO.Directory.GetCurrentDirectory() + "\\" + ConfigurationManager.ConnectionStrings[id];
@@ -77,7 +84,14 @@ namespace SC_M4.Modules
                 return output.ToList();
             }
         }
-
+        public static List<T> Query<T>(string sql, Dictionary<string, object> parameters = null)
+        {
+            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
+            {
+                var output = cnn.Query<T>(sql, parameters);
+                return output.ToList();
+            }
+        }
         internal static bool IsExist(string sql)
         {
             using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))

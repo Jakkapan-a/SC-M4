@@ -764,9 +764,9 @@ namespace SC_M4
         private string ReplaceName(string input)
         {
             input = input.Replace("731OTM", "7310TM");
-            
-            
+
             input = input.Replace("3O1731", "3-01731");
+
             input = input.Replace("3-O1731", "3-01731");
 
             input = input.Replace("4O1731", "4-01731");
