@@ -75,6 +75,7 @@ namespace SC_M4
                 item.Text = "";
             }
 
+            this.Text = "SC-M4 v.4.52";
             background = new BackgroundWorker();
             background.WorkerReportsProgress = true;
             background.WorkerSupportsCancellation = true;
