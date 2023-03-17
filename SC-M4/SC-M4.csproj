@@ -127,6 +127,9 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="TClass">
+      <HintPath>..\..\Class Library\TClass\TClass\bin\Debug\TClass.dll</HintPath>
+    </Reference>
     <Reference Include="TConstrols">
       <HintPath>..\..\RGB-Detection\TConstrols\bin\Debug\TConstrols.dll</HintPath>
     </Reference>

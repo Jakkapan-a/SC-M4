@@ -27,6 +27,9 @@ using BitmapDecoder = Windows.Graphics.Imaging.BitmapDecoder;
 using System.Drawing.Imaging;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 using System.Windows.Markup;
+
+using TClass;
+using Windows.UI.Xaml.Controls;
 //using Windows.UI.Xaml.Controls;
 
 namespace SC_M4
@@ -85,7 +88,7 @@ namespace SC_M4
             background.ProgressChanged += Background_ProgressChanged;
 
             timerOCR = new System.Windows.Forms.Timer(components);
-            timerOCR.Interval = 500;
+            timerOCR.Interval = 1000;
 
             timerOCR.Tick += TimerOCR_Tick;
 
@@ -99,11 +102,11 @@ namespace SC_M4
                 Directory.CreateDirectory(Properties.Resources.path_images);
             // Create Video Capture Object
             capture_1 = new TCapture.Capture();
-            capture_1.OnFrameHeadler += Capture_1_OnFrameHeadler;
+            capture_1.OnFrameHeader += Capture_1_OnFrameHeadler;
             capture_1.OnVideoStarted += Capture_1_OnVideoStarted;
             capture_1.OnVideoStop += Capture_1_OnVideoStop;
             capture_2 = new TCapture.Capture();
-            capture_2.OnFrameHeadler += Capture_2_OnFrameHeadler;
+            capture_2.OnFrameHeader += Capture_2_OnFrameHeadler;
             capture_2.OnVideoStarted += Capture_2_OnVideoStarted;
             capture_2.OnVideoStop += Capture_2_OnVideoStop;
             this.ActiveControl = txtEmployee;
@@ -139,15 +142,25 @@ namespace SC_M4
             loadTableHistory();
 
         }
-
+        private Task taskProcess;
         private void TimerOCR_Tick(object sender, EventArgs e)
         {
-           if(background != null && background.IsBusy != true && isStaetReset)
-            {
-                background.RunWorkerAsync();
-            }
+            //if(background != null && background.IsBusy != true && isStaetReset)
+            // {
+            //     background.RunWorkerAsync();
+            // }
+            onTest();
         }
 
+        private async void onTest()
+        {
+            if (taskProcess != null && taskProcess.Status == TaskStatus.Running)
+            {
+                return;
+            }
+            taskProcess = Task.Run(() => processOCR());
+            await taskProcess;
+        }
         private async void deletedFileTemp()
         {
             try
@@ -274,21 +287,21 @@ namespace SC_M4
                 pictureBoxCamera02.Invoke(new Action(() => Capture_2_OnFrameHeadler(bitmap)));
                 return;
             }
-            
-            pictureBoxCamera02.SuspendLayout();
-            pictureBoxCamera02.Image = new Bitmap(bitmap);
+
+            pictureBoxCamera02.Image?.Dispose();
+            pictureBoxCamera02.Image = (System.Drawing.Image)bitmap.Clone();
+            bitmapCamaera_02?.Dispose();
             bitmapCamaera_02 = (Bitmap)pictureBoxCamera02.Image.Clone();
             if (rect_2 != Rectangle.Empty && isStaetReset)
             {
-                if (bmp2 != null)
-                {
-                    bmp2.Dispose();
-                }
+
+                bmp2?.Dispose();
                 bmp2 = new Bitmap(rect_2.Width, rect_2.Height);
                 using (Graphics g = Graphics.FromImage(bmp2))
                 {
                     g.DrawImage(bitmapCamaera_02, 0, 0, rect_2, GraphicsUnit.Pixel);
                 }
+                scrollablePictureBoxCamera02.Image?.Dispose();
                 scrollablePictureBoxCamera02.Image = bmp2;
                 // Draw Rectangle to Image
                 using (Graphics g = Graphics.FromImage(pictureBoxCamera02.Image))
@@ -296,7 +309,6 @@ namespace SC_M4
                     g.DrawRectangle(new Pen(Color.Red, 2), rect_2);
                 }
             }
-            pictureBoxCamera02.ResumeLayout();
         }
 
         private void Capture_1_OnVideoStop()
@@ -326,25 +338,25 @@ namespace SC_M4
         
         private void Capture_1_OnFrameHeadler(Bitmap bitmap)
         {
-            if (pictureBoxCamera01.InvokeRequired)
+            if (InvokeRequired)
             {
-                pictureBoxCamera01.Invoke(new Action(()=>Capture_1_OnFrameHeadler(bitmap)));
+                Invoke(new Action(()=>Capture_1_OnFrameHeadler(bitmap)));
                 return;
             }
-            pictureBoxCamera01.SuspendLayout();
-            pictureBoxCamera01.Image = new Bitmap(bitmap);
+            pictureBoxCamera01.Image?.Dispose();
+            pictureBoxCamera01.Image = (System.Drawing.Image)bitmap.Clone();
+            
+            bitmapCamaera_01?.Dispose();
             bitmapCamaera_01 = (Bitmap)pictureBoxCamera01.Image.Clone();
             if (rect_1 != Rectangle.Empty && isStaetReset)
             {
-                if(bmp1 != null)
-                {
-                    bmp1.Dispose();
-                }
+                bmp1?.Dispose();
                 bmp1 = new Bitmap(rect_1.Width, rect_1.Height);
                 using (Graphics g = Graphics.FromImage(bmp1))
                 {
                     g.DrawImage(bitmapCamaera_01, 0, 0, rect_1, GraphicsUnit.Pixel);
                 }
+                scrollablePictureBoxCamera01.Image?.Dispose();
                 scrollablePictureBoxCamera01.Image = bmp1;
                 // Draw Rectangle to Image
                 using (Graphics g = Graphics.FromImage(pictureBoxCamera01.Image))
@@ -352,7 +364,6 @@ namespace SC_M4
                     g.DrawRectangle(new Pen(Color.Red, 2), rect_1);
                 }
             }
-            pictureBoxCamera01.ResumeLayout();
         }
 
         #endregion
@@ -409,8 +420,23 @@ namespace SC_M4
         #region Start
         private List<ReplaceName> repleaceNames1 = new List<ReplaceName>();
         private List<ReplaceName> repleaceNames2 = new List<ReplaceName>();
-        private void btStartStop_Click(object sender, EventArgs e)
+
+        private Task taskCam1;
+        private Task taskCam2;
+        private async void btStartStop_Click(object sender, EventArgs e)
         {
+
+            if(taskCam1 != null &&  taskCam1.Status == TaskStatus.Running)
+            {
+                Console.WriteLine("Task 1 is running");
+                return;
+            }
+
+            if (taskCam2 != null && taskCam2.Status == TaskStatus.Running)
+            {
+                Console.WriteLine("Task 2 is running");
+                return;
+            }
             this.isStart = !this.isStart;
             try
             {
@@ -445,14 +471,13 @@ namespace SC_M4
 
                     this.serialportName = comboBoxCOMPort.Text;
                     this.serialportBaud = comboBoxBaud.Text;
-                    serialConnect();
+                    //serialConnect();
 
                     if (capture_1.IsOpened)
                         capture_1.Stop();
                     if (capture_2.IsOpened)
                         capture_2.Stop();
 
-                
                     repleaceNames1.Clear();
                     repleaceNames1 = Modules.ReplaceName.GetList(0);
 
@@ -463,10 +488,15 @@ namespace SC_M4
                     driveindex_01 = cbDriveCam01.SelectedIndex;
                     driveindex_02 = cbDriveCam02.SelectedIndex;
 
-                    Task.Factory.StartNew(() => capture_1.Start(driveindex_01));
-                    Task.Factory.StartNew(() => capture_2.Start(driveindex_02));
-
                     lbTitle.Text = "Camera opening...";
+
+                    taskCam1 = Task.Run(()=> capture_1.Start(driveindex_01));
+
+                    await taskCam1;
+
+                    taskCam2 = Task.Run(() => capture_2.Start(driveindex_02));
+
+                    await taskCam2;
 
                     btStartStop.Text = "STOP";
 
@@ -495,8 +525,6 @@ namespace SC_M4
 
                     isStarted = true;
                     isStaetReset = true;
-
-
                 }
                 else
                 {
@@ -662,6 +690,109 @@ namespace SC_M4
 
         private Stopwatch stopwatch = new Stopwatch();
       
+        private async void processOCR()
+        {
+            if (capture_1._isRunning && capture_2._isRunning && bitmapCamaera_01 != null && bitmapCamaera_02 != null && isStaetReset && scrollablePictureBoxCamera01.Image != null && scrollablePictureBoxCamera02.Image != null)
+            {
+                if (isStarted)
+                {
+                    capture_2.setFocus((int)numericUpDownFocus.Value);
+                    isStarted = false;
+                }
+                stopwatch.Reset();
+                stopwatch.Start();
+                detection = !detection;
+                if (detection)
+                {
+                    Invoke(new Action(() =>
+                    {
+                        lbTitle.Text = "Wiat for detect..";
+                    }));
+                }
+                else
+                {
+                    Invoke(new Action(() =>
+                    {
+                        lbTitle.Text = "Detecting...";
+                    }));
+                }
+                // Console.WriteLine("2");
+                var ocr_1 = await OcrProcessor.GetOcrResultFromBitmap(Sharpen((Bitmap)scrollablePictureBoxCamera01.Image), SelectedLang);
+                //var ocr_1 = await _OCRScan.GetOcrResultFromBitmap(Sharpen((Bitmap)scrollablePictureBoxCamera01.Image), SelectedLang);
+                result_1 = ocr_1.Text; // performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty);
+                var a = result_1.IndexOf("-731");
+                result_1 = result_1.Substring(a + 1);
+                a = result_1.IndexOf("|731");
+                result_1 = result_1.Substring(a + 1);
+                result_1 = result_1.Replace("T31TM", "731TM");
+                result_1 = result_1.Replace("731THC", "731TMC");
+                result_1 = result_1.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "").Replace("\\", "").Replace("|", "").Replace(@"\", "");
+                result_1 = result_1.Replace("7731TMC", "731TMC");
+                result_1 = result_1.Replace("731TMCO", "731TMC6").Replace("-I", "-1");
+                result_1 = result_1.Replace("-S-", "-5-");
+                result_1 = result_1.Replace("G.22", "G:22");
+
+                foreach (var item in repleaceNames1)
+                {
+                    result_1 = result_1.Replace(item.oldName, item.newName);
+                }
+
+                if (isOCR1 && result_1 == string.Empty)
+                {
+                    result_1 = "731TMC";
+                    isOCR1 = false;
+                }
+
+                richTextBox1.Invoke(new Action(() =>
+                {
+                    this.richTextBox1.Text = string.Empty;
+                    this.richTextBox1.Text = result_1.Trim();
+
+                }));
+                // Image 02
+                int lb = result_1.IndexOf("731TMC");
+                if (result_1 != string.Empty && lb != -1)
+                {
+                    // OCR 2
+                    result_2 = string.Empty;
+                    var ocr = await OcrProcessor.GetOcrResultFromBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(), SelectedLang);
+                    //var ocr = await _OCRScan.GetOcrResultFromBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(), SelectedLang);
+                    result_2 = ocr.Text;
+                    result_2 = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
+                    result_2 = Regex.Replace(result_2, "[^a-zA-Z,0-9,(),:,-]", "");
+
+                    result_2 = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "").Replace("'", "").Replace("|", "").Replace(@"\", "");
+                    result_2 = result_2.Replace("91J7", "9U7");
+                    result_2 = result_2.Replace("-OO", "-00");
+                    result_2 = result_2.Replace(")9U7", "9U7").Replace("\n", "");
+                    result_2 = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
+                    result_2 = ReplaceName(result_2);
+                    foreach (var item in repleaceNames2)
+                    {
+                        result_2 = result_2.Replace(item.oldName, item.newName);
+                    }
+                    richTextBox2.Invoke(new Action(() =>
+                    {
+                        this.richTextBox2.Text = string.Empty;
+                        this.richTextBox2.Text = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
+                    }));
+                    int result = Compare_Master(result_1, result_2);
+                    if (result == 1 || result == 2)
+                    {
+                        isStaetReset = false;
+                    }
+                }
+                //await Task.Delay(100);
+                stopwatch.Stop();
+                Console.WriteLine("Elapsed Time is {0} ms", stopwatch.ElapsedMilliseconds);
+                Invoke(new Action(() =>
+                {
+                    toolStripStatusTime.Text = "Load " + stopwatch.ElapsedMilliseconds.ToString() + "ms";
+                    loadTableHistory();
+                }));
+            }
+        }
+
         private async void Background_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = (BackgroundWorker)sender;
@@ -675,7 +806,7 @@ namespace SC_M4
                 }
                 if (isStarted)
                 {
-                    capture_2.SetFocus((int)numericUpDownFocus.Value);
+                    capture_2.setFocus((int)numericUpDownFocus.Value);
                     isStarted = false;
                 }
                 stopwatch.Reset();
@@ -1106,14 +1237,14 @@ namespace SC_M4
                 OCRImageEntity entity = new OCRImageEntity(imageList, inputfilename, index, rect, curLangCode);
                 entity.ScreenshotMode = false;
                 entity.Language = "eng";
-                OCR<Image> ocrEngine = new OCRImages();
+                OCR<System.Drawing.Image> ocrEngine = new OCRImages();
                 ocrEngine.PageSegMode = selectedPSM;
                 ocrEngine.OcrEngineMode = selectedOEM;
                 ocrEngine.Language = entity.Language;
 
-                IList<Image> images = entity.ClonedImages;
+                IList<System.Drawing.Image> images = entity.ClonedImages;
 
-                string result = ocrEngine.RecognizeText(((List<Image>)images).GetRange(0, 1), entity.Inputfilename);
+                string result = ocrEngine.RecognizeText(((List<System.Drawing.Image>)images).GetRange(0, 1), entity.Inputfilename);
                 return result;
             }
             catch (Exception ex)
@@ -1156,7 +1287,7 @@ namespace SC_M4
         {
             if (!checkBoxAutoFocus.Checked)
             {
-                capture_2.SetFocus((int)numericUpDownFocus.Value);
+                capture_2.setFocus((int)numericUpDownFocus.Value);
             }
             else
             {
@@ -1328,6 +1459,7 @@ namespace SC_M4
     }
 
     #region TCapture
+    /*
     public class TCapture
     {
         public class Capture
@@ -1536,6 +1668,7 @@ namespace SC_M4
 
         }
     }
+    */
     #endregion
 
     #region Old
