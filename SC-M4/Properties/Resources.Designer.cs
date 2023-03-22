@@ -105,5 +105,15 @@ namespace SC_M4.Properties {
                 return ResourceManager.GetString("path_temp", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Spinner_0_4s_800px {
+            get {
+                object obj = ResourceManager.GetObject("Spinner_0_4s_800px", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

@@ -489,6 +489,12 @@ namespace SC_M4
 
                     lbTitle.Text = "Camera opening...";
 
+                    btConnect.Text = "Opening...";
+                    pictureBoxCamera01.Image?.Dispose();
+                    pictureBoxCamera02.Image?.Dispose();
+                    pictureBoxCamera01.Image = Properties.Resources.Spinner_0_4s_800px;
+                    pictureBoxCamera02.Image = Properties.Resources.Spinner_0_4s_800px;
+
                     taskCam1 = Task.Run(()=> capture_1.Start(driveindex_01));
 
                     await taskCam1;
@@ -565,7 +571,8 @@ namespace SC_M4
                     lbTitle.ForeColor = Color.Black;
                     lbTitle.BackColor = Color.Yellow;
                     is_Blink_NG = false;
-
+                    pictureBoxCamera01.Image = null;
+                    pictureBoxCamera02.Image = null;
                     //if (thread != null)
                     //{
                     //    thread.Abort(true);
