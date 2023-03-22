@@ -115,6 +115,8 @@ namespace SC_M4
             LogWriter.SaveLog("Start Program");
             btRefresh.PerformClick();
 
+            imageList = new List<System.Drawing.Image>();
+
             loadRect(0);
             loadRect(1);
             try
@@ -470,7 +472,7 @@ namespace SC_M4
 
                     this.serialportName = comboBoxCOMPort.Text;
                     this.serialportBaud = comboBoxBaud.Text;
-                    //serialConnect();
+                    serialConnect();
 
                     if (capture_1.IsOpened)
                         capture_1.Stop();
@@ -726,10 +728,14 @@ namespace SC_M4
                         }));
                     }
                     // Console.WriteLine("2");
-                    ocrResult1 = null;
-                    ocrResult1 = await GetOcrResultBitmap(Sharpen((Bitmap)scrollablePictureBoxCamera01.Image), SelectedLang);
+                    //ocrResult1 = null;
+                    //ocrResult1 = await GetOcrResultBitmap(Sharpen((Bitmap)scrollablePictureBoxCamera01.Image), SelectedLang);
                     //var ocr_1 = await _OCRScan.GetOcrResultFromBitmap(Sharpen((Bitmap)scrollablePictureBoxCamera01.Image), SelectedLang);
-                    result_1 = ocrResult1.Text; // performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty);
+                    //result_1 = ocrResult1.Text; // performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty);
+                    imageList?.Clear();
+                    imageList.Add((System.Drawing.Image)scrollablePictureBoxCamera01.Image.Clone());
+
+                    result_1 = await performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty);
                     var a = result_1.IndexOf("-731");
                     result_1 = result_1.Substring(a + 1);
                     a = result_1.IndexOf("|731");
@@ -1256,34 +1262,36 @@ namespace SC_M4
         {
         }
 
-        private string performOCR(IList<System.Drawing.Image> imageList, string inputfilename, int index, Rectangle rect)
+        private async Task<string> performOCR(IList<System.Drawing.Image> imageList, string inputfilename, int index, Rectangle rect)
         {
-            try
-            {
-                if (curLangCode.Trim().Length == 0)
+            return await Task.Run(() => {
+                try
                 {
-                    MessageBox.Show(this, "curLangCode = 0");
-                    return "";
+                    if (curLangCode.Trim().Length == 0)
+                    {
+                        MessageBox.Show(this, "curLangCode = 0");
+                        return "";
+                    }
+                    OCRImageEntity entity = new OCRImageEntity(imageList, inputfilename, index, rect, curLangCode);
+                    entity.ScreenshotMode = false;
+                    entity.Language = "eng";
+                    OCR<System.Drawing.Image> ocrEngine = new OCRImages();
+                    ocrEngine.PageSegMode = selectedPSM;
+                    ocrEngine.OcrEngineMode = selectedOEM;
+                    ocrEngine.Language = entity.Language;
+
+                    IList<System.Drawing.Image> images = entity.ClonedImages;
+
+                    string result = ocrEngine.RecognizeText(((List<System.Drawing.Image>)images).GetRange(0, 1), entity.Inputfilename);
+                    return result;
                 }
-                OCRImageEntity entity = new OCRImageEntity(imageList, inputfilename, index, rect, curLangCode);
-                entity.ScreenshotMode = false;
-                entity.Language = "eng";
-                OCR<System.Drawing.Image> ocrEngine = new OCRImages();
-                ocrEngine.PageSegMode = selectedPSM;
-                ocrEngine.OcrEngineMode = selectedOEM;
-                ocrEngine.Language = entity.Language;
-
-                IList<System.Drawing.Image> images = entity.ClonedImages;
-
-                string result = ocrEngine.RecognizeText(((List<System.Drawing.Image>)images).GetRange(0, 1), entity.Inputfilename);
-                return result;
-            }
-            catch (Exception ex)
-            {
-                //MessageBox.Show(ex.Message, "Exclamation A00", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                LogWriter.SaveLog("A00 : " + ex.Message);
-            }
-            return "";
+                catch (Exception ex)
+                {
+                    //MessageBox.Show(ex.Message, "Exclamation A00", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    LogWriter.SaveLog("A00 : " + ex.Message);
+                }
+                return "";
+            });
         }
 
         private void testOCRToolStripMenuItem_Click(object sender, EventArgs e)

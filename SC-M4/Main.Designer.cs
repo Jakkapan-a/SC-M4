@@ -79,9 +79,9 @@
             this.toolStripStatusTime = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusConnectSerialPort = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusSerialData = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelError = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerMain = new System.Windows.Forms.Timer(this.components);
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
-            this.toolStripStatusLabelError = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerHomeMain)).BeginInit();
@@ -652,6 +652,12 @@
             this.toolStripStatusSerialData.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusSerialData.Text = "toolStripStatusLabel1";
             // 
+            // toolStripStatusLabelError
+            // 
+            this.toolStripStatusLabelError.Name = "toolStripStatusLabelError";
+            this.toolStripStatusLabelError.Size = new System.Drawing.Size(118, 17);
+            this.toolStripStatusLabelError.Text = "toolStripStatusLabel1";
+            // 
             // timerMain
             // 
             this.timerMain.Interval = 1000;
@@ -660,12 +666,6 @@
             // serialPort
             // 
             this.serialPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort_DataReceived);
-            // 
-            // toolStripStatusLabelError
-            // 
-            this.toolStripStatusLabelError.Name = "toolStripStatusLabelError";
-            this.toolStripStatusLabelError.Size = new System.Drawing.Size(118, 17);
-            this.toolStripStatusLabelError.Text = "toolStripStatusLabel1";
             // 
             // Main
             // 
@@ -680,7 +680,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "SC-M4 v4.50";
+            this.Text = "SC-M4 v4.51";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Main_FormClosed);
             this.Load += new System.EventHandler(this.Main_Load);
