@@ -720,7 +720,7 @@ namespace SC_M4
                     }
                     // Console.WriteLine("2");
                     ocrResult1 = null;
-                    ocrResult1 = await OcrProcessor.GetOcrResultFromBitmap(Sharpen((Bitmap)scrollablePictureBoxCamera01.Image), SelectedLang);
+                    ocrResult1 = await GetOcrResultBitmap(Sharpen((Bitmap)scrollablePictureBoxCamera01.Image), SelectedLang);
                     //var ocr_1 = await _OCRScan.GetOcrResultFromBitmap(Sharpen((Bitmap)scrollablePictureBoxCamera01.Image), SelectedLang);
                     result_1 = ocrResult1.Text; // performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty);
                     var a = result_1.IndexOf("-731");
@@ -759,7 +759,7 @@ namespace SC_M4
                         // OCR 2
                         result_2 = string.Empty;
                         ocrResult2 = null;
-                        ocrResult2 = await OcrProcessor.GetOcrResultFromBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(), SelectedLang);
+                        ocrResult2 = await GetOcrResultBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(), SelectedLang);
                         //var ocr = await _OCRScan.GetOcrResultFromBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(), SelectedLang);
                         result_2 = ocrResult2.Text;
                         result_2 = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
@@ -793,6 +793,7 @@ namespace SC_M4
                     {
                         toolStripStatusTime.Text = "Load " + stopwatch.ElapsedMilliseconds.ToString() + "ms";
                         loadTableHistory();
+                        toolStripStatusLabelError.ForeColor = Color.Green;
                     }));
                 }
             }
@@ -1561,6 +1562,67 @@ namespace SC_M4
             nameList = new NameList();
             nameList.Show();
         }
+        /*
+        public async Task<OcrResult> GetOcrResultBitmap(Bitmap scaledBitmap, Language selectedLanguage)
+        {
+            using (MemoryStream memory = new MemoryStream())
+            {
+                scaledBitmap.Save(memory, ImageFormat.Bmp);
+                memory.Position = 0;
+
+                BitmapDecoder bmpDecoder = await BitmapDecoder.CreateAsync(memory.AsRandomAccessStream());
+                SoftwareBitmap softwareBmp = await bmpDecoder.GetSoftwareBitmapAsync();
+
+                OcrEngine ocrEngine = OcrEngine.TryCreateFromLanguage(selectedLanguage);
+
+                // Run the RecognizeAsync call in a separate thread to allow message pumping
+                OcrResult result = await Task.Run(async () => await ocrEngine.RecognizeAsync(softwareBmp));
+                scaledBitmap.Dispose();
+                softwareBmp.Dispose();
+                ocrEngine = null;
+                return result;
+            }
+        }
+        */
+        public Task<OcrResult> GetOcrResultBitmap(Bitmap scaledBitmap, Language selectedLanguage)
+        {
+            var tcs = new TaskCompletionSource<OcrResult>();
+
+            Thread staThread = new Thread(() =>
+            {
+                try
+                {
+                    using (MemoryStream memory = new MemoryStream())
+                    {
+                        scaledBitmap.Save(memory, ImageFormat.Bmp);
+                        memory.Position = 0;
+
+                        BitmapDecoder bmpDecoder = BitmapDecoder.CreateAsync(memory.AsRandomAccessStream()).AsTask().Result;
+                        SoftwareBitmap softwareBmp = bmpDecoder.GetSoftwareBitmapAsync().AsTask().Result;
+
+                        OcrEngine ocrEngine = OcrEngine.TryCreateFromLanguage(selectedLanguage);
+
+                        // Run the RecognizeAsync call in a separate thread to allow message pumping
+                        OcrResult result = ocrEngine.RecognizeAsync(softwareBmp).AsTask().Result;
+
+                        softwareBmp.Dispose();
+                        ocrEngine = null;
+                        tcs.SetResult(result);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    tcs.SetException(ex);
+                }
+            });
+
+            staThread.SetApartmentState(ApartmentState.STA);
+            staThread.Start();
+
+            return tcs.Task;
+        }
+
+
     }
 
     #region TCapture
@@ -1883,7 +1945,6 @@ namespace SC_M4
                 scaledBitmap.Dispose();
                 softwareBmp.Dispose();
                 ocrEngine = null;
-                memory.Dispose();
                 return result;
             }
         }
