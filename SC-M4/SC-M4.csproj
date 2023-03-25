@@ -143,6 +143,12 @@
     <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.22000.194" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\CameraControls.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CameraControls.Designer.cs">
+      <DependentUpon>CameraControls.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Edit_Items.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -206,6 +212,9 @@
     <Compile Include="Utilities\GrayBMP_File.cs" />
     <Compile Include="Utilities\ImageConverter.cs" />
     <Compile Include="Utilities\ImageHelper.cs" />
+    <EmbeddedResource Include="Forms\CameraControls.resx">
+      <DependentUpon>CameraControls.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Edit_Items.resx">
       <DependentUpon>Edit_Items.cs</DependentUpon>
     </EmbeddedResource>

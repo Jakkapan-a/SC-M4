@@ -57,8 +57,7 @@
             this.scrollablePictureBoxCamera02 = new System.Windows.Forms.PictureBox();
             this.pictureBoxCamera02 = new TConstrols.ScrollablePictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.checkBoxAutoFocus = new System.Windows.Forms.CheckBox();
-            this.numericUpDownFocus = new System.Windows.Forms.NumericUpDown();
+            this.nFocus = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.cbDriveCam01 = new System.Windows.Forms.ComboBox();
@@ -82,6 +81,8 @@
             this.toolStripStatusLabelError = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerMain = new System.Windows.Forms.Timer(this.components);
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
+            this.cameraControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkBoxAutoFocus = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerHomeMain)).BeginInit();
@@ -102,7 +103,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.scrollablePictureBoxCamera02)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCamera02)).BeginInit();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFocus)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nFocus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewHistory)).BeginInit();
             this.statusStripHome.SuspendLayout();
             this.SuspendLayout();
@@ -131,6 +132,7 @@
             this.selectXYCAM1ToolStripMenuItem,
             this.selectXYCAM2ToolStripMenuItem,
             this.testOCRToolStripMenuItem,
+            this.cameraControlToolStripMenuItem,
             this.changeNameToolStripMenuItem});
             this.settingToolStripMenuItem.Name = "settingToolStripMenuItem";
             this.settingToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
@@ -139,28 +141,28 @@
             // masterListToolStripMenuItem
             // 
             this.masterListToolStripMenuItem.Name = "masterListToolStripMenuItem";
-            this.masterListToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.masterListToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.masterListToolStripMenuItem.Text = "Master List";
             this.masterListToolStripMenuItem.Click += new System.EventHandler(this.masterListToolStripMenuItem_Click);
             // 
             // selectXYCAM1ToolStripMenuItem
             // 
             this.selectXYCAM1ToolStripMenuItem.Name = "selectXYCAM1ToolStripMenuItem";
-            this.selectXYCAM1ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.selectXYCAM1ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.selectXYCAM1ToolStripMenuItem.Text = "Select X-Y CAM 1";
             this.selectXYCAM1ToolStripMenuItem.Click += new System.EventHandler(this.selectXYCAM1ToolStripMenuItem_Click);
             // 
             // selectXYCAM2ToolStripMenuItem
             // 
             this.selectXYCAM2ToolStripMenuItem.Name = "selectXYCAM2ToolStripMenuItem";
-            this.selectXYCAM2ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.selectXYCAM2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.selectXYCAM2ToolStripMenuItem.Text = "Select X-Y CAM 2";
             this.selectXYCAM2ToolStripMenuItem.Click += new System.EventHandler(this.selectXYCAM2ToolStripMenuItem_Click);
             // 
             // testOCRToolStripMenuItem
             // 
             this.testOCRToolStripMenuItem.Name = "testOCRToolStripMenuItem";
-            this.testOCRToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.testOCRToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.testOCRToolStripMenuItem.Text = "Test OCR";
             this.testOCRToolStripMenuItem.Visible = false;
             this.testOCRToolStripMenuItem.Click += new System.EventHandler(this.testOCRToolStripMenuItem_Click);
@@ -168,7 +170,7 @@
             // changeNameToolStripMenuItem
             // 
             this.changeNameToolStripMenuItem.Name = "changeNameToolStripMenuItem";
-            this.changeNameToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.changeNameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.changeNameToolStripMenuItem.Text = "Setting";
             this.changeNameToolStripMenuItem.Click += new System.EventHandler(this.changeNameToolStripMenuItem_Click);
             // 
@@ -425,7 +427,7 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.checkBoxAutoFocus);
-            this.groupBox1.Controls.Add(this.numericUpDownFocus);
+            this.groupBox1.Controls.Add(this.nFocus);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.cbDriveCam01);
@@ -446,35 +448,23 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "SETTING";
             // 
-            // checkBoxAutoFocus
+            // nFocus
             // 
-            this.checkBoxAutoFocus.AutoSize = true;
-            this.checkBoxAutoFocus.Checked = true;
-            this.checkBoxAutoFocus.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxAutoFocus.Location = new System.Drawing.Point(145, 255);
-            this.checkBoxAutoFocus.Name = "checkBoxAutoFocus";
-            this.checkBoxAutoFocus.Size = new System.Drawing.Size(77, 17);
-            this.checkBoxAutoFocus.TabIndex = 17;
-            this.checkBoxAutoFocus.Text = "AutoFocus";
-            this.checkBoxAutoFocus.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDownFocus
-            // 
-            this.numericUpDownFocus.Location = new System.Drawing.Point(94, 230);
-            this.numericUpDownFocus.Maximum = new decimal(new int[] {
+            this.nFocus.Location = new System.Drawing.Point(94, 230);
+            this.nFocus.Maximum = new decimal(new int[] {
             1000,
             0,
             0,
             0});
-            this.numericUpDownFocus.Name = "numericUpDownFocus";
-            this.numericUpDownFocus.Size = new System.Drawing.Size(125, 20);
-            this.numericUpDownFocus.TabIndex = 16;
-            this.numericUpDownFocus.Value = new decimal(new int[] {
+            this.nFocus.Name = "nFocus";
+            this.nFocus.Size = new System.Drawing.Size(125, 20);
+            this.nFocus.TabIndex = 16;
+            this.nFocus.Value = new decimal(new int[] {
             68,
             0,
             0,
             0});
-            this.numericUpDownFocus.ValueChanged += new System.EventHandler(this.numericUpDownFocus_ValueChanged);
+            this.nFocus.ValueChanged += new System.EventHandler(this.numericUpDownFocus_ValueChanged);
             // 
             // label4
             // 
@@ -667,6 +657,25 @@
             // 
             this.serialPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort_DataReceived);
             // 
+            // cameraControlToolStripMenuItem
+            // 
+            this.cameraControlToolStripMenuItem.Name = "cameraControlToolStripMenuItem";
+            this.cameraControlToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cameraControlToolStripMenuItem.Text = "Camera Control";
+            this.cameraControlToolStripMenuItem.Click += new System.EventHandler(this.cameraControlToolStripMenuItem_Click);
+            // 
+            // checkBoxAutoFocus
+            // 
+            this.checkBoxAutoFocus.AutoSize = true;
+            this.checkBoxAutoFocus.Checked = true;
+            this.checkBoxAutoFocus.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxAutoFocus.Location = new System.Drawing.Point(145, 255);
+            this.checkBoxAutoFocus.Name = "checkBoxAutoFocus";
+            this.checkBoxAutoFocus.Size = new System.Drawing.Size(77, 17);
+            this.checkBoxAutoFocus.TabIndex = 17;
+            this.checkBoxAutoFocus.Text = "AutoFocus";
+            this.checkBoxAutoFocus.UseVisualStyleBackColor = true;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -707,7 +716,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCamera02)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFocus)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nFocus)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewHistory)).EndInit();
             this.statusStripHome.ResumeLayout(false);
             this.statusStripHome.PerformLayout();
@@ -734,8 +743,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelChild02;
         private System.Windows.Forms.RichTextBox richTextBox2;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.CheckBox checkBoxAutoFocus;
-        private System.Windows.Forms.NumericUpDown numericUpDownFocus;
+        private System.Windows.Forms.NumericUpDown nFocus;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cbDriveCam01;
@@ -770,6 +778,8 @@
         private System.Windows.Forms.PictureBox scrollablePictureBoxCamera01;
         private System.Windows.Forms.PictureBox scrollablePictureBoxCamera02;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelError;
+        private System.Windows.Forms.ToolStripMenuItem cameraControlToolStripMenuItem;
+        private System.Windows.Forms.CheckBox checkBoxAutoFocus;
     }
 }
 

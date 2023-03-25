@@ -37,6 +37,7 @@ namespace SC_M4
     public partial class Main : Form
     {
         private  Language SelectedLang = null;
+        public TControl cameraControl;
         public Main()
         {
             InitializeComponent();
@@ -513,6 +514,18 @@ namespace SC_M4
                     scrollablePictureBoxCamera01.Image = null;
                     scrollablePictureBoxCamera02.Image = null;
 
+                    cameraControl.set(driveindex_02);
+                    cameraControl.setFocus(Properties.Settings.Default.dFocus);
+                    cameraControl.setZoom(Properties.Settings.Default.dZoom);
+                    cameraControl.setPan(Properties.Settings.Default.dPan);
+                    cameraControl.setTilt(Properties.Settings.Default.dTilt);
+                    cameraControl.setExposure(Properties.Settings.Default.dExposure);
+
+                    nFocus.Maximum = cameraControl.fmax;
+                    nFocus.Minimum = cameraControl.fmin;
+                    nFocus.Value = cameraControl.fValue;
+
+
                     btConnect.Text = "Disconnect";
                     if(background == null)
                     {
@@ -528,7 +541,7 @@ namespace SC_M4
                     timerOCR.Start();
 
                     checkBoxAutoFocus.Checked = false;
-                    numericUpDownFocus.Value = 68;
+                    nFocus.Value = 68;
 
                     isStarted = true;
                     isStaetReset = true;
@@ -707,7 +720,7 @@ namespace SC_M4
                 {
                     if (isStarted)
                     {
-                        capture_2.setFocus((int)numericUpDownFocus.Value);
+                        capture_2.setFocus((int)nFocus.Value);
                         isStarted = false;
                     }
                     stopwatch.Reset();
@@ -1326,11 +1339,11 @@ namespace SC_M4
         {
             if (!checkBoxAutoFocus.Checked)
             {
-                capture_2.setFocus((int)numericUpDownFocus.Value);
+                //capture_2.setFocus((int)numericUpDownFocus.Value);
             }
             else
             {
-                capture_2.AutoFocus();
+                //capture_2.AutoFocus();
             }
         }
         SettingModel setting;
@@ -1577,28 +1590,18 @@ namespace SC_M4
             nameList = new NameList();
             nameList.Show();
         }
-        /*
-        public async Task<OcrResult> GetOcrResultBitmap(Bitmap scaledBitmap, Language selectedLanguage)
+        private CameraControls cameraControlForm;
+        private void cameraControlToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (MemoryStream memory = new MemoryStream())
+            if (cameraControlForm != null)
             {
-                scaledBitmap.Save(memory, ImageFormat.Bmp);
-                memory.Position = 0;
-
-                BitmapDecoder bmpDecoder = await BitmapDecoder.CreateAsync(memory.AsRandomAccessStream());
-                SoftwareBitmap softwareBmp = await bmpDecoder.GetSoftwareBitmapAsync();
-
-                OcrEngine ocrEngine = OcrEngine.TryCreateFromLanguage(selectedLanguage);
-
-                // Run the RecognizeAsync call in a separate thread to allow message pumping
-                OcrResult result = await Task.Run(async () => await ocrEngine.RecognizeAsync(softwareBmp));
-                scaledBitmap.Dispose();
-                softwareBmp.Dispose();
-                ocrEngine = null;
-                return result;
+                cameraControlForm.Close();
             }
+
+            cameraControlForm = new CameraControls(this);
+            cameraControlForm.Show();
         }
-        */
+
         public Task<OcrResult> GetOcrResultBitmap(Bitmap scaledBitmap, Language selectedLanguage)
         {
             var tcs = new TaskCompletionSource<OcrResult>();
