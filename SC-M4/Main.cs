@@ -252,6 +252,13 @@ namespace SC_M4
             comboBoxCOMPort.Items.AddRange(SerialPort.GetPortNames());
             if (comboBoxCOMPort.Items.Count > 0)
                 comboBoxCOMPort.SelectedIndex = 0;
+
+
+            if (cameraControl != null)
+            {
+                cameraControl = null;
+            }
+            cameraControl = new TClass.TControl(cbDriveCam02.SelectedIndex);
         }
 
         #region Video Capture
@@ -1339,7 +1346,7 @@ namespace SC_M4
         {
             if (!checkBoxAutoFocus.Checked)
             {
-                //capture_2.setFocus((int)numericUpDownFocus.Value);
+                cameraControl.setFocus((int)nFocus.Value);
             }
             else
             {
