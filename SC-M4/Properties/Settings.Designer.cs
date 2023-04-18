@@ -178,5 +178,29 @@ namespace SC_M4.Properties {
                 this["dExposure"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("731TMC")]
+        public string keyCAM1 {
+            get {
+                return ((string)(this["keyCAM1"]));
+            }
+            set {
+                this["keyCAM1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("731TMC")]
+        public string keyCAM2 {
+            get {
+                return ((string)(this["keyCAM2"]));
+            }
+            set {
+                this["keyCAM2"] = value;
+            }
+        }
     }
 }

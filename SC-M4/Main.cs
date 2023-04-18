@@ -30,6 +30,7 @@ using System.Windows.Markup;
 
 using TClass;
 using Windows.UI.Xaml.Controls;
+using SC_M4.Utilities;
 //using Windows.UI.Xaml.Controls;
 
 namespace SC_M4
@@ -747,11 +748,6 @@ namespace SC_M4
                             lbTitle.Text = "Detecting...";
                         }));
                     }
-                    // Console.WriteLine("2");
-                    //ocrResult1 = null;
-                    //ocrResult1 = await GetOcrResultBitmap(Sharpen((Bitmap)scrollablePictureBoxCamera01.Image), SelectedLang);
-                    //var ocr_1 = await _OCRScan.GetOcrResultFromBitmap(Sharpen((Bitmap)scrollablePictureBoxCamera01.Image), SelectedLang);
-                    //result_1 = ocrResult1.Text; // performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty);
                     imageList?.Clear();
                     imageList.Add((System.Drawing.Image)scrollablePictureBoxCamera01.Image.Clone());
 
@@ -775,7 +771,7 @@ namespace SC_M4
 
                     if (isOCR1 && result_1 == string.Empty)
                     {
-                        result_1 = "731TMC";
+                        result_1 = Properties.Settings.Default.keyCAM1;
                         isOCR1 = false;
                     }
 
@@ -786,7 +782,7 @@ namespace SC_M4
 
                     }));
                     // Image 02
-                    int lb = result_1.IndexOf("731TMC");
+                    int lb = result_1.IndexOf(Properties.Settings.Default.keyCAM1);
                     if (result_1 != string.Empty && lb != -1)
                     {
                         // OCR 2
@@ -1043,7 +1039,7 @@ namespace SC_M4
             }
             history = new History();
             //txt_lb = txt_lb.Replace("O", "0");
-            int lb = txt_lb.IndexOf("731TMC");
+            int lb = txt_lb.IndexOf(Properties.Settings.Default.keyCAM1);
             // If not found, IndexOf returns -1.
             if (lb == -1)
             {
@@ -1052,7 +1048,7 @@ namespace SC_M4
                 return result;
             }
 
-            int swa = txt_sw.IndexOf("731TMC");
+            int swa = txt_sw.IndexOf(Properties.Settings.Default.keyCAM2);
             // If not found, IndexOf returns -1.
             if (swa == -1)
             {
@@ -1607,6 +1603,29 @@ namespace SC_M4
 
             cameraControlForm = new CameraControls(this);
             cameraControlForm.Show();
+        }
+
+        private Forms.Key key;
+        private void keyCAM1ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(key != null)
+            {
+                key.Close();
+            }
+
+            key = new Key(KeyForms.CAM1);
+            key.Show();
+        }
+
+        private void keyCAM2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (key != null)
+            {
+                key.Close();
+            }
+
+            key = new Key(KeyForms.CAM2);
+            key.Show();
         }
 
         public Task<OcrResult> GetOcrResultBitmap(Bitmap scaledBitmap, Language selectedLanguage)

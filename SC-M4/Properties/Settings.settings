@@ -41,5 +41,11 @@
     <Setting Name="dExposure" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
+    <Setting Name="keyCAM1" Type="System.String" Scope="User">
+      <Value Profile="(Default)">731TMC</Value>
+    </Setting>
+    <Setting Name="keyCAM2" Type="System.String" Scope="User">
+      <Value Profile="(Default)">731TMC</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

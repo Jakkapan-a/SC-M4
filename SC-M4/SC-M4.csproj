@@ -22,6 +22,21 @@
     <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -155,6 +170,12 @@
     <Compile Include="Forms\Edit_Items.Designer.cs">
       <DependentUpon>Edit_Items.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Key.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Key.Designer.cs">
+      <DependentUpon>Key.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -212,11 +233,15 @@
     <Compile Include="Utilities\GrayBMP_File.cs" />
     <Compile Include="Utilities\ImageConverter.cs" />
     <Compile Include="Utilities\ImageHelper.cs" />
+    <Compile Include="Utilities\KeyForms.cs" />
     <EmbeddedResource Include="Forms\CameraControls.resx">
       <DependentUpon>CameraControls.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Edit_Items.resx">
       <DependentUpon>Edit_Items.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Key.resx">
+      <DependentUpon>Key.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
@@ -306,6 +331,18 @@
   <ItemGroup>
     <Content Include="layers.ico" />
     <None Include="Resources\Spinner-0.4s-800px.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.8">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.8 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
