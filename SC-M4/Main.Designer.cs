@@ -287,6 +287,7 @@
             this.txtEmployee.Name = "txtEmployee";
             this.txtEmployee.Size = new System.Drawing.Size(125, 20);
             this.txtEmployee.TabIndex = 0;
+            this.txtEmployee.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtEmployee_KeyDown);
             // 
             // splitContainerHomeBody
             // 
@@ -483,7 +484,7 @@
             this.checkBoxAutoFocus.Location = new System.Drawing.Point(145, 255);
             this.checkBoxAutoFocus.Name = "checkBoxAutoFocus";
             this.checkBoxAutoFocus.Size = new System.Drawing.Size(77, 17);
-            this.checkBoxAutoFocus.TabIndex = 17;
+            this.checkBoxAutoFocus.TabIndex = 7;
             this.checkBoxAutoFocus.Text = "AutoFocus";
             this.checkBoxAutoFocus.UseVisualStyleBackColor = true;
             // 
@@ -497,7 +498,7 @@
             0});
             this.nFocus.Name = "nFocus";
             this.nFocus.Size = new System.Drawing.Size(125, 20);
-            this.nFocus.TabIndex = 16;
+            this.nFocus.TabIndex = 6;
             this.nFocus.Value = new decimal(new int[] {
             68,
             0,
@@ -529,7 +530,7 @@
             this.cbDriveCam01.Location = new System.Drawing.Point(93, 28);
             this.cbDriveCam01.Name = "cbDriveCam01";
             this.cbDriveCam01.Size = new System.Drawing.Size(132, 21);
-            this.cbDriveCam01.TabIndex = 9;
+            this.cbDriveCam01.TabIndex = 0;
             // 
             // label7
             // 
@@ -573,7 +574,7 @@
             this.comboBoxCOMPort.Location = new System.Drawing.Point(94, 148);
             this.comboBoxCOMPort.Name = "comboBoxCOMPort";
             this.comboBoxCOMPort.Size = new System.Drawing.Size(132, 21);
-            this.comboBoxCOMPort.TabIndex = 6;
+            this.comboBoxCOMPort.TabIndex = 3;
             // 
             // label5
             // 
@@ -591,7 +592,7 @@
             this.btRefresh.Location = new System.Drawing.Point(6, 174);
             this.btRefresh.Name = "btRefresh";
             this.btRefresh.Size = new System.Drawing.Size(23, 21);
-            this.btRefresh.TabIndex = 11;
+            this.btRefresh.TabIndex = 4;
             this.btRefresh.UseVisualStyleBackColor = true;
             this.btRefresh.Click += new System.EventHandler(this.btRefresh_Click);
             // 
@@ -600,7 +601,7 @@
             this.btConnect.Location = new System.Drawing.Point(150, 174);
             this.btConnect.Name = "btConnect";
             this.btConnect.Size = new System.Drawing.Size(75, 25);
-            this.btConnect.TabIndex = 11;
+            this.btConnect.TabIndex = 5;
             this.btConnect.Text = "Connect";
             this.btConnect.UseVisualStyleBackColor = true;
             this.btConnect.Click += new System.EventHandler(this.btConnect_Click);
@@ -611,7 +612,7 @@
             this.cbDriveCam02.Location = new System.Drawing.Point(93, 55);
             this.cbDriveCam02.Name = "cbDriveCam02";
             this.cbDriveCam02.Size = new System.Drawing.Size(132, 21);
-            this.cbDriveCam02.TabIndex = 8;
+            this.cbDriveCam02.TabIndex = 1;
             // 
             // comboBoxBaud
             // 
@@ -619,7 +620,7 @@
             this.comboBoxBaud.Location = new System.Drawing.Point(94, 121);
             this.comboBoxBaud.Name = "comboBoxBaud";
             this.comboBoxBaud.Size = new System.Drawing.Size(132, 21);
-            this.comboBoxBaud.TabIndex = 7;
+            this.comboBoxBaud.TabIndex = 2;
             // 
             // dataGridViewHistory
             // 

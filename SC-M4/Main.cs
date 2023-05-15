@@ -433,7 +433,7 @@ namespace SC_M4
         private Task taskCam2;
         private async void btStartStop_Click(object sender, EventArgs e)
         {
-
+             
             if(taskCam1 != null &&  taskCam1.Status == TaskStatus.Running)
             {
                 Console.WriteLine("Task 1 is running");
@@ -519,6 +519,7 @@ namespace SC_M4
 
                     scrollablePictureBoxCamera01.Image = null;
                     scrollablePictureBoxCamera02.Image = null;
+                    await Task.Delay(1000);
 
                     cameraControl.set(driveindex_02);
                     cameraControl.setFocus(Properties.Settings.Default.dFocus);
@@ -527,9 +528,12 @@ namespace SC_M4
                     cameraControl.setTilt(Properties.Settings.Default.dTilt);
                     cameraControl.setExposure(Properties.Settings.Default.dExposure);
 
+                    checkBoxAutoFocus.Checked = false;
+
+                    nFocus.Value = cameraControl.fValue;
+                    nFocus.Value = 68 > cameraControl.fmax ? cameraControl.fmax: 68;
                     nFocus.Maximum = cameraControl.fmax;
                     nFocus.Minimum = cameraControl.fmin;
-                    nFocus.Value = cameraControl.fValue;
 
 
                     btConnect.Text = "Disconnect";
@@ -546,8 +550,6 @@ namespace SC_M4
 
                     timerOCR.Start();
 
-                    checkBoxAutoFocus.Checked = false;
-                    nFocus.Value = 68;
 
                     isStarted = true;
                     isStaetReset = true;
@@ -608,6 +610,19 @@ namespace SC_M4
                 MessageBox.Show(ex.Message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 this.isStart = false;
                 btStartStop.Text = "START";
+                lbTitle.Text = "Camera close.";
+                btConnect.Text = "Connect";
+                if (capture_1._isRunning)
+                    capture_1.Stop();
+
+                if (capture_2._isRunning)
+                    capture_2.Stop();
+
+                if (serialPort.IsOpen)
+                    serialPort.Close();
+
+                timerOCR.Stop();
+
             }
         }
         private bool detection = false;
@@ -647,7 +662,7 @@ namespace SC_M4
                     }
                     if (useQrCode)
                     {
-                        result_1 = "";
+                        result_1 = QrCode.DecodeQRCode(scrollablePictureBoxCamera01.Image);
                     }
                     else
                     {
@@ -1545,6 +1560,14 @@ namespace SC_M4
             catch(Exception ex)
             {
                 LogWriter.SaveLog("cb Qr save :" + ex.Message);
+            }
+        }
+
+        private void txtEmployee_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+            {
+                btConnect.PerformClick();
             }
         }
 
