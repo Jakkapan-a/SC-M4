@@ -202,5 +202,17 @@ namespace SC_M4.Properties {
                 this["keyCAM2"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool useQrCode {
+            get {
+                return ((bool)(this["useQrCode"]));
+            }
+            set {
+                this["useQrCode"] = value;
+            }
+        }
     }
 }

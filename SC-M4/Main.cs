@@ -1,5 +1,4 @@
 ﻿using DirectShowLib;
-using LogWriter;
 using SC_M4.Forms;
 using SC_M4.Modules;
 using SC_M4.Ocr;
@@ -101,6 +100,7 @@ namespace SC_M4
                 Directory.CreateDirectory(Properties.Resources.path_log);
             if (!Directory.Exists(Properties.Resources.path_images))
                 Directory.CreateDirectory(Properties.Resources.path_images);
+
             // Create Video Capture Object
             capture_1 = new TCapture.Capture();
             capture_1.OnFrameHeader += Capture_1_OnFrameHeadler;
@@ -144,14 +144,12 @@ namespace SC_M4
             deletedFileTemp();
             loadTableHistory();
 
+            cbQrCode.Checked = Properties.Settings.Default.useQrCode;
+            useQrCode = cbQrCode.Checked;
         }
         private Task taskProcess;
         private void TimerOCR_Tick(object sender, EventArgs e)
         {
-            //if (background != null && background.IsBusy != true && isStaetReset)
-            //{
-            //    background.RunWorkerAsync();
-            //}
             onTest();
         }
 
@@ -612,114 +610,13 @@ namespace SC_M4
                 btStartStop.Text = "START";
             }
         }
-        /*
-        private void ProcessTesting()
-        {
-            bool detection = false;
-            string result_1 = string.Empty;
-            string result_2 = string.Empty;
-            isStaetReset = true;
-            Stopwatch stopwatch = new Stopwatch();
-            while (true)
-            {
-                if (capture_1._isRunning && capture_2._isRunning && bitmapCamaera_01 != null && bitmapCamaera_02 != null && isStaetReset && scrollablePictureBoxCamera01.Image != null && scrollablePictureBoxCamera02.Image != null)
-                {
-                    stopwatch.Reset();
-                    stopwatch.Start();
-                    detection = !detection;
-                    if (detection)
-                    {
-                        Invoke(new Action(() =>
-                        {
-                            lbTitle.Text = "Wiat for detect..";
-                        }));
-                    }
-                    else
-                    {
-                        Invoke(new Action(() =>
-                        {
-                            lbTitle.Text = "Detecting...";
-                        }));
-                    }
-                    // Image 01
-                    imageList = new List<Image>();
-                    imageList.Add((Image)scrollablePictureBoxCamera01.Image.Clone());
-
-                    result_1 = performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty);
-                    
-                    var a = result_1.IndexOf("-731");
-                    result_1 = result_1.Substring(a + 1);
-                    a = result_1.IndexOf("|731");
-                    result_1 = result_1.Substring(a + 1);
-                    result_1 = result_1.Replace("T31TM", "731TM");
-                    result_1 = result_1.Replace("731THC", "731TMC");
-                    result_1 = result_1.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "").Replace("\\", "").Replace("|", "").Replace(@"\", "");
-                    result_1 = result_1.Replace("7731TMC", "731TMC");
-                    result_1 = result_1.Replace("731TMCO", "731TMC6");
-                    result_1 = result_1.Replace("-S-", "-5-");
-                    if (isOCR1 && result_1 == string.Empty)
-                    {
-                        result_1 = "731TMC";
-                        isOCR1 = false;
-                    }
-
-                    richTextBox1.Invoke(new Action(() =>
-                    {
-                        this.richTextBox1.Text = string.Empty;
-                        this.richTextBox1.Text = result_1.Trim();
-                        
-                    }));
-                    
-                    // Image 02
-                    int lb = result_1.IndexOf("731TMC");
-                    if (result_1 != string.Empty && lb != -1)
-                    {
-                        // OCR 2
-                        result_2 = string.Empty;
-                        //imageList = new List<Image>();
-                        var ocr = OcrProcessor.GetOcrResultFromBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(), SelectedLang);
-                        result_2 = ocr.Result.Text;
-                        //result_2 = "9U7310TM063-01731TMCasfea";
-                        result_2 = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
-                        result_2 = Regex.Replace(result_2, "[^a-zA-Z,0-9,(),:,-]", "");
-
-                        result_2 = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "").Replace("'", "").Replace("|", "").Replace(@"\", "");
-                        result_2 = result_2.Replace("91J7", "9U7");
-                        result_2 = result_2.Replace("-OO", "-00");
-                        result_2 = result_2.Replace(")9U7", "9U7").Replace("\n", "");
-                        result_2= result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
-                        result_2 = ReplaceName(result_2);
-                        richTextBox2.Invoke(new Action(() =>
-                        {
-                            this.richTextBox2.Text = string.Empty;
-                            this.richTextBox2.Text = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
-                        }));
-                        int result = Compare_Master(result_1, result_2);
-                        if (result == 1 || result == 2)
-                        {
-                            isStaetReset = false;
-                        }
-                    }
-
-                    stopwatch.Stop();
-                    Console.WriteLine("Elapsed Time is {0} ms", stopwatch.ElapsedMilliseconds);
-                    Invoke(new Action(() =>
-                    {
-                        toolStripStatusTime.Text = "Load " + stopwatch.ElapsedMilliseconds.ToString() + "ms";
-                    }));
-                }
-                
-                Thread.Sleep(1000);
-            }
-        }
-        */
         private bool detection = false;
         private string result_1 = string.Empty;
         private string result_2 = string.Empty;
 
         private Stopwatch stopwatch = new Stopwatch();
         private OcrResult ocrResult1, ocrResult2;
-
+        private bool useQrCode = false;
         private async void processOCR()
         {
             try
@@ -748,10 +645,16 @@ namespace SC_M4
                             lbTitle.Text = "Detecting...";
                         }));
                     }
-                    imageList?.Clear();
-                    imageList.Add((System.Drawing.Image)scrollablePictureBoxCamera01.Image.Clone());
-
-                    result_1 = await performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty);
+                    if (useQrCode)
+                    {
+                        result_1 = "";
+                    }
+                    else
+                    {
+                        imageList?.Clear();
+                        imageList.Add((System.Drawing.Image)scrollablePictureBoxCamera01.Image.Clone());
+                        result_1 = await performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty);
+                    }
                     var a = result_1.IndexOf("-731");
                     result_1 = result_1.Substring(a + 1);
                     a = result_1.IndexOf("|731");
@@ -1038,8 +941,17 @@ namespace SC_M4
                 history = null;
             }
             history = new History();
-            //txt_lb = txt_lb.Replace("O", "0");
-            int lb = txt_lb.IndexOf(Properties.Settings.Default.keyCAM1);
+
+
+            int swa = txt_sw.IndexOf(Properties.Settings.Default.keyCAM1);
+            // If not found, IndexOf returns -1.
+            if (swa == -1)
+            {
+                result = 0;
+                return result;
+            }
+
+            int lb = txt_lb.IndexOf(Properties.Settings.Default.keyCAM2);
             // If not found, IndexOf returns -1.
             if (lb == -1)
             {
@@ -1048,13 +960,6 @@ namespace SC_M4
                 return result;
             }
 
-            int swa = txt_sw.IndexOf(Properties.Settings.Default.keyCAM2);
-            // If not found, IndexOf returns -1.
-            if (swa == -1)
-            {
-                result = 0;
-                return result;
-            }
             var txt = txt_lb.Substring(0, lb);
             txt = txt.Replace("O", "0");
             var master_lb = MasterAll.GetMasterALLByLBName(txt);
@@ -1628,6 +1533,21 @@ namespace SC_M4
             key.Show();
         }
 
+        private void cbQrCode_CheckedChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                Properties.Settings.Default.useQrCode = cbQrCode.Checked;
+                Properties.Settings.Default.Save();
+                useQrCode = cbQrCode.Checked;
+
+            }
+            catch(Exception ex)
+            {
+                LogWriter.SaveLog("cb Qr save :" + ex.Message);
+            }
+        }
+
         public Task<OcrResult> GetOcrResultBitmap(Bitmap scaledBitmap, Language selectedLanguage)
         {
             var tcs = new TaskCompletionSource<OcrResult>();
@@ -1669,247 +1589,6 @@ namespace SC_M4
 
     }
 
-    #region TCapture
-    /*
-    public class TCapture
-    {
-        public class Capture
-        {
-            private Thread _thread;
-            private OpenCvSharp.VideoCapture _videoCapture;
-
-            public delegate void VideoCaptureError(string messages);
-            public event VideoCaptureError OnError;
-
-            public delegate void VideoFrameHeadler(Bitmap bitmap);
-            public event VideoFrameHeadler OnFrameHeadler;
-
-            public delegate void VideoCaptureStop();
-            public event VideoCaptureStop OnVideoStop;
-
-            public delegate void VideoCaptureStarted();
-            public event VideoCaptureStarted OnVideoStarted;
-
-            private bool _onStarted = false;
-
-            public bool _isRunning { get; set; }
-
-            private int _frameRate = 50;
-
-            public int width { get; set; }
-            public int height { get; set; }
-            public int frameRate
-            {
-                get { return _frameRate; }
-                set { _frameRate = 1000 / value; }
-            }
-
-            public bool IsOpened
-            {
-                get { return IsOpen(); }
-            }
-            public bool IsOpen()
-            {
-                if (_videoCapture != null && _videoCapture.IsOpened())
-                {
-                    return true;
-                }
-                return false;
-            }
-
-            public Capture()
-            {
-                width = 1280;
-                height = 720;
-            }
-            public void Start(int device)
-            {
-                if (_videoCapture != null)
-                {
-                    _videoCapture.Dispose();
-                }
-
-                _videoCapture = new OpenCvSharp.VideoCapture(device);
-                _videoCapture.Open(device);
-                setFrame(width, height);
-                _isRunning = true;
-                _onStarted = true;
-                if (_thread != null)
-                {
-                    _thread.Abort();
-                }
-                _thread = new Thread(FrameCapture);
-                _thread.Start();
-            }
-            
-            private void FrameCapture()
-            {
-                try
-                {
-                    while (_isRunning)
-                    {
-                        if (_videoCapture.IsOpened())
-                        {
-                            if (_onStarted)
-                            {
-                                OnVideoStarted?.Invoke();
-                                _onStarted = false;
-                            }
-                            using (OpenCvSharp.Mat frame = _videoCapture.RetrieveMat())
-                            {
-                                if (frame.Empty())
-                                {
-                                    OnError?.Invoke("Frame is empty");
-                                    continue;
-                                }
-                                using (Bitmap bitmap = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(frame))
-                                {
-                                    OnFrameHeadler?.Invoke(bitmap);
-                                }
-                            }
-                           
-                        }
-
-                        Thread.Sleep(_frameRate);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    OnError?.Invoke(ex.Message);
-                }
-            }
-
-            public void setFrame(int width, int height)
-            {
-                _videoCapture.Set(OpenCvSharp.VideoCaptureProperties.FrameWidth, width);
-                _videoCapture.Set(OpenCvSharp.VideoCaptureProperties.FrameHeight, height);
-            }
-
-            public void Stop()
-            {
-                _isRunning = false;
-                if (_videoCapture != null)
-                {
-                    _videoCapture.Release();
-                }
-                OnVideoStop?.Invoke();
-            }
-
-            public void Dispose()
-            {
-                _isRunning = false;
-                if (_videoCapture != null)
-                {
-                    _videoCapture.Dispose();
-                }
-                if (_thread != null)
-                {
-                    _thread.Abort();
-                }
-            }
-
-            // Get Focus
-            public int GetFocus()
-            {
-                return (int)_videoCapture.Get(OpenCvSharp.VideoCaptureProperties.Focus);
-            }
-            // Set Focus 
-            public void SetFocus(int value)
-            {
-                _videoCapture.Set(OpenCvSharp.VideoCaptureProperties.Focus, value);
-            }
-            // Auto Focus
-            public void AutoFocus()
-            {
-                _videoCapture.Set(OpenCvSharp.VideoCaptureProperties.Focus, -1);
-            }
-
-            // Get Zoom
-            public int GetZoom()
-            {
-                return (int)_videoCapture.Get(OpenCvSharp.VideoCaptureProperties.Zoom);
-            }
-
-            // Set Zoom
-            public void SetZoom(int value)
-            {
-                _videoCapture.Set(OpenCvSharp.VideoCaptureProperties.Zoom, value);
-            }
-            // Get Exposure
-            public int GetExposure()
-            {
-                return (int)_videoCapture.Get(OpenCvSharp.VideoCaptureProperties.Exposure);
-            }
-
-            // Set Exposure
-            public void SetExposure(int value)
-            {
-                _videoCapture.Set(OpenCvSharp.VideoCaptureProperties.Exposure, value);
-            }
-
-            // Get Gain
-            public int GetGain()
-            {
-                return (int)_videoCapture.Get(OpenCvSharp.VideoCaptureProperties.Gain);
-            }
-
-            // Set Gain
-            public void SetGain(int value)
-            {
-                _videoCapture.Set(OpenCvSharp.VideoCaptureProperties.Gain, value);
-            }
-
-            // Set Brightness
-            public void SetBrightness(int value)
-            {
-                _videoCapture.Set(OpenCvSharp.VideoCaptureProperties.Brightness, value);
-            }
-
-            // Set Contrast
-            public void SetContrast(int value)
-            {
-                _videoCapture.Set(OpenCvSharp.VideoCaptureProperties.Contrast, value);
-            }
-
-            // Set Saturation
-            public void SetSaturation(int value)
-            {
-                _videoCapture.Set(OpenCvSharp.VideoCaptureProperties.Saturation, value);
-            }
-
-        }
-    }
-    */
-    #endregion
-
-    #region Old
-    /*
-    public static class SettingHandler
-    {
-        public static Dictionary<string, string> DefaultSetting = new Dictionary<string, string>(){
-            {"Language", ""},
-            {"WrapText", "newLine"},
-            {"IsTooltipShowed", "false"},
-            {"RecentAccessFolderToken", ""}
-        };
-
-        public static ApplicationDataContainer GetSetting()
-        {
-            var localSettings = ApplicationData.Current.LocalSettings;
-            //if no setting, set default value
-            foreach (var item in DefaultSetting)
-            {
-                if (localSettings.Values[item.Key] == null)
-                {
-                    localSettings.Values[item.Key] = item.Value;
-                }
-            }
-
-            return localSettings;
-        }
-    }
-    */
-    #endregion
     public static class OcrProcessor
     {
             public static IReadOnlyList<Language> GetOcrLangList()
@@ -1950,28 +1629,6 @@ namespace SC_M4
                 }
                 return textList;
             }
-        /*
-        public async static Task<OcrResult> GetOcrResultFromBitmap(Bitmap scaledBitmap, Language selectedLanguage)
-        {
-            using (MemoryStream memory = new MemoryStream())
-            {
-                scaledBitmap.Save(memory, ImageFormat.Bmp);
-                memory.Position = 0;
-
-                BitmapDecoder bmpDecoder = await BitmapDecoder.CreateAsync(memory.AsRandomAccessStream());
-                SoftwareBitmap softwareBmp = await bmpDecoder.GetSoftwareBitmapAsync();
-
-                OcrEngine ocrEngine = OcrEngine.TryCreateFromLanguage(selectedLanguage);
-
-                // Run the RecognizeAsync call in a separate thread to allow message pumping
-                OcrResult result = await Task.Run (async () => await ocrEngine.RecognizeAsync(softwareBmp));
-
-                softwareBmp.Dispose();
-                ocrEngine = null;
-                return result;
-            }
-        }
-        */
         public async static Task<OcrResult> GetOcrResultFromBitmap(Bitmap scaledBitmap, Language selectedLanguage)
         {
             using (MemoryStream memory = new MemoryStream())

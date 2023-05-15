@@ -73,9 +73,6 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="LogWriter">
-      <HintPath>..\..\SC-M2\LogWriter\bin\Debug\LogWriter.dll</HintPath>
-    </Reference>
     <Reference Include="OpenCvSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenCvSharp4.4.7.0.20230115\lib\net48\OpenCvSharp.dll</HintPath>
     </Reference>
@@ -234,6 +231,7 @@
     <Compile Include="Utilities\ImageConverter.cs" />
     <Compile Include="Utilities\ImageHelper.cs" />
     <Compile Include="Utilities\KeyForms.cs" />
+    <Compile Include="Utilities\LogWriter.cs" />
     <EmbeddedResource Include="Forms\CameraControls.resx">
       <DependentUpon>CameraControls.cs</DependentUpon>
     </EmbeddedResource>

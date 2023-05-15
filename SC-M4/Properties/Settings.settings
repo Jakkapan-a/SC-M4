@@ -47,5 +47,8 @@
     <Setting Name="keyCAM2" Type="System.String" Scope="User">
       <Value Profile="(Default)">731TMC</Value>
     </Setting>
+    <Setting Name="useQrCode" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
