@@ -40,9 +40,11 @@ namespace SC_M4.Forms
         {
             if(_type == 0 && main.bitmapCamaera_01 != null)
             {
+                scrollablePictureBox1.Image?.Dispose();
                 scrollablePictureBox1.Image = (Image)main.bitmapCamaera_01.Clone();
             }else if (_type == 1 && main.bitmapCamaera_02 != null)
             {
+                scrollablePictureBox1.Image?.Dispose();
                 scrollablePictureBox1.Image = (Image)main.bitmapCamaera_02.Clone();
             }
         }

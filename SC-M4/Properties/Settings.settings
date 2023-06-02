@@ -62,7 +62,7 @@
     <Setting Name="color_high" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">2</Value>
     </Setting>
-    <Setting Name="Setting" Type="System.Int32" Scope="User">
+    <Setting Name="ColorAverageType" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>

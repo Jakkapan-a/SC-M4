@@ -17,14 +17,14 @@ namespace SC_M4.Utilities
             public int B;
         }
 
-        public enum AverageColorType
-        {
-            Full,
-            TopLeft,
-            TopRight,
-            BottomLeft,
-            BottomRight,
-            Center
+        public enum AverageColorType : int
+        {            
+            TopLeft = 0,
+            TopRight = 1,
+            BottomLeft = 2,
+            BottomRight = 3,
+            Center = 4,
+            Full = 5,
         }
 
         public static AverageColor GetAverageColor(Bitmap bmp, AverageColorType type = AverageColorType.Full, int maxWidth = 100, int maxHeight = 100)

@@ -266,12 +266,12 @@ namespace SC_M4.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int Setting {
+        public int ColorAverageType {
             get {
-                return ((int)(this["Setting"]));
+                return ((int)(this["ColorAverageType"]));
             }
             set {
-                this["Setting"] = value;
+                this["ColorAverageType"] = value;
             }
         }
     }

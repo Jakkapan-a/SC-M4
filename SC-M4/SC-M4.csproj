@@ -226,6 +226,12 @@
     <Compile Include="Forms\Select_X-Y.Designer.cs">
       <DependentUpon>Select_X-Y.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Select_XY_Color.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Select_XY_Color.Designer.cs">
+      <DependentUpon>Select_XY_Color.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SettingModel.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -237,6 +243,9 @@
     </Compile>
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main.Video.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\History.cs" />
     <Compile Include="Modules\MasterAll.cs" />
@@ -284,6 +293,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Select_X-Y.resx">
       <DependentUpon>Select_X-Y.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Select_XY_Color.resx">
+      <DependentUpon>Select_XY_Color.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SettingModel.resx">
       <DependentUpon>SettingModel.cs</DependentUpon>
