@@ -483,10 +483,6 @@ namespace SC_M4
                     is_Blink_NG = false;
                     pictureBoxCamera01.Image = null;
                     pictureBoxCamera02.Image = null;
-                    //if (thread != null)
-                    //{
-                    //    thread.Abort(true);
-                    //}
                 }
                 lbTitle.BackColor = Color.Yellow;
                 lbTitle.ForeColor = Color.Black;
@@ -596,12 +592,7 @@ namespace SC_M4
                         ocrResult2 = await GetOcrResultBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(), SelectedLang);
                         //var ocr = await _OCRScan.GetOcrResultFromBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(), SelectedLang);
 
-                        Heller.AverageColor rgb;
-                        using (var bm = (Bitmap)scrollablePictureBoxCamera02.Image.Clone())
-                        {
-                            rgb = Heller.GetAverageColor(bm);
-                        }
-                        Console.WriteLine("Averate : R=" + rgb.R + ", G=" + rgb.G + ", B=" + rgb.B);
+
 
                         result_2 = ocrResult2.Text;
                         result_2 = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
@@ -622,7 +613,15 @@ namespace SC_M4
                             this.richTextBox2.Text = string.Empty;
                             this.richTextBox2.Text = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
                         }));
+                        Heller.AverageColor rgb;
+                        using (var bm = (Bitmap)bmp2_color.Clone())
+                        {
+                            rgb = Heller.GetAverageColor(bm);
+                        }
+                        Console.WriteLine("Averate : R=" + rgb.R + ", G=" + rgb.G + ", B=" + rgb.B);
+
                         int result = Compare_Master(result_1, result_2);
+
                         if (result == 1 || result == 2)
                         {
                             isStaetReset = false;

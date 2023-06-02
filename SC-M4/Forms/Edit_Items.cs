@@ -66,23 +66,23 @@ namespace SC_M4.Forms
         }
         public void loadTable_LB()
         {
-            dataGridViewLB.DataSource = null;
+            //dataGridViewLB.DataSource = null;
+            DataTable dt = new DataTable();
+            dt.Columns.Add("id", typeof(int));
+            dt.Columns.Add("No", typeof(int));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Color_Name", typeof(string));
+            dt.Columns.Add("Date", typeof(string));
+            var masterLB = MasterLB.GetMasterLBBySW(id_sw);
+            
+            for(int i = 0; i < masterLB.Count; i++)
+            {
+                dt.Rows.Add(masterLB[i].id, i + 1, masterLB[i].name, masterLB[i].color_name, masterLB[i].updated_at);
+            }
+            dataGridViewLB.DataSource = dt;
+            dataGridViewLB.Columns["id"].Visible = false;
+            dataGridViewLB.Columns["No"].Width = dataGridViewLB.Width / 10;
 
-            int i = 0;
-            var data = (from a in MasterLB.GetMasterLBBySW(id_sw)
-                        select new
-                        {
-                            ID = a.id,
-                            No = ++i,
-                            Name = a.name,
-                            Updated = a.updated_at
-                        }).ToList();
-            dataGridViewLB.DataSource = data;
-            dataGridViewLB.Columns[0].Visible = false;
-            dataGridViewLB.Columns[1].Width = dataGridViewLB.Width / 10;
-            // last column
-            dataGridViewLB.Columns[2].Width = dataGridViewLB.Width / 2;
-            dataGridViewLB.Columns[3].Width = dataGridViewLB.Width / 3;
             reloadTableSetting();
         }
 
@@ -119,6 +119,7 @@ namespace SC_M4.Forms
                 MasterLB masterLB = new MasterLB();
                 masterLB.master_sw_id = id_sw;
                 masterLB.name = txtInputLB.Text.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
+                masterLB.color_name = cbColor.SelectedItem.ToString();
                 if (MasterLB.IsExist(masterLB.name))
                 {
                     MessageBox.Show("Model Name is already exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -147,24 +148,14 @@ namespace SC_M4.Forms
 
         private void renameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(rename != null)
-            {
-                rename.Close();
-                rename.Dispose();
-                rename= null;
-            }
+            rename?.Dispose();
             rename = new Rename(this, 0);
             rename.ShowDialog();
         }
 
         private void renameToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (rename != null)
-            {
-                rename.Close();
-                rename.Dispose();
-                rename = null;
-            }
+            rename?.Dispose();
             rename = new Rename(this, 1);
             rename.ShowDialog();
         }

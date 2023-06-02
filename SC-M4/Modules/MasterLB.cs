@@ -11,15 +11,17 @@ namespace SC_M4.Modules
         public int id { get; set;}
         public int master_sw_id { get; set;}
         public string name { get; set;}
+        public string color_name { get; set; }
         public string created_at { get; set;}
         public string updated_at { get; set;}
 
         public void Save()
         {
-            string sql = "insert into master_lb (master_sw_id,name,created_at,updated_at) values (@master_sw_id,@name,@created_at,@updated_at)";
+            string sql = "insert into master_lb (master_sw_id,name,color_name,created_at,updated_at) values (@master_sw_id,@name,@color_name,@created_at,@updated_at)";
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@master_sw_id", master_sw_id);
             parameters.Add("@name", name);
+            parameters.Add("@color_name", color_name);
             parameters.Add("@created_at", SQliteDataAccess.GetDateTimeNow());
             parameters.Add("@updated_at", SQliteDataAccess.GetDateTimeNow());
             SQliteDataAccess.InserInputDB(sql, parameters);
@@ -27,11 +29,12 @@ namespace SC_M4.Modules
 
         public void Update()
         {
-            string sql = "update master_lb set master_sw_id = @master_sw_id, name = @name, updated_at = @updated_at where id = @id";
+            string sql = "update master_lb set master_sw_id = @master_sw_id, name = @name, color_name=@color_name, updated_at = @updated_at where id = @id";
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@id", id);
             parameters.Add("@master_sw_id", master_sw_id);
             parameters.Add("@name", name);
+            parameters.Add("@color_name", color_name);
             parameters.Add("@updated_at", SQliteDataAccess.GetDateTimeNow());
             SQliteDataAccess.InserInputDB(sql, parameters);
         }
@@ -42,7 +45,7 @@ namespace SC_M4.Modules
             parameters.Add("@id", id);
             SQliteDataAccess.InserInputDB(sql, parameters);
         }
-
+ 
         public static List<MasterLB> GetMasterLB() => SQliteDataAccess.GetRow<MasterLB>("select * from master_lb order by id desc");
 
         public static List<MasterLB> GetMasterLB(int id) => SQliteDataAccess.GetRow<MasterLB>("select * from master_lb where id = " + id);

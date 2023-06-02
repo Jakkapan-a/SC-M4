@@ -48,6 +48,7 @@
             this.contextMenuStripLB = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.renameToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.cbColor = new System.Windows.Forms.ComboBox();
             this.statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -64,9 +65,9 @@
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusID_SW,
             this.toolStripStatusID_LB});
-            this.statusStrip.Location = new System.Drawing.Point(0, 394);
+            this.statusStrip.Location = new System.Drawing.Point(0, 424);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(614, 22);
+            this.statusStrip.Size = new System.Drawing.Size(755, 22);
             this.statusStrip.TabIndex = 0;
             this.statusStrip.Text = "statusStrip1";
             // 
@@ -97,12 +98,13 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.cbColor);
             this.splitContainer1.Panel2.Controls.Add(this.label2);
             this.splitContainer1.Panel2.Controls.Add(this.btnAddLB);
             this.splitContainer1.Panel2.Controls.Add(this.txtInputLB);
             this.splitContainer1.Panel2.Controls.Add(this.dataGridViewLB);
-            this.splitContainer1.Size = new System.Drawing.Size(614, 394);
-            this.splitContainer1.SplitterDistance = 302;
+            this.splitContainer1.Size = new System.Drawing.Size(755, 424);
+            this.splitContainer1.SplitterDistance = 371;
             this.splitContainer1.TabIndex = 1;
             // 
             // label1
@@ -112,7 +114,7 @@
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(13, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(285, 29);
+            this.label1.Size = new System.Drawing.Size(354, 29);
             this.label1.TabIndex = 3;
             this.label1.Text = "List Version Software In ECU";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -120,7 +122,7 @@
             // btnAddSW
             // 
             this.btnAddSW.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddSW.Location = new System.Drawing.Point(223, 359);
+            this.btnAddSW.Location = new System.Drawing.Point(292, 389);
             this.btnAddSW.Name = "btnAddSW";
             this.btnAddSW.Size = new System.Drawing.Size(75, 23);
             this.btnAddSW.TabIndex = 2;
@@ -132,9 +134,9 @@
             // 
             this.txtInputSW.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtInputSW.Location = new System.Drawing.Point(12, 360);
+            this.txtInputSW.Location = new System.Drawing.Point(12, 390);
             this.txtInputSW.Name = "txtInputSW";
-            this.txtInputSW.Size = new System.Drawing.Size(205, 20);
+            this.txtInputSW.Size = new System.Drawing.Size(274, 20);
             this.txtInputSW.TabIndex = 1;
             // 
             // dataGridViewSW
@@ -151,7 +153,7 @@
             this.dataGridViewSW.Name = "dataGridViewSW";
             this.dataGridViewSW.RowHeadersVisible = false;
             this.dataGridViewSW.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewSW.Size = new System.Drawing.Size(286, 309);
+            this.dataGridViewSW.Size = new System.Drawing.Size(355, 339);
             this.dataGridViewSW.TabIndex = 0;
             this.dataGridViewSW.SelectionChanged += new System.EventHandler(this.dataGridViewSW_SelectionChanged);
             // 
@@ -184,7 +186,7 @@
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(3, 13);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(293, 29);
+            this.label2.Size = new System.Drawing.Size(365, 29);
             this.label2.TabIndex = 3;
             this.label2.Text = "List Models In Label";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -192,7 +194,7 @@
             // btnAddLB
             // 
             this.btnAddLB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddLB.Location = new System.Drawing.Point(230, 360);
+            this.btnAddLB.Location = new System.Drawing.Point(302, 393);
             this.btnAddLB.Name = "btnAddLB";
             this.btnAddLB.Size = new System.Drawing.Size(75, 23);
             this.btnAddLB.TabIndex = 2;
@@ -204,9 +206,9 @@
             // 
             this.txtInputLB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtInputLB.Location = new System.Drawing.Point(6, 360);
+            this.txtInputLB.Location = new System.Drawing.Point(6, 393);
             this.txtInputLB.Name = "txtInputLB";
-            this.txtInputLB.Size = new System.Drawing.Size(209, 20);
+            this.txtInputLB.Size = new System.Drawing.Size(196, 20);
             this.txtInputLB.TabIndex = 1;
             // 
             // dataGridViewLB
@@ -223,7 +225,7 @@
             this.dataGridViewLB.Name = "dataGridViewLB";
             this.dataGridViewLB.RowHeadersVisible = false;
             this.dataGridViewLB.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewLB.Size = new System.Drawing.Size(293, 309);
+            this.dataGridViewLB.Size = new System.Drawing.Size(365, 339);
             this.dataGridViewLB.TabIndex = 0;
             this.dataGridViewLB.SelectionChanged += new System.EventHandler(this.dataGridViewLB_SelectionChanged);
             // 
@@ -249,11 +251,31 @@
             this.deleteToolStripMenuItem1.Text = "Delete";
             this.deleteToolStripMenuItem1.Click += new System.EventHandler(this.deleteToolStripMenuItem1_Click);
             // 
+            // cbColor
+            // 
+            this.cbColor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbColor.FormattingEnabled = true;
+            this.cbColor.Items.AddRange(new object[] {
+            "White",
+            "Blue",
+            "Red",
+            "Orange",
+            "Yellow",
+            "Green",
+            "Violet",
+            "Brown",
+            "Black",
+            "Grey"});
+            this.cbColor.Location = new System.Drawing.Point(208, 393);
+            this.cbColor.Name = "cbColor";
+            this.cbColor.Size = new System.Drawing.Size(88, 21);
+            this.cbColor.TabIndex = 4;
+            // 
             // Edit_Items
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(614, 416);
+            this.ClientSize = new System.Drawing.Size(755, 446);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -298,5 +320,6 @@
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem renameToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem1;
+        private System.Windows.Forms.ComboBox cbColor;
     }
 }
