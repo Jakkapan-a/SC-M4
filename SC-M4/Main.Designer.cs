@@ -38,10 +38,12 @@
             this.selectXYCAM2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testOCRToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cameraControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.changeNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.keyCAM1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.keyCAM2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.colorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelHeader = new System.Windows.Forms.Panel();
+            this.cbQrCode = new System.Windows.Forms.CheckBox();
             this.btStartStop = new System.Windows.Forms.Button();
             this.lbTitle = new System.Windows.Forms.Label();
             this.splitContainerHomeMain = new System.Windows.Forms.SplitContainer();
@@ -85,7 +87,6 @@
             this.toolStripStatusLabelError = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerMain = new System.Windows.Forms.Timer(this.components);
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
-            this.cbQrCode = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerHomeMain)).BeginInit();
@@ -136,9 +137,10 @@
             this.selectXYCAM2ToolStripMenuItem,
             this.testOCRToolStripMenuItem,
             this.cameraControlToolStripMenuItem,
-            this.changeNameToolStripMenuItem,
             this.keyCAM1ToolStripMenuItem,
-            this.keyCAM2ToolStripMenuItem});
+            this.keyCAM2ToolStripMenuItem,
+            this.changeNameToolStripMenuItem,
+            this.colorToolStripMenuItem});
             this.settingToolStripMenuItem.Name = "settingToolStripMenuItem";
             this.settingToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
             this.settingToolStripMenuItem.Text = "Setting";
@@ -146,28 +148,28 @@
             // masterListToolStripMenuItem
             // 
             this.masterListToolStripMenuItem.Name = "masterListToolStripMenuItem";
-            this.masterListToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.masterListToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.masterListToolStripMenuItem.Text = "Master List";
             this.masterListToolStripMenuItem.Click += new System.EventHandler(this.masterListToolStripMenuItem_Click);
             // 
             // selectXYCAM1ToolStripMenuItem
             // 
             this.selectXYCAM1ToolStripMenuItem.Name = "selectXYCAM1ToolStripMenuItem";
-            this.selectXYCAM1ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.selectXYCAM1ToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.selectXYCAM1ToolStripMenuItem.Text = "Select X-Y CAM 1";
             this.selectXYCAM1ToolStripMenuItem.Click += new System.EventHandler(this.selectXYCAM1ToolStripMenuItem_Click);
             // 
             // selectXYCAM2ToolStripMenuItem
             // 
             this.selectXYCAM2ToolStripMenuItem.Name = "selectXYCAM2ToolStripMenuItem";
-            this.selectXYCAM2ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.selectXYCAM2ToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.selectXYCAM2ToolStripMenuItem.Text = "Select X-Y CAM 2";
             this.selectXYCAM2ToolStripMenuItem.Click += new System.EventHandler(this.selectXYCAM2ToolStripMenuItem_Click);
             // 
             // testOCRToolStripMenuItem
             // 
             this.testOCRToolStripMenuItem.Name = "testOCRToolStripMenuItem";
-            this.testOCRToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.testOCRToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.testOCRToolStripMenuItem.Text = "Test OCR";
             this.testOCRToolStripMenuItem.Visible = false;
             this.testOCRToolStripMenuItem.Click += new System.EventHandler(this.testOCRToolStripMenuItem_Click);
@@ -175,30 +177,37 @@
             // cameraControlToolStripMenuItem
             // 
             this.cameraControlToolStripMenuItem.Name = "cameraControlToolStripMenuItem";
-            this.cameraControlToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.cameraControlToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.cameraControlToolStripMenuItem.Text = "Camera Control";
             this.cameraControlToolStripMenuItem.Click += new System.EventHandler(this.cameraControlToolStripMenuItem_Click);
-            // 
-            // changeNameToolStripMenuItem
-            // 
-            this.changeNameToolStripMenuItem.Name = "changeNameToolStripMenuItem";
-            this.changeNameToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
-            this.changeNameToolStripMenuItem.Text = "Setting";
-            this.changeNameToolStripMenuItem.Click += new System.EventHandler(this.changeNameToolStripMenuItem_Click);
             // 
             // keyCAM1ToolStripMenuItem
             // 
             this.keyCAM1ToolStripMenuItem.Name = "keyCAM1ToolStripMenuItem";
-            this.keyCAM1ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.keyCAM1ToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.keyCAM1ToolStripMenuItem.Text = "Key CAM 1";
             this.keyCAM1ToolStripMenuItem.Click += new System.EventHandler(this.keyCAM1ToolStripMenuItem_Click);
             // 
             // keyCAM2ToolStripMenuItem
             // 
             this.keyCAM2ToolStripMenuItem.Name = "keyCAM2ToolStripMenuItem";
-            this.keyCAM2ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.keyCAM2ToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.keyCAM2ToolStripMenuItem.Text = "Key CAM 2";
             this.keyCAM2ToolStripMenuItem.Click += new System.EventHandler(this.keyCAM2ToolStripMenuItem_Click);
+            // 
+            // changeNameToolStripMenuItem
+            // 
+            this.changeNameToolStripMenuItem.Name = "changeNameToolStripMenuItem";
+            this.changeNameToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.changeNameToolStripMenuItem.Text = "Setting";
+            this.changeNameToolStripMenuItem.Click += new System.EventHandler(this.changeNameToolStripMenuItem_Click);
+            // 
+            // colorToolStripMenuItem
+            // 
+            this.colorToolStripMenuItem.Name = "colorToolStripMenuItem";
+            this.colorToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.colorToolStripMenuItem.Text = "Check point of color";
+            this.colorToolStripMenuItem.Click += new System.EventHandler(this.colorToolStripMenuItem_Click);
             // 
             // panelHeader
             // 
@@ -211,6 +220,20 @@
             this.panelHeader.Name = "panelHeader";
             this.panelHeader.Size = new System.Drawing.Size(803, 67);
             this.panelHeader.TabIndex = 3;
+            // 
+            // cbQrCode
+            // 
+            this.cbQrCode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbQrCode.AutoSize = true;
+            this.cbQrCode.Checked = true;
+            this.cbQrCode.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbQrCode.Location = new System.Drawing.Point(708, 4);
+            this.cbQrCode.Name = "cbQrCode";
+            this.cbQrCode.Size = new System.Drawing.Size(92, 17);
+            this.cbQrCode.TabIndex = 9;
+            this.cbQrCode.Text = "Use QR Code";
+            this.cbQrCode.UseVisualStyleBackColor = true;
+            this.cbQrCode.CheckedChanged += new System.EventHandler(this.cbQrCode_CheckedChanged);
             // 
             // btStartStop
             // 
@@ -697,20 +720,6 @@
             // 
             this.serialPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort_DataReceived);
             // 
-            // cbQrCode
-            // 
-            this.cbQrCode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbQrCode.AutoSize = true;
-            this.cbQrCode.Checked = true;
-            this.cbQrCode.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbQrCode.Location = new System.Drawing.Point(708, 4);
-            this.cbQrCode.Name = "cbQrCode";
-            this.cbQrCode.Size = new System.Drawing.Size(92, 17);
-            this.cbQrCode.TabIndex = 9;
-            this.cbQrCode.Text = "Use QR Code";
-            this.cbQrCode.UseVisualStyleBackColor = true;
-            this.cbQrCode.CheckedChanged += new System.EventHandler(this.cbQrCode_CheckedChanged);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -724,7 +733,8 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "SC-M4 v4.51";
+            this.Text = "SC-M4 v4.52";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Main_FormClosed);
             this.Load += new System.EventHandler(this.Main_Load);
@@ -819,6 +829,7 @@
         private System.Windows.Forms.ToolStripMenuItem keyCAM1ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem keyCAM2ToolStripMenuItem;
         private System.Windows.Forms.CheckBox cbQrCode;
+        private System.Windows.Forms.ToolStripMenuItem colorToolStripMenuItem;
     }
 }
 

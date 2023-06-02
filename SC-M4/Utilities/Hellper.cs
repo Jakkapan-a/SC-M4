@@ -8,7 +8,7 @@ using System.Web;
 
 namespace SC_M4.Utilities
 {
-    public class Hellper
+    public class Heller
     {
         public struct AverageColor
         {
@@ -17,7 +17,17 @@ namespace SC_M4.Utilities
             public int B;
         }
 
-        public static AverageColor GetAverageColor(Bitmap bmp, int maxWidth = 100, int maxHeight = 100)
+        public enum AverageColorType
+        {
+            Full,
+            TopLeft,
+            TopRight,
+            BottomLeft,
+            BottomRight,
+            Center
+        }
+
+        public static AverageColor GetAverageColor(Bitmap bmp, AverageColorType type = AverageColorType.Full, int maxWidth = 100, int maxHeight = 100)
         {
             // Resize bitmap if necessary
             if (bmp.Width > maxWidth || bmp.Height > maxHeight)

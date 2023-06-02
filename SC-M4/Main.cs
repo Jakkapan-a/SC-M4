@@ -30,7 +30,7 @@ using System.Windows.Markup;
 using TClass;
 using Windows.UI.Xaml.Controls;
 using SC_M4.Utilities;
-using static SC_M4.Utilities.Hellper;
+
 //using Windows.UI.Xaml.Controls;
 
 namespace SC_M4
@@ -710,10 +710,10 @@ namespace SC_M4
                         ocrResult2 = await GetOcrResultBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(), SelectedLang);
                         //var ocr = await _OCRScan.GetOcrResultFromBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(), SelectedLang);
 
-                        AverageColor rgb;
+                        Heller.AverageColor rgb;
                         using (var bm = (Bitmap)scrollablePictureBoxCamera02.Image.Clone())
                         {
-                            rgb = Hellper.GetAverageColor(bm);
+                            rgb = Heller.GetAverageColor(bm);
                         }
                         Console.WriteLine("Averate : R=" + rgb.R + ", G=" + rgb.G + ", B=" + rgb.B);
 
@@ -1471,6 +1471,13 @@ namespace SC_M4
             {
                 btConnect.PerformClick();
             }
+        }
+        private ColorAverage colorAverage;
+        private void colorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            colorAverage?.Dispose();
+            colorAverage = new ColorAverage();
+            colorAverage.Show();
         }
 
         public Task<OcrResult> GetOcrResultBitmap(Bitmap scaledBitmap, Language selectedLanguage)
