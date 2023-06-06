@@ -81,7 +81,7 @@ namespace SC_M4
                 item.Text = "";
             }
 
-            this.Text = "SC-M4 v.4.52";
+            this.Text = "SC-M4 v.4.53";
             background = new BackgroundWorker();
             background.WorkerReportsProgress = true;
             background.WorkerSupportsCancellation = true;
@@ -188,6 +188,12 @@ namespace SC_M4
 
         private void loadTableHistory()
         {
+
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => { loadTableHistory(); }));
+                return;
+            }
             DataTable dt = new DataTable();
             dt.Columns.Add("ID", typeof(int));
             dt.Columns.Add("No", typeof(int));
@@ -196,6 +202,7 @@ namespace SC_M4
             dt.Columns.Add("Software", typeof(string));
             dt.Columns.Add("Master_Model", typeof(string));
             dt.Columns.Add("Models", typeof(string));
+            dt.Columns.Add("Color", typeof(string));
             dt.Columns.Add("Results", typeof(string));
             dt.Columns.Add("Description", typeof(string));
             dt.Columns.Add("Update", typeof(string));
@@ -204,7 +211,7 @@ namespace SC_M4
             int i = 1;
             foreach (var h in history)
             {
-                dt.Rows.Add(i, h.name, h.master_sw, h.name_sw, h.master_lb, h.name_lb, h.result, h.description, h.updated_at);
+                dt.Rows.Add(h.id,i, h.name, h.master_sw, h.name_sw, h.master_lb, h.name_lb, h.color, h.result, h.description, h.updated_at);
                 i++;
             }
 

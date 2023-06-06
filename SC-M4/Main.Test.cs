@@ -4,12 +4,16 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.Media.Ocr;
+using Windows.UI.Xaml.Shapes;
+using Rectangle = System.Drawing.Rectangle;
 
 namespace SC_M4
 {
@@ -40,6 +44,7 @@ namespace SC_M4
 
             try
             {
+
                 taskProcess = Task.Run(() => processOCR(), cts.Token);
                 await taskProcess;
             }
@@ -123,11 +128,24 @@ namespace SC_M4
                             this.richTextBox2.Text = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
                         }));
 
+                        //Rectangle rectangle = new Rectangle(Properties.Settings.Default.color_x, Properties.Settings.Default.color_y, Properties.Settings.Default.color_width, Properties.Settings.Default.color_high);
+
+                        //bmp2_color?.Dispose();
+                        //bmp2_color = new Bitmap(rectangle.Width, rectangle.Height);
+                        //using (Graphics gx = Graphics.FromImage(scrollablePictureBoxCamera02.Image))
+                        //{
+                        //    gx.DrawImage(bmp2_color, 0, 0, rectangle, GraphicsUnit.Pixel);
+                        //}
+
                         Heller.AverageColor rgb;
-                        using (var bm = (Bitmap)bmp2_color.Clone())
+                        rgb.R = 0;
+                        rgb.G = 0;
+                        rgb.B = 0;
+                        using (var bm = (Bitmap)pgRGB.Image.Clone())
                         {
                             rgb = Heller.GetAverageColor(bm);
                         }
+
                         Console.WriteLine("Average : R=" + rgb.R + ", G=" + rgb.G + ", B=" + rgb.B);
 
                         string[] colorName = _colorName.Name(_colorName.RgbToHex(rgb.R, rgb.G, rgb.B));
@@ -154,19 +172,12 @@ namespace SC_M4
             }
             catch (Exception ex)
             {
-                if (InvokeRequired)
+                Invoke(new Action(() =>
                 {
-                    Invoke(new Action(() =>
-                    {
-                        toolStripStatusLabelError.Text = ex.Message;
-                        toolStripStatusLabelError.ForeColor = Color.Red;
-                    }));
-                }
-                else
-                {
+                    // One or more errors occurred.
                     toolStripStatusLabelError.Text = ex.Message;
                     toolStripStatusLabelError.ForeColor = Color.Red;
-                }
+                }));
             }
         }
         private string CleanAndReplaceResult(string result, List<ReplaceName> replaceNames)
@@ -266,9 +277,12 @@ namespace SC_M4
             history.master_sw = "null";
             history.master_lb = "null";
             string description = "";
-
+            string color_error = "";
             foreach (var item in master_lb)
             {
+                history.master_sw = item.nameSW;
+                history.master_lb = item.nameModel;
+                
                 if (item.nameSW == txt_sw && color.Equals(item.color_name, StringComparison.OrdinalIgnoreCase))
                 {
                     history.master_sw = item.nameSW;
@@ -280,6 +294,7 @@ namespace SC_M4
                     history.name_lb = txt_lb;
                     history.name_sw = txt_sw;
                     history.result = "OK";
+                    history.color = item.color_name +" - "+ color;
                     history.description = "-";
                     history.Save();
 
@@ -287,15 +302,31 @@ namespace SC_M4
                     return ResultType.OK;
                 }
 
-      
-                if(item.nameSW == txt_sw){
-                    description += "Found in " + item.nameModel + " - " + item.nameSW + "";
-                    if(color.Equals(item.color_name, StringComparison.OrdinalIgnoreCase)){
-                        description += " - Color OK";
-                    }else{
-                        description += " - Color NG";
+
+                if (item.nameSW == txt_sw)
+                {
+                    try
+                    {
+                        history.name_lb = txt_lb;
+                        history.name_sw = txt_sw;
+                        description += "Found in " + item.nameModel + " - " + item.nameSW + "";
+                        if (color.Equals(item.color_name, StringComparison.OrdinalIgnoreCase))
+                        {
+                            description += " - Color OK";
+                            color_error = " - " + color + " OK";
+                        }
+                        else
+                        {
+                            description += " - Color NG";
+                            color_error = " - " + color + " NG";
+                        }
+                        break;
                     }
-                    break;
+                    catch (Exception ex)
+                    {
+                        LogWriter.SaveLog("Error : " + ex.Message);
+                        // description += "Found in " + item.nameModel + " - " + item.nameSW + " - Color NG";
+                    }
                 }
             }
 
@@ -305,13 +336,14 @@ namespace SC_M4
             history.name_lb = txt_lb;
             history.name_sw = txt_sw;
             history.description = description;
+            history.color = color_error;
             history.result = "NG";
             history.Save();
 
             isStateReset = false;
             return ResultType.NG;
         }
-        
+
         #region Old
         private int Compare_Master(string txt_sw, string txt_lb)
         {

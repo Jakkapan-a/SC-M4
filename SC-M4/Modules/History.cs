@@ -15,13 +15,14 @@ namespace SC_M4.Modules
         public string name_lb { get; set; }
         public string master_lb { get; set; }
         public string result { get; set; }
+        public string color { get; set; }
         public string description { get; set; }
         public string created_at { get; set; }
         public string updated_at { get; set;}
 
         public void Save()
         {
-            string sql = "insert into history (name, name_sw, master_sw, name_lb, master_lb, result, description, created_at, updated_at) values (@name, @name_sw, @master_sw, @name_lb, @master_lb, @result, @description, @created_at, @updated_at)";
+            string sql = "insert into history (name, name_sw, master_sw, name_lb, master_lb, result, color, description, created_at, updated_at) values (@name, @name_sw, @master_sw, @name_lb, @master_lb, @result, @color, @description, @created_at, @updated_at)";
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@name", name);
             parameters.Add("@name_sw", name_sw);
@@ -29,6 +30,7 @@ namespace SC_M4.Modules
             parameters.Add("@name_lb", name_lb);
             parameters.Add("@master_lb", master_lb);
             parameters.Add("@result", result);
+            parameters.Add("@color", color);
             parameters.Add("@description", description);
             parameters.Add("@created_at", SQliteDataAccess.GetDateTimeNow());
             parameters.Add("@updated_at", SQliteDataAccess.GetDateTimeNow());
@@ -37,7 +39,7 @@ namespace SC_M4.Modules
 
         public void Update()
         {
-            string sql = "update history set name = @name, name_sw = @name_sw, master_sw = @master_sw, name_lb = @name_lb, master_lb = @master_lb, result = @result, description =@description, updated_at = @updated_at where id = @id";
+            string sql = "update history set name = @name, name_sw = @name_sw, master_sw = @master_sw, name_lb = @name_lb, master_lb = @master_lb, result = @result, color = @color, description =@description, updated_at = @updated_at where id = @id";
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@id", id);
             parameters.Add("@name", name);
@@ -46,6 +48,7 @@ namespace SC_M4.Modules
             parameters.Add("@name_lb", name_lb);
             parameters.Add("@master_lb", master_lb);
             parameters.Add("@result", result);
+            parameters.Add("@color", color);
             parameters.Add("@description", description);
             parameters.Add("@updated_at", SQliteDataAccess.GetDateTimeNow());
             SQliteDataAccess.Execute(sql, parameters);

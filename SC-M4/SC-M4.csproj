@@ -373,6 +373,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="layers.ico" />
+    <None Include="Resources\settings__32.png" />
+    <None Include="Resources\performance_imac_32.png" />
+    <None Include="Resources\screenshot_32.png" />
+    <None Include="Resources\Edit_File_32.png" />
     <None Include="Resources\Point.png" />
     <None Include="Resources\Spinner-0.4s-800px.gif" />
   </ItemGroup>

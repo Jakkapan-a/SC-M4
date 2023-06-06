@@ -68,12 +68,15 @@ namespace SC_M4
                 }
 
                 bmp2_color?.Dispose();
-                bmp2_color = new Bitmap(rectangle.Width, rectangle.Height);
-                using (Graphics gx = Graphics.FromImage(scrollablePictureBoxCamera02.Image))
-                {
+                rectangle = new Rectangle(Properties.Settings.Default.color_x + 2, Properties.Settings.Default.color_y+2, Properties.Settings.Default.color_width-6, Properties.Settings.Default.color_high-6);
 
-                    gx.DrawImage(bmp2_color, 0, 0, rectangle, GraphicsUnit.Pixel);
+                bmp2_color = new Bitmap(rectangle.Width, rectangle.Height);
+                using (Graphics gx = Graphics.FromImage(bmp2_color))
+                {
+                    gx.DrawImage(scrollablePictureBoxCamera02.Image, 0, 0, rectangle, GraphicsUnit.Pixel);
                 }
+                pgRGB.Image?.Dispose();
+                pgRGB.Image = bmp2_color;
                 // Draw Rectangle to Image
                 using (Graphics g = Graphics.FromImage(pictureBoxCamera02.Image))
                 {

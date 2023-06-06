@@ -71,6 +71,16 @@ namespace SC_M4.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Edit_File_32 {
+            get {
+                object obj = ResourceManager.GetObject("Edit_File_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please select drive camera.
         /// </summary>
         internal static string msg_select_camera {
@@ -109,9 +119,39 @@ namespace SC_M4.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap performance_imac_32 {
+            get {
+                object obj = ResourceManager.GetObject("performance_imac_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Point {
             get {
                 object obj = ResourceManager.GetObject("Point", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap screenshot_32 {
+            get {
+                object obj = ResourceManager.GetObject("screenshot_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap settings__32 {
+            get {
+                object obj = ResourceManager.GetObject("settings__32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

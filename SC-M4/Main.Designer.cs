@@ -87,6 +87,8 @@
             this.toolStripStatusLabelError = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerMain = new System.Windows.Forms.Timer(this.components);
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
+            this.pgRGB = new System.Windows.Forms.PictureBox();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerHomeMain)).BeginInit();
@@ -110,6 +112,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.nFocus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewHistory)).BeginInit();
             this.statusStripHome.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pgRGB)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -147,6 +151,7 @@
             // 
             // masterListToolStripMenuItem
             // 
+            this.masterListToolStripMenuItem.Image = global::SC_M4.Properties.Resources.Edit_File_32;
             this.masterListToolStripMenuItem.Name = "masterListToolStripMenuItem";
             this.masterListToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.masterListToolStripMenuItem.Text = "Master List";
@@ -154,6 +159,7 @@
             // 
             // selectXYCAM1ToolStripMenuItem
             // 
+            this.selectXYCAM1ToolStripMenuItem.Image = global::SC_M4.Properties.Resources.screenshot_32;
             this.selectXYCAM1ToolStripMenuItem.Name = "selectXYCAM1ToolStripMenuItem";
             this.selectXYCAM1ToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.selectXYCAM1ToolStripMenuItem.Text = "Select X-Y CAM 1";
@@ -161,6 +167,7 @@
             // 
             // selectXYCAM2ToolStripMenuItem
             // 
+            this.selectXYCAM2ToolStripMenuItem.Image = global::SC_M4.Properties.Resources.screenshot_32;
             this.selectXYCAM2ToolStripMenuItem.Name = "selectXYCAM2ToolStripMenuItem";
             this.selectXYCAM2ToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.selectXYCAM2ToolStripMenuItem.Text = "Select X-Y CAM 2";
@@ -176,6 +183,7 @@
             // 
             // cameraControlToolStripMenuItem
             // 
+            this.cameraControlToolStripMenuItem.Image = global::SC_M4.Properties.Resources.performance_imac_32;
             this.cameraControlToolStripMenuItem.Name = "cameraControlToolStripMenuItem";
             this.cameraControlToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.cameraControlToolStripMenuItem.Text = "Camera Control";
@@ -197,6 +205,7 @@
             // 
             // changeNameToolStripMenuItem
             // 
+            this.changeNameToolStripMenuItem.Image = global::SC_M4.Properties.Resources.settings__32;
             this.changeNameToolStripMenuItem.Name = "changeNameToolStripMenuItem";
             this.changeNameToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.changeNameToolStripMenuItem.Text = "Setting";
@@ -429,8 +438,8 @@
             this.tableLayoutPanelChild02.ColumnCount = 2;
             this.tableLayoutPanelChild02.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanelChild02.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanelChild02.Controls.Add(this.richTextBox2, 1, 0);
             this.tableLayoutPanelChild02.Controls.Add(this.scrollablePictureBoxCamera02, 0, 0);
+            this.tableLayoutPanelChild02.Controls.Add(this.panel1, 1, 0);
             this.tableLayoutPanelChild02.Location = new System.Drawing.Point(3, 255);
             this.tableLayoutPanelChild02.Name = "tableLayoutPanelChild02";
             this.tableLayoutPanelChild02.RowCount = 1;
@@ -443,9 +452,9 @@
             this.richTextBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBox2.Location = new System.Drawing.Point(151, 3);
+            this.richTextBox2.Location = new System.Drawing.Point(3, 3);
             this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(142, 135);
+            this.richTextBox2.Size = new System.Drawing.Size(136, 129);
             this.richTextBox2.TabIndex = 0;
             this.richTextBox2.Text = "";
             // 
@@ -722,6 +731,28 @@
             // 
             this.serialPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort_DataReceived);
             // 
+            // pgRGB
+            // 
+            this.pgRGB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pgRGB.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.pgRGB.Location = new System.Drawing.Point(86, 3);
+            this.pgRGB.Name = "pgRGB";
+            this.pgRGB.Size = new System.Drawing.Size(53, 28);
+            this.pgRGB.TabIndex = 16;
+            this.pgRGB.TabStop = false;
+            // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.pgRGB);
+            this.panel1.Controls.Add(this.richTextBox2);
+            this.panel1.Location = new System.Drawing.Point(151, 3);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(142, 135);
+            this.panel1.TabIndex = 2;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -768,6 +799,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewHistory)).EndInit();
             this.statusStripHome.ResumeLayout(false);
             this.statusStripHome.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pgRGB)).EndInit();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -832,6 +865,8 @@
         private System.Windows.Forms.ToolStripMenuItem keyCAM2ToolStripMenuItem;
         private System.Windows.Forms.CheckBox cbQrCode;
         private System.Windows.Forms.ToolStripMenuItem colorToolStripMenuItem;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.PictureBox pgRGB;
     }
 }
 

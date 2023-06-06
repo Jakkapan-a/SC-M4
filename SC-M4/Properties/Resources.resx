@@ -124,8 +124,8 @@
   <data name="Spinner_0_4s_800px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Spinner-0.4s-800px.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="_refresh_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\_refresh_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Edit_File_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Edit_File_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="path_temp" xml:space="preserve">
     <value>./system/temp</value>
@@ -133,10 +133,22 @@
   <data name="msg_select_camera" xml:space="preserve">
     <value>Please select drive camera</value>
   </data>
-  <data name="path_images" xml:space="preserve">
-    <value>./system/images</value>
+  <data name="performance_imac_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\performance_imac_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_refresh_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\_refresh_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Point" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Point.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="screenshot_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\screenshot_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="path_images" xml:space="preserve">
+    <value>./system/images</value>
+  </data>
+  <data name="settings__32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\settings__32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
