@@ -17,6 +17,17 @@ namespace SC_M4.Utilities
         SW,
         LB
     }
+    public enum ResultType
+    {
+        None,
+        Success,
+        Fail,
+        Pass,
+        Error,
+        OK,
+        NG,
+        NotFound,
+    }
     public class Heller
     {
         public struct AverageColor

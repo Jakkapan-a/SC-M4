@@ -37,18 +37,18 @@ namespace SC_M4
 {
     public partial class Main : Form
     {
-        private  Language SelectedLang = null;
+        private Language SelectedLang = null;
         public TControl cameraControl;
         public Main()
         {
             InitializeComponent();
         }
-                
+
         public TCapture.Capture capture_1;
         public TCapture.Capture capture_2;
 
-        public Bitmap bitmapCamaera_01;
-        public Bitmap bitmapCamaera_02;
+        public Bitmap bitmapCamera_01;
+        public Bitmap bitmapCamera_02;
 
         LogFile LogWriter;
         public string[] baudList = { "9600", "19200", "38400", "57600", "115200" };
@@ -65,15 +65,17 @@ namespace SC_M4
         protected string selectedPSM = "Auto"; // 3 - Fully automatic page segmentation, but no OSD (default)
         protected string selectedOEM = "3"; // Default
 
-        private bool isStaetReset;
+        private bool isStateReset;
 
         private bool isOCR1 = false;
 
         private BackgroundWorker background;
         private System.Windows.Forms.Timer timerOCR;
-       
+        private ColorName _colorName;
         private void Main_Load(object sender, EventArgs e)
         {
+            _colorName = new ColorName();
+            
             foreach (ToolStripItem item in statusStripHome.Items)
             {
                 item.Text = "";
@@ -104,11 +106,11 @@ namespace SC_M4
 
             // Create Video Capture Object
             capture_1 = new TCapture.Capture();
-            capture_1.OnFrameHeader += Capture_1_OnFrameHeadler;
+            capture_1.OnFrameHeader += Capture_1_OnFrameHeader;
             capture_1.OnVideoStarted += Capture_1_OnVideoStarted;
             capture_1.OnVideoStop += Capture_1_OnVideoStop;
             capture_2 = new TCapture.Capture();
-            capture_2.OnFrameHeader += Capture_2_OnFrameHeadler;
+            capture_2.OnFrameHeader += Capture_2_OnFrameHeader;
             capture_2.OnVideoStarted += Capture_2_OnVideoStarted;
             capture_2.OnVideoStop += Capture_2_OnVideoStop;
             this.ActiveControl = txtEmployee;
@@ -148,21 +150,6 @@ namespace SC_M4
             cbQrCode.Checked = Properties.Settings.Default.useQrCode;
             useQrCode = cbQrCode.Checked;
         }
-        private Task taskProcess;
-        private void TimerOCR_Tick(object sender, EventArgs e)
-        {
-            onTest();
-        }
-
-        private async void onTest()
-        {
-            if (taskProcess != null && taskProcess.Status == TaskStatus.Running)
-            {
-                return;
-            }
-            taskProcess = Task.Run(() => processOCR());
-            await taskProcess;
-        }
         private async void deletedFileTemp()
         {
             try
@@ -201,24 +188,28 @@ namespace SC_M4
 
         private void loadTableHistory()
         {
-            var list = History.GetHistory();
-            dataGridViewHistory.DataSource = null;
-            int i = 0;
-            // Reverse the list to display the latest record first
-            var data = (from p in list
-                        select new
-                        {
-                            ID = p.id,
-                            No = ++i,
-                            Employee = p.name,
-                            MasterSW = p.master_sw,
-                            Software = p.name_sw,
-                            Master_Model = p.master_lb,
-                            Models = p.name_lb,
-                            Results = p.result,
-                            Update = p.created_at
-                        }).ToList();
-            dataGridViewHistory.DataSource = data;
+            DataTable dt = new DataTable();
+            dt.Columns.Add("ID", typeof(int));
+            dt.Columns.Add("No", typeof(int));
+            dt.Columns.Add("Employee", typeof(string));
+            dt.Columns.Add("MasterSW", typeof(string));
+            dt.Columns.Add("Software", typeof(string));
+            dt.Columns.Add("Master_Model", typeof(string));
+            dt.Columns.Add("Models", typeof(string));
+            dt.Columns.Add("Results", typeof(string));
+            dt.Columns.Add("Description", typeof(string));
+            dt.Columns.Add("Update", typeof(string));
+
+            var history = History.GetHistory();
+            int i = 1;
+            foreach (var h in history)
+            {
+                dt.Rows.Add(i, h.name, h.master_sw, h.name_sw, h.master_lb, h.name_lb, h.result, h.description, h.updated_at);
+                i++;
+            }
+
+            dataGridViewHistory.DataSource = dt;
+
             dataGridViewHistory.Columns["ID"].Visible = false;
             // 10% of the width of the DataGridView
             dataGridViewHistory.Columns["No"].Width = dataGridViewHistory.Width * 10 / 100;
@@ -261,8 +252,8 @@ namespace SC_M4
             cameraControl = new TClass.TControl(cbDriveCam02.SelectedIndex);
         }
 
-     
-        
+
+
         public void saveRect(Rectangle rect, int _type)
         {
             if (_type == 0)
@@ -284,8 +275,8 @@ namespace SC_M4
 
                 Properties.Settings.Default.rect2_w = rect.Width;
                 Properties.Settings.Default.rect2_h = rect.Height;
-                
-                
+
+
                 Properties.Settings.Default.Save();
             }
         }
@@ -295,7 +286,7 @@ namespace SC_M4
             if (_type == 0 && Properties.Settings.Default.rect1_x != 0)
             {
                 rect_1 = new Rectangle(Properties.Settings.Default.rect1_x, Properties.Settings.Default.rect1_y, Properties.Settings.Default.rect1_w, Properties.Settings.Default.rect1_h);
-                toolStripStatusRect1.Text = "Rect 1 : X=" + rect_1.X.ToString() + ", Y=" + rect_1.Y.ToString() + ", H=" + rect_1.Height.ToString()+ ", W=" + rect_1.Width.ToString();
+                toolStripStatusRect1.Text = "Rect 1 : X=" + rect_1.X.ToString() + ", Y=" + rect_1.Y.ToString() + ", H=" + rect_1.Height.ToString() + ", W=" + rect_1.Width.ToString();
             }
             else if (_type == 1 && Properties.Settings.Default.rect2_x != 0)
             {
@@ -313,15 +304,14 @@ namespace SC_M4
         private Thread thread;
 
         #region Start
-        private List<ReplaceName> repleaceNames1 = new List<ReplaceName>();
-        private List<ReplaceName> repleaceNames2 = new List<ReplaceName>();
+
 
         private Task taskCam1;
         private Task taskCam2;
         private async void btStartStop_Click(object sender, EventArgs e)
         {
-             
-            if(taskCam1 != null &&  taskCam1.Status == TaskStatus.Running)
+
+            if (taskCam1 != null && taskCam1.Status == TaskStatus.Running)
             {
                 Console.WriteLine("Task 1 is running");
                 return;
@@ -348,7 +338,7 @@ namespace SC_M4
 
                     if (cbDriveCam01.SelectedIndex == cbDriveCam02.SelectedIndex)
                     {
-                        lbTitle.Text = "Please select camera drive!"; 
+                        lbTitle.Text = "Please select camera drive!";
                         throw new Exception("Please select camera drive!");
                     }
 
@@ -373,11 +363,11 @@ namespace SC_M4
                     if (capture_2.IsOpened)
                         capture_2.Stop();
 
-                    repleaceNames1.Clear();
-                    repleaceNames1 = Modules.ReplaceName.GetList(0);
+                    replaceNames1.Clear();
+                    replaceNames1 = Modules.ReplaceName.GetList(0);
 
-                    repleaceNames2.Clear();
-                    repleaceNames2 = Modules.ReplaceName.GetList(1);
+                    replaceNames2.Clear();
+                    replaceNames2 = Modules.ReplaceName.GetList(1);
 
 
                     driveindex_01 = cbDriveCam01.SelectedIndex;
@@ -391,7 +381,7 @@ namespace SC_M4
                     pictureBoxCamera01.Image = Properties.Resources.Spinner_0_4s_800px;
                     pictureBoxCamera02.Image = Properties.Resources.Spinner_0_4s_800px;
 
-                    taskCam1 = Task.Run(()=> capture_1.Start(driveindex_01));
+                    taskCam1 = Task.Run(() => capture_1.Start(driveindex_01));
 
                     await taskCam1;
 
@@ -418,13 +408,13 @@ namespace SC_M4
                     checkBoxAutoFocus.Checked = false;
 
                     nFocus.Value = cameraControl.fValue;
-                    nFocus.Value = 68 > cameraControl.fmax ? cameraControl.fmax: 68;
+                    nFocus.Value = 68 > cameraControl.fmax ? cameraControl.fmax : 68;
                     nFocus.Maximum = cameraControl.fmax;
                     nFocus.Minimum = cameraControl.fmin;
 
 
                     btConnect.Text = "Disconnect";
-                    if(background == null)
+                    if (background == null)
                     {
                         background = new BackgroundWorker();
                         background.WorkerReportsProgress = true;
@@ -439,7 +429,7 @@ namespace SC_M4
 
 
                     isStarted = true;
-                    isStaetReset = true;
+                    isStateReset = true;
                 }
                 else
                 {
@@ -459,7 +449,7 @@ namespace SC_M4
                         background.Dispose();
                     }
 
-                    if(background != null)
+                    if (background != null)
                     {
                         background.Dispose();
                     }
@@ -508,159 +498,13 @@ namespace SC_M4
 
             }
         }
-        private bool detection = false;
-        private string result_1 = string.Empty;
-        private string result_2 = string.Empty;
 
-        private Stopwatch stopwatch = new Stopwatch();
-        private OcrResult ocrResult1, ocrResult2;
-        private bool useQrCode = false;
-        private async void processOCR()
-        {
-            try
-            {
-                if (capture_1._isRunning && capture_2._isRunning && bitmapCamaera_01 != null && bitmapCamaera_02 != null && isStaetReset && scrollablePictureBoxCamera01.Image != null && scrollablePictureBoxCamera02.Image != null)
-                {
-                    if (isStarted)
-                    {
-                        capture_2.setFocus((int)nFocus.Value);
-                        isStarted = false;
-                    }
-                    stopwatch.Reset();
-                    stopwatch.Start();
-                    detection = !detection;
-                    if (detection)
-                    {
-                        Invoke(new Action(() =>
-                        {
-                            lbTitle.Text = "Wiat for detect..";
-                        }));
-                    }
-                    else
-                    {
-                        Invoke(new Action(() =>
-                        {
-                            lbTitle.Text = "Detecting...";
-                        }));
-                    }
-                    if (useQrCode)
-                    {
-                        result_1 = QrCode.DecodeQRCode(scrollablePictureBoxCamera01.Image);
-                    }
-                    else
-                    {
-                        imageList?.Clear();
-                        imageList.Add((System.Drawing.Image)scrollablePictureBoxCamera01.Image.Clone());
-                        result_1 = await performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty);
-                    }
-                    var a = result_1.IndexOf("-731");
-                    result_1 = result_1.Substring(a + 1);
-                    a = result_1.IndexOf("|731");
-                    result_1 = result_1.Substring(a + 1);
-                    result_1 = result_1.Replace("T31TM", "731TM");
-                    result_1 = result_1.Replace("731THC", "731TMC");
-                    result_1 = result_1.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "").Replace("\\", "").Replace("|", "").Replace(@"\", "");
-                    result_1 = result_1.Replace("7731TMC", "731TMC");
-                    result_1 = result_1.Replace("731TMCO", "731TMC6").Replace("-I", "-1");
-                    result_1 = result_1.Replace("-S-", "-5-");
-                    result_1 = result_1.Replace("G.22", "G:22");
-
-                    foreach (var item in repleaceNames1)
-                    {
-                        result_1 = result_1.Replace(item.oldName, item.newName);
-                    }
-
-                    if (isOCR1 && result_1 == string.Empty)
-                    {
-                        result_1 = Properties.Settings.Default.keyCAM1;
-                        isOCR1 = false;
-                    }
-
-                    richTextBox1.Invoke(new Action(() =>
-                    {
-                        this.richTextBox1.Text = string.Empty;
-                        this.richTextBox1.Text = result_1.Trim();
-
-                    }));
-                    // Image 02
-                    int lb = result_1.IndexOf(Properties.Settings.Default.keyCAM1);
-                    if (result_1 != string.Empty && lb != -1)
-                    {
-                        // OCR 2
-                        result_2 = string.Empty;
-                        ocrResult2 = null;
-                        ocrResult2 = await GetOcrResultBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(), SelectedLang);
-                        //var ocr = await _OCRScan.GetOcrResultFromBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(), SelectedLang);
-
-
-
-                        result_2 = ocrResult2.Text;
-                        result_2 = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
-                        result_2 = Regex.Replace(result_2, "[^a-zA-Z,0-9,(),:,-]", "");
-
-                        result_2 = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "").Replace("'", "").Replace("|", "").Replace(@"\", "");
-                        result_2 = result_2.Replace("91J7", "9U7");
-                        result_2 = result_2.Replace("-OO", "-00");
-                        result_2 = result_2.Replace(")9U7", "9U7").Replace("\n", "");
-                        result_2 = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
-                        result_2 = ReplaceName(result_2);
-                        foreach (var item in repleaceNames2)
-                        {
-                            result_2 = result_2.Replace(item.oldName, item.newName);
-                        }
-                        richTextBox2.Invoke(new Action(() =>
-                        {
-                            this.richTextBox2.Text = string.Empty;
-                            this.richTextBox2.Text = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
-                        }));
-                        Heller.AverageColor rgb;
-                        using (var bm = (Bitmap)bmp2_color.Clone())
-                        {
-                            rgb = Heller.GetAverageColor(bm);
-                        }
-                        Console.WriteLine("Averate : R=" + rgb.R + ", G=" + rgb.G + ", B=" + rgb.B);
-
-                        int result = Compare_Master(result_1, result_2);
-
-                        if (result == 1 || result == 2)
-                        {
-                            isStaetReset = false;
-                        }
-                    }
-                    //await Task.Delay(100);
-                    stopwatch.Stop();
-                    Console.WriteLine("Elapsed Time is {0} ms", stopwatch.ElapsedMilliseconds);
-                    Invoke(new Action(() =>
-                    {
-                        toolStripStatusTime.Text = "Load " + stopwatch.ElapsedMilliseconds.ToString() + "ms";
-                        loadTableHistory();
-                        toolStripStatusLabelError.ForeColor = Color.Green;
-                    }));
-                }
-            }
-            catch (Exception ex)
-            {
-                if (InvokeRequired)
-                {
-                    Invoke(new Action(() =>
-                    {
-                        toolStripStatusLabelError.Text = ex.Message;
-                        toolStripStatusLabelError.ForeColor = Color.Red;
-                    }));
-                }
-                else
-                {
-                    toolStripStatusLabelError.Text = ex.Message;
-                    toolStripStatusLabelError.ForeColor = Color.Red;
-                }
-            }
-        }
 
         private void Background_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = (BackgroundWorker)sender;
             onTest();
-      
+
         }
 
         private void Background_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -675,157 +519,9 @@ namespace SC_M4
 
 
 
-        private string ReplaceName(string input)
-        {
-            input = input.Replace("731OTM", "7310TM");
-
-            input = input.Replace("3O1731", "3-01731");
-
-            input = input.Replace("3-O1731", "3-01731");
-
-            input = input.Replace("4O1731", "4-01731");
-            input = input.Replace("4-O1731", "4-01731");
-
-            input = input.Replace("5O1731", "5-01731");
-            input = input.Replace("5-O1731", "5-01731");
-
-            input = input.Replace("6O3731", "6-03731");
-            input = input.Replace("6-O3731", "6-03731");
-
-            input = input.Replace("2O1731", "2-01731");
-            input = input.Replace("2-O1731", "2-01731");
-
-            input = input.Replace("7O1731", "7-01731");
-            input = input.Replace("7-O1731", "7-01731");
-
-            input = input.Replace("5O2731", "5-02731");
-            input = input.Replace("5-O2731", "5-02731");
-
-            input = input.Replace("4O4731", "4-04731");
-            input = input.Replace("4-O4731", "4-04731");
-
-            input = input.Replace("8OO731", "8-00731");
-            input = input.Replace("8-OO731", "8-00731");
-
-            input = input.Replace("8OO731", "8-00731");
-            input = input.Replace("8-OO731", "8-00731");
-
-            input = input.Replace("8OA731", "8-0A731");
-            input = input.Replace("8-OA731", "8-0A731");
-
-            input = input.Replace("9OA731", "9-0A731");
-            input = input.Replace("9-OA731", "9-0A731");
-
-            input = input.Replace("6O1731", "6-01731");
-            input = input.Replace("6-O1731", "6-01731");
-
-            input = input.Replace("7OA731", "7-0A731");
-            input = input.Replace("7-OA731", "7-0A731");
-            
-            input = input.Replace("7OO731", "7-00731");
-            input = input.Replace("7-OO731", "7-00731");
-
-            input = input.Replace("2OA731", "2-0A731");
-            input = input.Replace("2-OA731", "2-0A731");
-            return input;
-        }
         History history;
         private bool is_Blink_NG = false;
-        private int Compare_Master(string txt_sw, string txt_lb)
-        {
-            // 0 = not fount, 1 = OK, 2 = NG
-            int result = 0;
-
-            LogWriter.SaveLog("TXT Read :" + txt_sw.Replace("\r","").Replace("\n", "") + ", " + txt_lb.Replace("\r", "").Replace("\n", ""));
-            //lbTitle.Text;
-            if(history != null)
-            {
-                history = null;
-            }
-            history = new History();
-
-
-            int swa = txt_sw.IndexOf(Properties.Settings.Default.keyCAM1);
-            // If not found, IndexOf returns -1.
-            if (swa == -1)
-            {
-                result = 0;
-                return result;
-            }
-
-            int lb = txt_lb.IndexOf(Properties.Settings.Default.keyCAM2);
-            // If not found, IndexOf returns -1.
-            if (lb == -1)
-            {
-                // Return the original string.
-                result = 0;
-                return result;
-            }
-
-            var txt = txt_lb.Substring(0, lb);
-            txt = txt.Replace("O", "0");
-            var master_lb = MasterAll.GetMasterALLByLBName(txt);
-
-            bool check = false;
-
-            if (master_lb.Count > 0)
-            {
-                foreach (var item in master_lb)
-                {
-                    history.master_sw = item.nameSW;
-                    history.master_lb = item.nameModel;
-                    if (item.nameSW == txt_sw)
-                    {
-                        check = true;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                history.master_sw = "null";
-                history.master_lb = "null";
-            }
-
-            if (!check)
-            {
-                Invoke(new Action(() =>
-                {
-                    lbTitle.Text = "NG";
-                    lbTitle.ForeColor = Color.White;
-                    lbTitle.BackColor = Color.Red;
-                }));
-                is_Blink_NG = true;
-                serialCommand("NG");
-             
-                result = 1;
-            }
-
-            else
-            {
-
-                Invoke(new Action(() =>
-                {
-                    lbTitle.Text = "OK";
-                    lbTitle.ForeColor = Color.White;
-                    lbTitle.BackColor = Color.Green;
-                    //loadTableHistory();
-                }));
-                result = 2;
-                serialCommand("OK");
-            }
-            history.name = txtEmployee.Text.Trim();
-            history.name_lb = txt_lb;
-            history.name_sw = txt_sw;
-            history.result = check ? "OK" : "NG";
-            history.Save();
-            LogWriter.SaveLog("Result :" + history.result);
-            LogWriter.SaveLog("SW :" + txt_lb);
-            LogWriter.SaveLog("LABEL :" + txt_lb);
-            isStaetReset = false;
- 
-            return result;
-        }
+        
         #endregion
 
         #region Serial Port 
@@ -871,7 +567,7 @@ namespace SC_M4
         {
             if (this.serialportName == string.Empty || this.serialportBaud == string.Empty)
                 throw new Exception("Please select serial port and baud rate");
-            
+
             this.serialConnect(this.serialportName, int.Parse(this.serialportBaud));
         }
 
@@ -915,7 +611,7 @@ namespace SC_M4
                 LogWriter.SaveLog("Serial Received : " + data);
                 if (data == "rst" || data.Contains("rst"))
                 {
-                    isStaetReset = true;
+                    isStateReset = true;
                     is_Blink_NG = false;
                     if (capture_1.IsOpened && capture_1.IsOpened)
                     {
@@ -987,7 +683,8 @@ namespace SC_M4
 
         private async Task<string> performOCR(IList<System.Drawing.Image> imageList, string inputfilename, int index, Rectangle rect)
         {
-            return await Task.Run(() => {
+            return await Task.Run(() =>
+            {
                 try
                 {
                     if (curLangCode.Trim().Length == 0)
@@ -1038,7 +735,7 @@ namespace SC_M4
                     lbTitle.ForeColor = Color.Red;
                 }
             }
-            else if (lbTitle.BackColor != Color.Yellow && isStaetReset && lbTitle.Text != "OK" && lbTitle.Text != "NG")
+            else if (lbTitle.BackColor != Color.Yellow && isStateReset && lbTitle.Text != "OK" && lbTitle.Text != "NG")
             {
                 lbTitle.BackColor = Color.Yellow;
                 lbTitle.ForeColor = Color.Black;
@@ -1158,7 +855,8 @@ namespace SC_M4
 
         public async Task<Bitmap> SharpenAsync(Bitmap image)
         {
-            return await Task.Run(() => { 
+            return await Task.Run(() =>
+            {
                 sharpenImage?.Dispose();
                 sharpenImage = (Bitmap)image.Clone();
 
@@ -1283,14 +981,14 @@ namespace SC_M4
 
             timerOCR.Stop();
 
-            if(background.IsBusy)
+            if (background.IsBusy)
                 background.Dispose();
 
         }
         NameList nameList;
         private void changeNameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(nameList != null)
+            if (nameList != null)
             {
                 nameList.Close();
                 nameList.Dispose();
@@ -1315,7 +1013,7 @@ namespace SC_M4
         private Forms.Key key;
         private void keyCAM1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(key != null)
+            if (key != null)
             {
                 key.Close();
             }
@@ -1344,7 +1042,7 @@ namespace SC_M4
                 useQrCode = cbQrCode.Checked;
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LogWriter.SaveLog("cb Qr save :" + ex.Message);
             }
@@ -1352,7 +1050,7 @@ namespace SC_M4
 
         private void txtEmployee_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter)
             {
                 btConnect.PerformClick();
             }
@@ -1408,44 +1106,44 @@ namespace SC_M4
 
     public static class OcrProcessor
     {
-            public static IReadOnlyList<Language> GetOcrLangList()
+        public static IReadOnlyList<Language> GetOcrLangList()
+        {
+            return OcrEngine.AvailableRecognizerLanguages;
+        }
+
+        public static async Task<List<string>> GetText(SoftwareBitmap imageItem, Language SelectedLang)
+        {
+            //check item is null
+            //check no selectedLang
+            //check image is too large
+            if (imageItem == null ||
+                SelectedLang == null ||
+                imageItem.PixelWidth > OcrEngine.MaxImageDimension ||
+                imageItem.PixelHeight > OcrEngine.MaxImageDimension
+                )
             {
-                return OcrEngine.AvailableRecognizerLanguages;
+                return new List<string> { "" };
             }
-        
-            public static async Task<List<string>> GetText(SoftwareBitmap imageItem, Language SelectedLang)
+
+
+            //check ocr image exist
+            var ocrEngine = OcrEngine.TryCreateFromLanguage(SelectedLang);
+            if (ocrEngine == null)
             {
-                //check item is null
-                //check no selectedLang
-                //check image is too large
-                if (imageItem == null ||
-                    SelectedLang == null ||
-                    imageItem.PixelWidth > OcrEngine.MaxImageDimension ||
-                    imageItem.PixelHeight > OcrEngine.MaxImageDimension
-                    )
-                {
-                    return new List<string> { "" };
-                }
-
-
-                //check ocr image exist
-                var ocrEngine = OcrEngine.TryCreateFromLanguage(SelectedLang);
-                if (ocrEngine == null)
-                {
-                    return new List<string> { "" };
-                }
-
-
-                var ocrResult = await ocrEngine.RecognizeAsync(imageItem);
-
-
-                List<string> textList = new List<string>() { };
-                foreach (var line in ocrResult.Lines)
-                {
-                    textList.Add(line.Text);
-                }
-                return textList;
+                return new List<string> { "" };
             }
+
+
+            var ocrResult = await ocrEngine.RecognizeAsync(imageItem);
+
+
+            List<string> textList = new List<string>() { };
+            foreach (var line in ocrResult.Lines)
+            {
+                textList.Add(line.Text);
+            }
+            return textList;
+        }
         public async static Task<OcrResult> GetOcrResultFromBitmap(Bitmap scaledBitmap, Language selectedLanguage)
         {
             using (MemoryStream memory = new MemoryStream())

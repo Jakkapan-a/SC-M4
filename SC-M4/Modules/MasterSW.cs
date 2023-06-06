@@ -20,7 +20,7 @@ namespace SC_M4.Modules
             parameters.Add("@name", name);
             parameters.Add("@created_at", SQliteDataAccess.GetDateTimeNow());
             parameters.Add("@updated_at", SQliteDataAccess.GetDateTimeNow());
-            SQliteDataAccess.InserInputDB(sql, parameters);
+            SQliteDataAccess.Execute(sql, parameters);
         }
 
         public void Update()
@@ -30,14 +30,14 @@ namespace SC_M4.Modules
             parameters.Add("@id", id);
             parameters.Add("@name", name);
             parameters.Add("@updated_at", SQliteDataAccess.GetDateTimeNow());
-            SQliteDataAccess.InserInputDB(sql, parameters);
+            SQliteDataAccess.Execute(sql, parameters);
         }
         public void Delete()
         {
             string sql = "delete from master_sw where id = @id";
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@id", id);
-            SQliteDataAccess.InserInputDB(sql, parameters);
+            SQliteDataAccess.Execute(sql, parameters);
         }
         public static List<MasterSW> GetMasterSW() => SQliteDataAccess.GetRow<MasterSW>("select * from master_sw order by id desc");
 
@@ -51,7 +51,7 @@ namespace SC_M4.Modules
 
         public static bool IsExist(string name) => GetMasterSW(name).Count > 0 ? true : false;
 
-        public static void Delete(int id) => SQliteDataAccess.InserInputDB("delete from master_sw where id = " + id, null);
+        public static void Delete(int id) => SQliteDataAccess.Execute("delete from master_sw where id = " + id, null);
 
     }
 }

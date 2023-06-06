@@ -10,7 +10,6 @@ namespace SC_M4
     partial class Main
     {
         #region Video Capture
-
         private void Capture_2_OnVideoStop()
         {
             Console.WriteLine("Video 2 Stop");
@@ -37,26 +36,26 @@ namespace SC_M4
 
         public Bitmap bmp2;
         public Bitmap bmp2_color;
-        private void Capture_2_OnFrameHeadler(Bitmap bitmap)
+        private void Capture_2_OnFrameHeader(Bitmap bitmap)
         {
             if (pictureBoxCamera02.InvokeRequired)
             {
-                pictureBoxCamera02.Invoke(new Action(() => Capture_2_OnFrameHeadler(bitmap)));
+                pictureBoxCamera02.Invoke(new Action(() => Capture_2_OnFrameHeader(bitmap)));
                 return;
             }
 
             pictureBoxCamera02.Image?.Dispose();
             pictureBoxCamera02.Image = (System.Drawing.Image)bitmap.Clone();
-            bitmapCamaera_02?.Dispose();
-            bitmapCamaera_02 = (Bitmap)pictureBoxCamera02.Image.Clone();
-            if (rect_2 != Rectangle.Empty && isStaetReset)
+            bitmapCamera_02?.Dispose();
+            bitmapCamera_02 = (Bitmap)pictureBoxCamera02.Image.Clone();
+            if (rect_2 != Rectangle.Empty && isStateReset)
             {
 
                 bmp2?.Dispose();
                 bmp2 = new Bitmap(rect_2.Width, rect_2.Height);
                 using (Graphics g = Graphics.FromImage(bmp2))
                 {
-                    g.DrawImage(bitmapCamaera_02, 0, 0, rect_2, GraphicsUnit.Pixel);
+                    g.DrawImage(bitmapCamera_02, 0, 0, rect_2, GraphicsUnit.Pixel);
                 }
                 scrollablePictureBoxCamera02.Image?.Dispose();
                 scrollablePictureBoxCamera02.Image = bmp2;
@@ -108,25 +107,25 @@ namespace SC_M4
 
         private Bitmap bmp1;
 
-        private void Capture_1_OnFrameHeadler(Bitmap bitmap)
+        private void Capture_1_OnFrameHeader(Bitmap bitmap)
         {
             if (InvokeRequired)
             {
-                Invoke(new Action(() => Capture_1_OnFrameHeadler(bitmap)));
+                Invoke(new Action(() => Capture_1_OnFrameHeader(bitmap)));
                 return;
             }
             pictureBoxCamera01.Image?.Dispose();
             pictureBoxCamera01.Image = (System.Drawing.Image)bitmap.Clone();
 
-            bitmapCamaera_01?.Dispose();
-            bitmapCamaera_01 = (Bitmap)pictureBoxCamera01.Image.Clone();
-            if (rect_1 != Rectangle.Empty && isStaetReset)
+            bitmapCamera_01?.Dispose();
+            bitmapCamera_01 = (Bitmap)pictureBoxCamera01.Image.Clone();
+            if (rect_1 != Rectangle.Empty && isStateReset)
             {
                 bmp1?.Dispose();
                 bmp1 = new Bitmap(rect_1.Width, rect_1.Height);
                 using (Graphics g = Graphics.FromImage(bmp1))
                 {
-                    g.DrawImage(bitmapCamaera_01, 0, 0, rect_1, GraphicsUnit.Pixel);
+                    g.DrawImage(bitmapCamera_01, 0, 0, rect_1, GraphicsUnit.Pixel);
                 }
                 scrollablePictureBoxCamera01.Image?.Dispose();
                 scrollablePictureBoxCamera01.Image = bmp1;

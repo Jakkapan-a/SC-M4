@@ -27,7 +27,7 @@ namespace SC_M4.Modules
             parameters.Add("@state", state);
             parameters.Add("@created_at", SQliteDataAccess.GetDateTimeNow());
             parameters.Add("@updated_at", SQliteDataAccess.GetDateTimeNow());
-            SQliteDataAccess.InserInputDB(sql, parameters);
+            SQliteDataAccess.Execute(sql, parameters);
         }
 
         public void Update()
@@ -40,14 +40,14 @@ namespace SC_M4.Modules
             parameters.Add("@state", state);
             parameters.Add("@updated_at", SQliteDataAccess.GetDateTimeNow());
             parameters.Add("@id", id);
-            SQliteDataAccess.InserInputDB(sql, parameters);
+            SQliteDataAccess.Execute(sql, parameters);
         }
 
         public void Delete(){
             string sql = "delete from settings where id = @id";
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@id", id);
-            SQliteDataAccess.InserInputDB(sql, parameters);
+            SQliteDataAccess.Execute(sql, parameters);
         }
 
         public static void RemoveBinding(int id)
@@ -55,7 +55,7 @@ namespace SC_M4.Modules
             string sql = "update settings set state = 0 where id = @id";
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("@id", id);
-            SQliteDataAccess.InserInputDB(sql, parameters);
+            SQliteDataAccess.Execute(sql, parameters);
         }
 
         public static List<Setting> GetSetting(int _type) => SQliteDataAccess.GetRow<Setting>("select * from settings where _type = " + _type+" order by id desc limit 1");

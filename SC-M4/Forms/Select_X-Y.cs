@@ -38,14 +38,14 @@ namespace SC_M4.Forms
 
         private void timerVideo_Tick(object sender, EventArgs e)
         {
-            if(_type == 0 && main.bitmapCamaera_01 != null)
+            if(_type == 0 && main.bitmapCamera_01 != null)
             {
                 scrollablePictureBox1.Image?.Dispose();
-                scrollablePictureBox1.Image = (Image)main.bitmapCamaera_01.Clone();
-            }else if (_type == 1 && main.bitmapCamaera_02 != null)
+                scrollablePictureBox1.Image = (Image)main.bitmapCamera_01.Clone();
+            }else if (_type == 1 && main.bitmapCamera_02 != null)
             {
                 scrollablePictureBox1.Image?.Dispose();
-                scrollablePictureBox1.Image = (Image)main.bitmapCamaera_02.Clone();
+                scrollablePictureBox1.Image = (Image)main.bitmapCamera_02.Clone();
             }
         }
 

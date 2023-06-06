@@ -38,16 +38,6 @@ namespace SC_M4.Modules
                 return output.ToList();
             }
         }
-
-        // Insert to Db
-        public static void InserInputDB(string sql, Dictionary<string, object> parameters)
-        {
-            using (IDbConnection con = new SQLiteConnection(LoadConnectionString()))
-            {
-                con.Execute(sql, parameters);
-            }
-        }
-
         // Update to Db
         public static void Update(string sql, Dictionary<string, object> parameters)
         {
