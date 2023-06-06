@@ -58,7 +58,14 @@ namespace SC_M4.Modules
 
         public static List<MasterLB> GetMasterLBBySW(int master_sw_id) => SQliteDataAccess.GetRow<MasterLB>("select * from master_lb where master_sw_id = " + master_sw_id + " ");
 
+        public static int getTotalLB(int id, string name){
+            string sql = "select count(*) as total from master_lb where not id = " + id + " and name = '" + name + "'";
+            return SQliteDataAccess.GetRow<int>(sql).FirstOrDefault();
+        }
+
+        public static bool IsExist(int id, string name) => getTotalLB(id,name) > 0 ? true : false;
         public static bool IsExist(string name) => GetMasterLB(name).Count > 0 ? true : false;
+
 
         public static void Delete(int id_lb) => SQliteDataAccess.InserInputDB("delete from master_lb where id = " + id_lb, null);
     }

@@ -41,6 +41,7 @@
             this.contextMenuStripSW = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cbColor = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.btnAddLB = new System.Windows.Forms.Button();
             this.txtInputLB = new System.Windows.Forms.TextBox();
@@ -48,7 +49,6 @@
             this.contextMenuStripLB = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.renameToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.cbColor = new System.Windows.Forms.ComboBox();
             this.statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -179,6 +179,26 @@
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
+            // cbColor
+            // 
+            this.cbColor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbColor.FormattingEnabled = true;
+            this.cbColor.Items.AddRange(new object[] {
+            "White",
+            "Blue",
+            "Red",
+            "Orange",
+            "Yellow",
+            "Green",
+            "Violet",
+            "Brown",
+            "Black",
+            "Grey"});
+            this.cbColor.Location = new System.Drawing.Point(208, 393);
+            this.cbColor.Name = "cbColor";
+            this.cbColor.Size = new System.Drawing.Size(88, 21);
+            this.cbColor.TabIndex = 4;
+            // 
             // label2
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -225,6 +245,7 @@
             this.dataGridViewLB.Name = "dataGridViewLB";
             this.dataGridViewLB.RowHeadersVisible = false;
             this.dataGridViewLB.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewLB.ShowEditingIcon = false;
             this.dataGridViewLB.Size = new System.Drawing.Size(365, 339);
             this.dataGridViewLB.TabIndex = 0;
             this.dataGridViewLB.SelectionChanged += new System.EventHandler(this.dataGridViewLB_SelectionChanged);
@@ -250,26 +271,6 @@
             this.deleteToolStripMenuItem1.Size = new System.Drawing.Size(117, 22);
             this.deleteToolStripMenuItem1.Text = "Delete";
             this.deleteToolStripMenuItem1.Click += new System.EventHandler(this.deleteToolStripMenuItem1_Click);
-            // 
-            // cbColor
-            // 
-            this.cbColor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbColor.FormattingEnabled = true;
-            this.cbColor.Items.AddRange(new object[] {
-            "White",
-            "Blue",
-            "Red",
-            "Orange",
-            "Yellow",
-            "Green",
-            "Violet",
-            "Brown",
-            "Black",
-            "Grey"});
-            this.cbColor.Location = new System.Drawing.Point(208, 393);
-            this.cbColor.Name = "cbColor";
-            this.cbColor.Size = new System.Drawing.Size(88, 21);
-            this.cbColor.TabIndex = 4;
             // 
             // Edit_Items
             // 

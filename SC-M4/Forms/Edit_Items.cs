@@ -1,4 +1,5 @@
 ﻿using SC_M4.Modules;
+using SC_M4.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,6 +8,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Forms;
 
 namespace SC_M4.Forms
@@ -27,14 +29,15 @@ namespace SC_M4.Forms
 
         public int id_sw = 0;
         public int id_lb = 0;
+
         private void Add_Item_Load(object sender, EventArgs e)
         {
             loadTable_SW();
-            // Clear status bar
             foreach (ToolStripItem item in statusStrip.Items)
             {
                 item.Text = "";
             }
+            cbColor.SelectedIndex = 0;
         }
         public void reloadTableSetting()
         {
@@ -120,7 +123,7 @@ namespace SC_M4.Forms
                 masterLB.master_sw_id = id_sw;
                 masterLB.name = txtInputLB.Text.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
                 masterLB.color_name = cbColor.SelectedItem.ToString();
-                if (MasterLB.IsExist(masterLB.name))
+                if (MasterLB.IsExist(masterLB.id, masterLB.name))
                 {
                     MessageBox.Show("Model Name is already exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -145,19 +148,42 @@ namespace SC_M4.Forms
                 toolStripStatusID_LB.Text = "ID_LB: " + id_lb;
             }
         }
-
+        private PageType current_page = PageType.None;
         private void renameToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            current_page = PageType.SW;
             rename?.Dispose();
-            rename = new Rename(this, 0);
+            rename = new Rename(this, PageType.SW);
+            rename.EventReloadData += _EventReloadData;
             rename.ShowDialog();
         }
 
         private void renameToolStripMenuItem1_Click(object sender, EventArgs e)
         {
+            current_page = PageType.LB;
             rename?.Dispose();
-            rename = new Rename(this, 1);
+            rename = new Rename(this, PageType.LB);
+            rename.EventReloadData += _EventReloadData;
             rename.ShowDialog();
+        }
+
+        private void _EventReloadData()
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => _EventReloadData()));
+                return;
+            }
+            // RenderTabel
+            if(current_page == PageType.SW)
+            {
+                loadTable_SW();
+            }
+            else if(current_page == PageType.LB)
+            {
+                loadTable_LB();
+            }
+
         }
 
         private void deleteToolStripMenuItem1_Click(object sender, EventArgs e)

@@ -8,6 +8,15 @@ using System.Web;
 
 namespace SC_M4.Utilities
 {
+
+    public enum PageType
+    {
+        None,
+        Add,
+        Update,
+        SW,
+        LB
+    }
     public class Heller
     {
         public struct AverageColor

@@ -35,7 +35,8 @@ namespace SC_M4.Forms
             }
         }
 
-        public void loadTable(){
+        public void loadTable()
+        {
 
             var all = MasterAll.GetMasterAll();
 
@@ -64,12 +65,9 @@ namespace SC_M4.Forms
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            if(_Items != null)
-            {
-                _Items.Close();
-                _Items.Dispose();
-                _Items= null;
-            }
+
+            _Items?.Dispose();
+
             _Items = new Edit_Items(this);
             _Items.Show();
         }
@@ -79,43 +77,45 @@ namespace SC_M4.Forms
             {
                 id_sw = int.Parse(dataGridViewReport.SelectedRows[0].Cells[0].Value.ToString());
                 id_lb = int.Parse(dataGridViewReport.SelectedRows[0].Cells[1].Value.ToString());
-                toolStripStatusID_SW.Text = "SW :"+id_sw.ToString();
-                toolStripStatusID_LB.Text = "LB :"+id_lb.ToString();
+                toolStripStatusID_SW.Text = "SW :" + id_sw.ToString();
+                toolStripStatusID_LB.Text = "LB :" + id_lb.ToString();
             }
         }
 
         private void renameSWToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(rename != null)
-            {
-                rename.Close();
-                rename.Dispose();
-                rename = null;
-            }
-            if(id_sw == 0)
+            rename?.Dispose();
+            if (id_sw == 0)
             {
                 MessageBox.Show("Can't rename this software name", "Rename Software", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            rename = new Rename(this,0);
+            rename = new Rename(this, Utilities.PageType.SW);
+            rename.EventReloadData += Rename_EventReloadData;
             rename.Show();
+        }
+
+        private void Rename_EventReloadData()
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => Rename_EventReloadData()));
+                return;
+            }
+
+            loadTable();
         }
 
         private void renameModelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(rename != null)
-            {
-                rename.Close();
-                rename.Dispose();
-                rename = null;
-            }
-            if(id_lb == 0)
+            rename?.Dispose();
+            if (id_lb == 0)
             {
                 MessageBox.Show("Can't rename this model name", "Rename Model", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            rename = new Rename(this,1);
+            rename = new Rename(this, Utilities.PageType.LB);
+            rename.EventReloadData += Rename_EventReloadData;
             rename.Show();
         }
-
 
         private void deleteModelToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -138,7 +138,7 @@ namespace SC_M4.Forms
             if (result == DialogResult.Yes)
             {
                 var model = MasterLB.GetMasterLBBySW(id_sw);
-                foreach(var item in model)
+                foreach (var item in model)
                 {
                     item.Delete();
                 }
@@ -148,8 +148,8 @@ namespace SC_M4.Forms
                     data[0].Delete();
                     loadTable();
                 }
-                 loadTable();
-                 MessageBox.Show("Delete software success", "Delete Software", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                loadTable();
+                MessageBox.Show("Delete software success", "Delete Software", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
