@@ -142,6 +142,7 @@ namespace SC_M4
                             isStateReset = false;
                         }
                     }
+
                     stopwatch.Stop();
                     Console.WriteLine("Elapsed Time is {0} ms", stopwatch.ElapsedMilliseconds);
                     Invoke(new Action(() =>
@@ -253,7 +254,7 @@ namespace SC_M4
 
         private ResultType CompareData(string txt_sw, string txt_lb, string color)
         {
-            LogWriter.SaveLog($"TXT Read : {PrepareLogMessage(txt_sw)}, {PrepareLogMessage(txt_lb)}");
+            LogWriter.SaveLog($"TXT Read : {PrepareLogMessage(txt_sw)}, {PrepareLogMessage(txt_lb)}, {PrepareLogMessage(color)}");
 
             history = history ?? new History();
 
@@ -262,9 +263,9 @@ namespace SC_M4
 
             var master_lb = MasterAll.GetMasterALLByLBName(txt_lb.Substring(0, txt_lb.IndexOf(Properties.Settings.Default.keyCAM2)).Replace("O", "0"));
 
-            
             history.master_sw = "null";
             history.master_lb = "null";
+            string description = "";
 
             foreach (var item in master_lb)
             {
@@ -279,10 +280,22 @@ namespace SC_M4
                     history.name_lb = txt_lb;
                     history.name_sw = txt_sw;
                     history.result = "OK";
+                    history.description = "-";
                     history.Save();
 
                     isStateReset = false;
                     return ResultType.OK;
+                }
+
+      
+                if(item.nameSW == txt_sw){
+                    description += "Found in " + item.nameModel + " - " + item.nameSW + "";
+                    if(color.Equals(item.color_name, StringComparison.OrdinalIgnoreCase)){
+                        description += " - Color OK";
+                    }else{
+                        description += " - Color NG";
+                    }
+                    break;
                 }
             }
 
@@ -291,13 +304,14 @@ namespace SC_M4
             history.name = txtEmployee.Text.Trim();
             history.name_lb = txt_lb;
             history.name_sw = txt_sw;
-            history.description = "";
+            history.description = description;
             history.result = "NG";
             history.Save();
 
             isStateReset = false;
             return ResultType.NG;
         }
+        
         #region Old
         private int Compare_Master(string txt_sw, string txt_lb)
         {
