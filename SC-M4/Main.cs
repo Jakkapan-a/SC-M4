@@ -249,7 +249,7 @@ namespace SC_M4
             comboBoxCOMPort.Items.Clear();
             comboBoxCOMPort.Items.AddRange(SerialPort.GetPortNames());
             if (comboBoxCOMPort.Items.Count > 0)
-                comboBoxCOMPort.SelectedIndex = 0;
+                comboBoxCOMPort.SelectedIndex = comboBoxCOMPort.Items.Count - 1;
 
 
             if (cameraControl != null)

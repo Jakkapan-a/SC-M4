@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Select_X_Y));
             this.panel1 = new System.Windows.Forms.Panel();
             this.scrollablePictureBox1 = new TConstrols.ScrollablePictureBox();
             this.btSave = new System.Windows.Forms.Button();
@@ -105,6 +106,7 @@
             this.Controls.Add(this.lbTitle);
             this.Controls.Add(this.btSave);
             this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Select_X_Y";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Select_X_Y";

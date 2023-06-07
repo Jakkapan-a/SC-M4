@@ -30,6 +30,7 @@ namespace SC_M4.Forms
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NameListForms));
             this.txtOldName = new System.Windows.Forms.TextBox();
             this.txtNewName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -110,6 +111,7 @@ namespace SC_M4.Forms
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtNewName);
             this.Controls.Add(this.txtOldName);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "NameListForms";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "NameListForms";

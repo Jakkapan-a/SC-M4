@@ -128,28 +128,22 @@ namespace SC_M4
                             this.richTextBox2.Text = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
                         }));
 
-                        //Rectangle rectangle = new Rectangle(Properties.Settings.Default.color_x, Properties.Settings.Default.color_y, Properties.Settings.Default.color_width, Properties.Settings.Default.color_high);
-
-                        //bmp2_color?.Dispose();
-                        //bmp2_color = new Bitmap(rectangle.Width, rectangle.Height);
-                        //using (Graphics gx = Graphics.FromImage(scrollablePictureBoxCamera02.Image))
-                        //{
-                        //    gx.DrawImage(bmp2_color, 0, 0, rectangle, GraphicsUnit.Pixel);
-                        //}
-
                         Heller.AverageColor rgb;
-                        rgb.R = 0;
-                        rgb.G = 0;
-                        rgb.B = 0;
-                        using (var bm = (Bitmap)pgRGB.Image.Clone())
+                        using (var bm = (Bitmap)bmp2_color.Clone())
                         {
                             rgb = Heller.GetAverageColor(bm);
                         }
 
                         Console.WriteLine("Average : R=" + rgb.R + ", G=" + rgb.G + ", B=" + rgb.B);
-
+                        if (rgb.R > 240 && rgb.G > 240 && rgb.B > 240)
+                        {
+                            //colorName[3] = "White";
+                            rgb.R = 255;
+                            rgb.G = 255;
+                            rgb.B = 255;
+                        }
                         string[] colorName = _colorName.Name(_colorName.RgbToHex(rgb.R, rgb.G, rgb.B));
-
+            
                         Console.WriteLine("Color Name : " + colorName[3]);
 
                         ResultType result = CompareData(result_1, result_2, colorName[3]);

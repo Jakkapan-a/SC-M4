@@ -73,22 +73,6 @@ namespace SC_M4.Utilities
                 long totalG = 0;
                 long totalB = 0;
 
-                //var lockObject = new object();
-
-                //Parallel.For(0, bmp.Width, x =>
-                //{
-                //    for (int y = 0; y < bmp.Height; y++)
-                //    {
-                //        Color clr = bmp.GetPixel(x, y);
-                //        lock (lockObject)
-                //        {
-                //            totalR += clr.R;
-                //            totalG += clr.G;
-                //            totalB += clr.B;
-                //        }
-                //    }
-                //});
-
                 for (int x = 0; x < bmp.Width; x++)
                 {
                     for (int y = 0; y < bmp.Height; y++)

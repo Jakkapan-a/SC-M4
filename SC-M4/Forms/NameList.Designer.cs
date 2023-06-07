@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NameList));
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelType = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelId = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.btnCam2 = new System.Windows.Forms.Button();
             this.btnCam1 = new System.Windows.Forms.Button();
@@ -37,7 +39,6 @@
             this.btnEdit = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
             this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.toolStripStatusLabelId = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -62,6 +63,12 @@
             this.toolStripStatusLabelType.Name = "toolStripStatusLabelType";
             this.toolStripStatusLabelType.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusLabelType.Text = "toolStripStatusLabel1";
+            // 
+            // toolStripStatusLabelId
+            // 
+            this.toolStripStatusLabelId.Name = "toolStripStatusLabelId";
+            this.toolStripStatusLabelId.Size = new System.Drawing.Size(118, 17);
+            this.toolStripStatusLabelId.Text = "toolStripStatusLabel2";
             // 
             // splitContainer
             // 
@@ -160,12 +167,6 @@
             this.dataGridView.TabIndex = 0;
             this.dataGridView.SelectionChanged += new System.EventHandler(this.dataGridView_SelectionChanged);
             // 
-            // toolStripStatusLabelId
-            // 
-            this.toolStripStatusLabelId.Name = "toolStripStatusLabelId";
-            this.toolStripStatusLabelId.Size = new System.Drawing.Size(118, 17);
-            this.toolStripStatusLabelId.Text = "toolStripStatusLabel2";
-            // 
             // NameList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -173,6 +174,7 @@
             this.ClientSize = new System.Drawing.Size(611, 450);
             this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.statusStrip);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "NameList";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "NameList";

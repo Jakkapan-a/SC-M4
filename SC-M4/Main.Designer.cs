@@ -58,8 +58,10 @@
             this.pictureBoxCamera01 = new TConstrols.ScrollablePictureBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelChild02 = new System.Windows.Forms.TableLayoutPanel();
-            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.scrollablePictureBoxCamera02 = new System.Windows.Forms.PictureBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.pgRGB = new System.Windows.Forms.PictureBox();
+            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.pictureBoxCamera02 = new TConstrols.ScrollablePictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.checkBoxAutoFocus = new System.Windows.Forms.CheckBox();
@@ -87,8 +89,6 @@
             this.toolStripStatusLabelError = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerMain = new System.Windows.Forms.Timer(this.components);
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
-            this.pgRGB = new System.Windows.Forms.PictureBox();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerHomeMain)).BeginInit();
@@ -107,13 +107,13 @@
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanelChild02.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.scrollablePictureBoxCamera02)).BeginInit();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pgRGB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCamera02)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nFocus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewHistory)).BeginInit();
             this.statusStripHome.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pgRGB)).BeginInit();
-            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -447,17 +447,6 @@
             this.tableLayoutPanelChild02.Size = new System.Drawing.Size(296, 141);
             this.tableLayoutPanelChild02.TabIndex = 1;
             // 
-            // richTextBox2
-            // 
-            this.richTextBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBox2.Location = new System.Drawing.Point(3, 3);
-            this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(136, 129);
-            this.richTextBox2.TabIndex = 0;
-            this.richTextBox2.Text = "";
-            // 
             // scrollablePictureBoxCamera02
             // 
             this.scrollablePictureBoxCamera02.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -470,6 +459,40 @@
             this.scrollablePictureBoxCamera02.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.scrollablePictureBoxCamera02.TabIndex = 1;
             this.scrollablePictureBoxCamera02.TabStop = false;
+            // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.pgRGB);
+            this.panel1.Controls.Add(this.richTextBox2);
+            this.panel1.Location = new System.Drawing.Point(151, 3);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(142, 135);
+            this.panel1.TabIndex = 2;
+            // 
+            // pgRGB
+            // 
+            this.pgRGB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pgRGB.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.pgRGB.Location = new System.Drawing.Point(99, 3);
+            this.pgRGB.Name = "pgRGB";
+            this.pgRGB.Size = new System.Drawing.Size(40, 28);
+            this.pgRGB.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pgRGB.TabIndex = 16;
+            this.pgRGB.TabStop = false;
+            // 
+            // richTextBox2
+            // 
+            this.richTextBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBox2.Location = new System.Drawing.Point(3, 3);
+            this.richTextBox2.Name = "richTextBox2";
+            this.richTextBox2.Size = new System.Drawing.Size(136, 129);
+            this.richTextBox2.TabIndex = 0;
+            this.richTextBox2.Text = "";
             // 
             // pictureBoxCamera02
             // 
@@ -731,28 +754,6 @@
             // 
             this.serialPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort_DataReceived);
             // 
-            // pgRGB
-            // 
-            this.pgRGB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pgRGB.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.pgRGB.Location = new System.Drawing.Point(86, 3);
-            this.pgRGB.Name = "pgRGB";
-            this.pgRGB.Size = new System.Drawing.Size(53, 28);
-            this.pgRGB.TabIndex = 16;
-            this.pgRGB.TabStop = false;
-            // 
-            // panel1
-            // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.Controls.Add(this.pgRGB);
-            this.panel1.Controls.Add(this.richTextBox2);
-            this.panel1.Location = new System.Drawing.Point(151, 3);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(142, 135);
-            this.panel1.TabIndex = 2;
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -792,6 +793,8 @@
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanelChild02.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.scrollablePictureBoxCamera02)).EndInit();
+            this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pgRGB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCamera02)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -799,8 +802,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewHistory)).EndInit();
             this.statusStripHome.ResumeLayout(false);
             this.statusStripHome.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pgRGB)).EndInit();
-            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

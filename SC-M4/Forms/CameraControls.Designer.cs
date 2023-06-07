@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CameraControls));
             this.btSave = new System.Windows.Forms.Button();
             this.nExposure = new System.Windows.Forms.NumericUpDown();
             this.nTilt = new System.Windows.Forms.NumericUpDown();
@@ -256,6 +257,7 @@
             this.Controls.Add(this.tPan);
             this.Controls.Add(this.tZoom);
             this.Controls.Add(this.tFocus);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(367, 377);
             this.MinimumSize = new System.Drawing.Size(367, 377);
             this.Name = "CameraControls";
