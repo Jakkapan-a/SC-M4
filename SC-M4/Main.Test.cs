@@ -44,7 +44,6 @@ namespace SC_M4
 
             try
             {
-
                 taskProcess = Task.Run(() => processOCR(), cts.Token);
                 await taskProcess;
             }
