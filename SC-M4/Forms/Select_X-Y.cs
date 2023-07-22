@@ -33,6 +33,11 @@ namespace SC_M4.Forms
                 this.Text = "SELECT X-Y CAMERA 2"; // SELECT X-Y Camera
                 this.lbTitle.Text = "SELECT X-Y CAMERA 2";
             }
+            else if (_type == 3)
+            {
+                this.Text = "SELECT X-Y COLOR "; // SELECT X-Y Camera
+                this.lbTitle.Text = "SELECT X-Y COLOR";
+            }
             timerVideo.Start();
         }
 
@@ -46,6 +51,11 @@ namespace SC_M4.Forms
             {
                 scrollablePictureBox1.Image?.Dispose();
                 scrollablePictureBox1.Image = (Image)main.bitmapCamera_02.Clone();
+            }
+            else if (_type ==2 && main.scrollablePictureBoxCamera02.Image != null)
+            {
+                scrollablePictureBox1.Image?.Dispose();
+                scrollablePictureBox1.Image = (Image)main.scrollablePictureBoxCamera02.Image.Clone();
             }
         }
 

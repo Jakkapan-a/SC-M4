@@ -133,7 +133,7 @@ namespace SC_M4
                             rgb = Heller.GetAverageColor(bm);
                         }
 
-                        Console.WriteLine("Average : R=" + rgb.R + ", G=" + rgb.G + ", B=" + rgb.B);
+                        //Console.WriteLine("Average : R=" + rgb.R + ", G=" + rgb.G + ", B=" + rgb.B);
                         if (rgb.R > 240 && rgb.G > 240 && rgb.B > 240)
                         {
                             //colorName[3] = "White";
@@ -142,7 +142,7 @@ namespace SC_M4
                             rgb.B = 255;
                         }
                         string[] colorName = _colorName.Name(_colorName.RgbToHex(rgb.R, rgb.G, rgb.B));
-            
+
                         Console.WriteLine("Color Name : " + colorName[3]);
 
                         ResultType result = CompareData(result_1, result_2, colorName[3]);
@@ -275,7 +275,7 @@ namespace SC_M4
             {
                 history.master_sw = item.nameSW;
                 history.master_lb = item.nameModel;
-                
+
                 if (item.nameSW == txt_sw && color.Equals(item.color_name, StringComparison.OrdinalIgnoreCase))
                 {
                     history.master_sw = item.nameSW;
@@ -287,39 +287,31 @@ namespace SC_M4
                     history.name_lb = txt_lb;
                     history.name_sw = txt_sw;
                     history.result = "OK";
-                    history.color = item.color_name +" - "+ color;
+                    history.color = item.color_name + " - " + color;
                     history.description = "-";
                     history.Save();
 
                     isStateReset = false;
                     return ResultType.OK;
                 }
-
-
-                if (item.nameSW == txt_sw)
+                else if (item.nameSW == txt_sw)
                 {
-                    try
+                    history.name_lb = txt_lb;
+                    history.name_sw = txt_sw;
+                    description += "Found in " + item.nameModel + " - " + item.nameSW + "";
+                    if (color.Equals(item.color_name, StringComparison.OrdinalIgnoreCase))
                     {
-                        history.name_lb = txt_lb;
-                        history.name_sw = txt_sw;
-                        description += "Found in " + item.nameModel + " - " + item.nameSW + "";
-                        if (color.Equals(item.color_name, StringComparison.OrdinalIgnoreCase))
-                        {
-                            description += " - Color OK";
-                            color_error = " - " + color + " OK";
-                        }
-                        else
-                        {
-                            description += " - Color NG";
-                            color_error = " - " + color + " NG";
-                        }
-                        break;
+                        description += " - Color OK";
+                        color_error = item.color_name +" - " + color + " OK";
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        LogWriter.SaveLog("Error : " + ex.Message);
-                        // description += "Found in " + item.nameModel + " - " + item.nameSW + " - Color NG";
+                        description += " - Color NG";
+                        string col = item.color_name == string.Empty ? "No color" : item.color_name;
+                        color_error = col+ " - " + color + " NG";
                     }
+                    break;
+
                 }
             }
 

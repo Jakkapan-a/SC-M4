@@ -75,7 +75,7 @@ namespace SC_M4
         private void Main_Load(object sender, EventArgs e)
         {
             _colorName = new ColorName();
-            
+
             foreach (ToolStripItem item in statusStripHome.Items)
             {
                 item.Text = "";
@@ -211,7 +211,7 @@ namespace SC_M4
             int i = 1;
             foreach (var h in history)
             {
-                dt.Rows.Add(h.id,i, h.name, h.master_sw, h.name_sw, h.master_lb, h.name_lb, h.color, h.result, h.description, h.updated_at);
+                dt.Rows.Add(h.id, i, h.name, h.master_sw, h.name_sw, h.master_lb, h.name_lb, h.color, h.result, h.description, h.updated_at);
                 i++;
             }
 
@@ -268,24 +268,26 @@ namespace SC_M4
                 rect_1 = rect;
                 Properties.Settings.Default.rect1_x = rect.X;
                 Properties.Settings.Default.rect1_y = rect.Y;
-
                 Properties.Settings.Default.rect1_w = rect.Width;
                 Properties.Settings.Default.rect1_h = rect.Height;
-
-                Properties.Settings.Default.Save();
             }
             else if (_type == 1)
             {
                 rect_2 = rect;
                 Properties.Settings.Default.rect2_x = rect.X;
                 Properties.Settings.Default.rect2_y = rect.Y;
-
                 Properties.Settings.Default.rect2_w = rect.Width;
                 Properties.Settings.Default.rect2_h = rect.Height;
-
-
-                Properties.Settings.Default.Save();
             }
+            else if (_type == 2)
+            {
+                rect_2 = rect;
+                Properties.Settings.Default.color_x = rect.X;
+                Properties.Settings.Default.color_y = rect.Y;
+                Properties.Settings.Default.color_width = rect.Width;
+                Properties.Settings.Default.color_high = rect.Height;
+            }
+            Properties.Settings.Default.Save();
         }
 
         public void loadRect(int _type)
@@ -311,7 +313,6 @@ namespace SC_M4
         private Thread thread;
 
         #region Start
-
 
         private Task taskCam1;
         private Task taskCam2;
@@ -401,24 +402,11 @@ namespace SC_M4
                     this.richTextBox1.Text = string.Empty;
                     this.richTextBox2.Text = string.Empty;
 
+                    scrollablePictureBoxCamera01.Image?.Dispose();
+                    scrollablePictureBoxCamera02.Image?.Dispose();
                     scrollablePictureBoxCamera01.Image = null;
                     scrollablePictureBoxCamera02.Image = null;
                     await Task.Delay(1000);
-
-                    cameraControl.set(driveindex_02);
-                    cameraControl.setFocus(Properties.Settings.Default.dFocus);
-                    cameraControl.setZoom(Properties.Settings.Default.dZoom);
-                    cameraControl.setPan(Properties.Settings.Default.dPan);
-                    cameraControl.setTilt(Properties.Settings.Default.dTilt);
-                    cameraControl.setExposure(Properties.Settings.Default.dExposure);
-
-                    checkBoxAutoFocus.Checked = false;
-
-                    nFocus.Value = cameraControl.fValue;
-                    nFocus.Value = 68 > cameraControl.fmax ? cameraControl.fmax : 68;
-                    nFocus.Maximum = cameraControl.fmax;
-                    nFocus.Minimum = cameraControl.fmin;
-
 
                     btConnect.Text = "Disconnect";
                     if (background == null)
@@ -526,14 +514,12 @@ namespace SC_M4
 
 
 
-        History history;
+        private History history;
         private bool is_Blink_NG = false;
-        
+
         #endregion
 
         #region Serial Port 
-
-        //private string serialportName = string.Empty;
 
         public void setSerialPort(string portName, string baud)
         {
@@ -649,12 +635,7 @@ namespace SC_M4
                 return;
             }
 
-            if (select_XY != null)
-            {
-                select_XY.Close();
-                select_XY = null;
-            }
-
+            select_XY?.Close();
             select_XY = new Select_X_Y(this, 0);
             select_XY.Show();
         }
@@ -667,12 +648,7 @@ namespace SC_M4
                 return;
             }
 
-            if (select_XY != null)
-            {
-                select_XY.Close();
-                select_XY = null;
-            }
-
+            select_XY?.Close();
             select_XY = new Select_X_Y(this, 1);
             select_XY.Show();
         }
@@ -1065,15 +1041,23 @@ namespace SC_M4
         private ColorAverage colorAverage;
         private void colorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            colorAverage?.Dispose();
-            colorAverage = new ColorAverage(this);
-            colorAverage.Show();
+            //colorAverage?.Dispose();
+            //colorAverage = new ColorAverage(this);
+            //colorAverage.Show();
+            if (scrollablePictureBoxCamera02.Image == null)
+            {
+                MessageBox.Show("Please select camera 2", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            select_XY?.Close();
+            select_XY = new Select_X_Y(this, 2);
+            select_XY.Show();
         }
 
         public Task<OcrResult> GetOcrResultBitmap(Bitmap scaledBitmap, Language selectedLanguage)
         {
             var tcs = new TaskCompletionSource<OcrResult>();
-
             Thread staThread = new Thread(() =>
             {
                 try
@@ -1091,7 +1075,7 @@ namespace SC_M4
                         // Run the RecognizeAsync call in a separate thread to allow message pumping
                         OcrResult result = ocrEngine.RecognizeAsync(softwareBmp).AsTask().Result;
 
-                        softwareBmp.Dispose();
+                        softwareBmp?.Dispose();
                         ocrEngine = null;
                         tcs.SetResult(result);
                     }

@@ -36,12 +36,12 @@
             this.masterListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectXYCAM1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectXYCAM2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.colorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testOCRToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cameraControlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.keyCAM1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.keyCAM2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.colorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelHeader = new System.Windows.Forms.Panel();
             this.cbQrCode = new System.Windows.Forms.CheckBox();
             this.btStartStop = new System.Windows.Forms.Button();
@@ -139,12 +139,12 @@
             this.masterListToolStripMenuItem,
             this.selectXYCAM1ToolStripMenuItem,
             this.selectXYCAM2ToolStripMenuItem,
+            this.colorToolStripMenuItem,
             this.testOCRToolStripMenuItem,
             this.cameraControlToolStripMenuItem,
             this.keyCAM1ToolStripMenuItem,
             this.keyCAM2ToolStripMenuItem,
-            this.changeNameToolStripMenuItem,
-            this.colorToolStripMenuItem});
+            this.changeNameToolStripMenuItem});
             this.settingToolStripMenuItem.Name = "settingToolStripMenuItem";
             this.settingToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
             this.settingToolStripMenuItem.Text = "Setting";
@@ -173,6 +173,14 @@
             this.selectXYCAM2ToolStripMenuItem.Text = "Select X-Y CAM 2";
             this.selectXYCAM2ToolStripMenuItem.Click += new System.EventHandler(this.selectXYCAM2ToolStripMenuItem_Click);
             // 
+            // colorToolStripMenuItem
+            // 
+            this.colorToolStripMenuItem.Image = global::SC_M4.Properties.Resources.screenshot_32;
+            this.colorToolStripMenuItem.Name = "colorToolStripMenuItem";
+            this.colorToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.colorToolStripMenuItem.Text = "Check point of color";
+            this.colorToolStripMenuItem.Click += new System.EventHandler(this.colorToolStripMenuItem_Click);
+            // 
             // testOCRToolStripMenuItem
             // 
             this.testOCRToolStripMenuItem.Name = "testOCRToolStripMenuItem";
@@ -187,6 +195,7 @@
             this.cameraControlToolStripMenuItem.Name = "cameraControlToolStripMenuItem";
             this.cameraControlToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.cameraControlToolStripMenuItem.Text = "Camera Control";
+            this.cameraControlToolStripMenuItem.Visible = false;
             this.cameraControlToolStripMenuItem.Click += new System.EventHandler(this.cameraControlToolStripMenuItem_Click);
             // 
             // keyCAM1ToolStripMenuItem
@@ -210,13 +219,6 @@
             this.changeNameToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.changeNameToolStripMenuItem.Text = "Setting";
             this.changeNameToolStripMenuItem.Click += new System.EventHandler(this.changeNameToolStripMenuItem_Click);
-            // 
-            // colorToolStripMenuItem
-            // 
-            this.colorToolStripMenuItem.Name = "colorToolStripMenuItem";
-            this.colorToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.colorToolStripMenuItem.Text = "Check point of color";
-            this.colorToolStripMenuItem.Click += new System.EventHandler(this.colorToolStripMenuItem_Click);
             // 
             // panelHeader
             // 
@@ -544,6 +546,7 @@
             this.checkBoxAutoFocus.TabIndex = 7;
             this.checkBoxAutoFocus.Text = "AutoFocus";
             this.checkBoxAutoFocus.UseVisualStyleBackColor = true;
+            this.checkBoxAutoFocus.Visible = false;
             // 
             // nFocus
             // 
@@ -561,6 +564,7 @@
             0,
             0,
             0});
+            this.nFocus.Visible = false;
             this.nFocus.ValueChanged += new System.EventHandler(this.numericUpDownFocus_ValueChanged);
             // 
             // label4
@@ -597,6 +601,7 @@
             this.label7.Size = new System.Drawing.Size(75, 13);
             this.label7.TabIndex = 13;
             this.label7.Text = "Focus Cam 2 :";
+            this.label7.Visible = false;
             // 
             // label2
             // 
@@ -767,7 +772,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "SC-M4 v4.52";
+            this.Text = "SC-M4 v5.00";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Main_FormClosed);
@@ -857,8 +862,6 @@
         private System.Windows.Forms.Timer timerMain;
         private System.IO.Ports.SerialPort serialPort;
         private System.Windows.Forms.ToolStripMenuItem changeNameToolStripMenuItem;
-        private System.Windows.Forms.PictureBox scrollablePictureBoxCamera01;
-        private System.Windows.Forms.PictureBox scrollablePictureBoxCamera02;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelError;
         private System.Windows.Forms.ToolStripMenuItem cameraControlToolStripMenuItem;
         private System.Windows.Forms.CheckBox checkBoxAutoFocus;
@@ -868,6 +871,8 @@
         private System.Windows.Forms.ToolStripMenuItem colorToolStripMenuItem;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox pgRGB;
+        public System.Windows.Forms.PictureBox scrollablePictureBoxCamera02;
+        public System.Windows.Forms.PictureBox scrollablePictureBoxCamera01;
     }
 }
 

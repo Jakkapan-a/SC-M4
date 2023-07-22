@@ -18,6 +18,7 @@ namespace SC_M4.Utilities
         SW,
         LB
     }
+
     public enum ResultType
     {
         None,

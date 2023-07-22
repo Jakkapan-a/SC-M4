@@ -249,6 +249,7 @@
             this.dataGridViewLB.Size = new System.Drawing.Size(365, 339);
             this.dataGridViewLB.TabIndex = 0;
             this.dataGridViewLB.SelectionChanged += new System.EventHandler(this.dataGridViewLB_SelectionChanged);
+            this.dataGridViewLB.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.dataGridViewLB_MouseDoubleClick);
             // 
             // contextMenuStripLB
             // 

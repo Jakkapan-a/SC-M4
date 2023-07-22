@@ -210,5 +210,10 @@ namespace SC_M4.Forms
                 loadTable_SW();
             }
         }
+
+        private void dataGridViewLB_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+
+        }
     }
 }
