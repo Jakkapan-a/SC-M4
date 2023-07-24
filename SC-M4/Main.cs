@@ -149,6 +149,7 @@ namespace SC_M4
 
             cbQrCode.Checked = Properties.Settings.Default.useQrCode;
             useQrCode = cbQrCode.Checked;
+            checkBoxAutoFocus.Checked = Properties.Settings.Default.isAutoFocus;
         }
         private async void deletedFileTemp()
         {
@@ -281,7 +282,6 @@ namespace SC_M4
             }
             else if (_type == 2)
             {
-                rect_2 = rect;
                 Properties.Settings.Default.color_x = rect.X;
                 Properties.Settings.Default.color_y = rect.Y;
                 Properties.Settings.Default.color_width = rect.Width;
@@ -311,9 +311,7 @@ namespace SC_M4
         private string serialportName = string.Empty;
         private string serialportBaud = string.Empty;
         private Thread thread;
-
-        #region Start
-
+        #region SATART
         private Task taskCam1;
         private Task taskCam2;
         private async void btStartStop_Click(object sender, EventArgs e)
@@ -407,6 +405,20 @@ namespace SC_M4
                     scrollablePictureBoxCamera01.Image = null;
                     scrollablePictureBoxCamera02.Image = null;
                     await Task.Delay(1000);
+                    if (!checkBoxAutoFocus.Checked)
+                    {
+                        cameraControl.set(driveindex_02);
+                        cameraControl.setFocus(Properties.Settings.Default.dFocus);
+                        cameraControl.setZoom(Properties.Settings.Default.dZoom);
+                        cameraControl.setPan(Properties.Settings.Default.dPan);
+                        cameraControl.setTilt(Properties.Settings.Default.dTilt);
+                        cameraControl.setExposure(Properties.Settings.Default.dExposure);
+
+                        nFocus.Value = cameraControl.fValue;
+                        nFocus.Value = 68 > cameraControl.fmax ? cameraControl.fmax : 68;
+                        nFocus.Maximum = cameraControl.fmax;
+                        nFocus.Minimum = cameraControl.fmin;
+                    }
 
                     btConnect.Text = "Disconnect";
                     if (background == null)
@@ -733,7 +745,7 @@ namespace SC_M4
             }
             else
             {
-                //capture_2.AutoFocus();
+                capture_2.AutoFocus();
             }
         }
         SettingModel setting;
@@ -1041,9 +1053,6 @@ namespace SC_M4
         private ColorAverage colorAverage;
         private void colorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //colorAverage?.Dispose();
-            //colorAverage = new ColorAverage(this);
-            //colorAverage.Show();
             if (scrollablePictureBoxCamera02.Image == null)
             {
                 MessageBox.Show("Please select camera 2", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -1092,7 +1101,16 @@ namespace SC_M4
             return tcs.Task;
         }
 
+        private void checkBoxAutoFocus_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.isAutoFocus = checkBoxAutoFocus.Checked;
+            Properties.Settings.Default.Save();
 
+            if (!checkBoxAutoFocus.Checked)
+            { 
+                cameraControl.setFocus((int)nFocus.Value);
+            }
+        }
     }
 
     public static class OcrProcessor

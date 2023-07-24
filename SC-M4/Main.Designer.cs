@@ -546,7 +546,7 @@
             this.checkBoxAutoFocus.TabIndex = 7;
             this.checkBoxAutoFocus.Text = "AutoFocus";
             this.checkBoxAutoFocus.UseVisualStyleBackColor = true;
-            this.checkBoxAutoFocus.Visible = false;
+            this.checkBoxAutoFocus.CheckedChanged += new System.EventHandler(this.checkBoxAutoFocus_CheckedChanged);
             // 
             // nFocus
             // 
@@ -564,7 +564,6 @@
             0,
             0,
             0});
-            this.nFocus.Visible = false;
             this.nFocus.ValueChanged += new System.EventHandler(this.numericUpDownFocus_ValueChanged);
             // 
             // label4
@@ -601,7 +600,6 @@
             this.label7.Size = new System.Drawing.Size(75, 13);
             this.label7.TabIndex = 13;
             this.label7.Text = "Focus Cam 2 :";
-            this.label7.Visible = false;
             // 
             // label2
             // 
