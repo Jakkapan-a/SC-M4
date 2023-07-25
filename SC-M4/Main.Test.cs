@@ -288,7 +288,7 @@ namespace SC_M4
                             _color.R = _col.R;
                             _color.G = _col.G;
                             _color.B = _col.B;
-                            if (_color.R > 245 && _color.G > 245 && _color.B > 245)
+                            if (_color.R > 240 && _color.G > 240 && _color.B > 240)
                             {
                                 _color.R = 255;
                                 _color.G = 255;

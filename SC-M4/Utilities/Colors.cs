@@ -9,7 +9,7 @@ namespace SC_M4.Utilities
     internal class Colors
     {
         #region Master
-        public static List<string[]> ntcNamesM = new List<string[]>
+        public static List<string[]> ntcNames = new List<string[]>
         {
              new string[] {"35312C", "Acadia", "Brown"},
              new string[] {"75AA94", "Acapulco", "Green"},

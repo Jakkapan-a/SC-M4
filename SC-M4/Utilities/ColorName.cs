@@ -72,14 +72,12 @@ namespace SC_M4.Utilities
             return cl < 0 ? new string[] { "#000000", "Invalid Color: " + color, "#000000", "", "false" } : new string[] { "#" + ntcNames[cl][0], ntcNames[cl][1], ShadeRGB(ntcNames[cl][2]), ntcNames[cl][2], "false" };
         }
 
-
         public static string ShadeRGB(string color)
         {
             for (int i = 0; i < shades.Count; i++)
             {
                 if (color == shades[i].Item1)
                     return "#" + shades[i].Item2;
-
             }
             return "#000000";
         }
@@ -1783,7 +1781,6 @@ namespace SC_M4.Utilities
              new string[] {"17462E", "Zuccini", "Green"},
              new string[] {"CDD5D5", "Zumthor", "Grey" }
         };
-        #endregion
-      
+        #endregion      
     }
 }
