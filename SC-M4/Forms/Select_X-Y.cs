@@ -34,7 +34,7 @@ namespace SC_M4.Forms
                 this.Text = "SELECT X-Y CAMERA 2"; // SELECT X-Y Camera
                 this.lbTitle.Text = "SELECT X-Y CAMERA 2";
             }
-            else if (_type == 3)
+            else if (_type == 2)
             {
                 this.Text = "SELECT X-Y COLOR "; // SELECT X-Y Camera
                 this.lbTitle.Text = "SELECT X-Y COLOR";

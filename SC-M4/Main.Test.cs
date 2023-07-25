@@ -58,7 +58,7 @@ namespace SC_M4
 
         private List<ReplaceName> replaceNames1 = new List<ReplaceName>();
         private List<ReplaceName> replaceNames2 = new List<ReplaceName>();
-        private async void processOCR()
+        private void processOCR()
         {
             try
             {
@@ -81,7 +81,7 @@ namespace SC_M4
                     {
                         imageList?.Clear();
                         imageList.Add((System.Drawing.Image)scrollablePictureBoxCamera01.Image.Clone());
-                        result_1 = await performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty);
+                        result_1 = performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty).Result;
                     }
 
                     var a = result_1.IndexOf("-731");
@@ -117,7 +117,7 @@ namespace SC_M4
                         // OCR 2
                         result_2 = string.Empty;
                         ocrResult2 = null;
-                        ocrResult2 = await GetOcrResultBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(), SelectedLang);
+                        ocrResult2 = GetOcrResultBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(), SelectedLang).Result;
 
                         result_2 = ocrResult2.Text;
                         result_2 = CleanAndReplaceText(result_2);
@@ -262,52 +262,56 @@ namespace SC_M4
              *  Colors name
              */
             Heller.AverageColor rgb;
-            Dictionary<string, int> dictionary = new Dictionary<string, int>();
-            dictionary.Add("Red", 0);
-            dictionary.Add("Orange", 0);
-            dictionary.Add("Yellow", 0);
-            dictionary.Add("Green", 0);
-            dictionary.Add("Blue", 0);
-            dictionary.Add("Violet", 0);
-            dictionary.Add("Brown", 0);
-            dictionary.Add("Black", 0);
-            dictionary.Add("Grey", 0);
-            dictionary.Add("White", 0);
+
+            //Dictionary<string, int> dictionary = new Dictionary<string, int>();
+            //dictionary.Add("Red", 0);
+            //dictionary.Add("Orange", 0);
+            //dictionary.Add("Yellow", 0);
+            //dictionary.Add("Green", 0);
+            //dictionary.Add("Blue", 0);
+            //dictionary.Add("Violet", 0);
+            //dictionary.Add("Brown", 0);
+            //dictionary.Add("Black", 0);
+            //dictionary.Add("Grey", 0);
+            //dictionary.Add("White", 0);
+
             AverageColor _color = new AverageColor();
             using (var bm = (Bitmap)bmp2_color.Clone())
             {
                 rgb = Heller.GetAverageColor(bm, bm.Width, bm.Height);
-
-                for (int h = 0; h < bm.Height; h++)
-                {
-                    for (int w = 0; w < bm.Width; w++)
-                    {
-                        try
-                        {
-                            Color _col = bm.GetPixel(w, h);
-                            _color.R = _col.R;
-                            _color.G = _col.G;
-                            _color.B = _col.B;
-                            if (_color.R > 240 && _color.G > 240 && _color.B > 240)
-                            {
-                                _color.R = 255;
-                                _color.G = 255;
-                                _color.B = 255;
-                            }
-                            string[] _name = _colorName.Name(_colorName.RgbToHex(_color.R, _color.G, _color.B));
-                            dictionary[_name[3]]++;
-                        }
-                        catch (Exception ex)
-                        {
-                            LogWriter.SaveLog("Error RGB :" + ex.Message);
-                        }
-                    }
-                }
+                //if (Properties.Settings.Default.isColors)
+                //{
+                //    for (int h = 0; h < bm.Height; h++)
+                //    {
+                //        for (int w = 0; w < bm.Width; w++)
+                //        {
+                //            try
+                //            {
+                //                Color _col = bm.GetPixel(w, h);
+                //                _color.R = _col.R;
+                //                _color.G = _col.G;
+                //                _color.B = _col.B;
+                //                if (_color.R > 240 && _color.G > 240 && _color.B > 240)
+                //                {
+                //                    _color.R = 255;
+                //                    _color.G = 255;
+                //                    _color.B = 255;
+                //                }
+                //                string[] _name = _colorName.Name(_colorName.RgbToHex(_color.R, _color.G, _color.B));
+                //                dictionary[_name[3]]++;
+                //            }
+                //            catch (Exception ex)
+                //            {
+                //                LogWriter.SaveLog("Error RGB :" + ex.Message);
+                //            }
+                //        }
+                //    }
+                //}
             }
             // True     
-            string maxKey = dictionary.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
-            Console.WriteLine("The color with the highest count is: " + maxKey);
-            LogWriter.SaveLog("The color with the highest count is: " + maxKey);
+            //string maxKey = dictionary.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
+            //Console.WriteLine("The color with the highest count is: " + maxKey);
+            //LogWriter.SaveLog("The color with the highest count is: " + maxKey);
             if (rgb.R > 240 && rgb.G > 240 && rgb.B > 240)
             {
                 rgb.R = 255;
@@ -318,7 +322,7 @@ namespace SC_M4
             string[] colorName = _colorName.Name(_colorName.RgbToHex(rgb.R, rgb.G, rgb.B));
             Console.WriteLine("Color Name : " + colorName[3]);
             LogWriter.SaveLog($"Color name :{colorName[3]},{colorName[1]},{colorName[2]} ,{colorName[0]}, R{rgb.R} G{rgb.G} B{rgb.B}");
-            string color = Properties.Settings.Default.isColors ? maxKey : colorName[3];
+            string color = colorName[3];
 
             foreach (var item in master_lb)
             {

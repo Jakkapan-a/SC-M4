@@ -101,6 +101,7 @@
             // 
             // cbColor
             // 
+            this.cbColor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cbColor.AutoSize = true;
             this.cbColor.Location = new System.Drawing.Point(17, 377);
             this.cbColor.Name = "cbColor";
