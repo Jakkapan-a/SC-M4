@@ -286,5 +286,17 @@ namespace SC_M4.Properties {
                 this["isAutoFocus"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool isColors {
+            get {
+                return ((bool)(this["isColors"]));
+            }
+            set {
+                this["isColors"] = value;
+            }
+        }
     }
 }

@@ -23,6 +23,7 @@ namespace SC_M4.Forms
 
         private void Select_X_Y_Load(object sender, EventArgs e)
         {
+            cbColor.Visible = false;
             if (_type == 0)
             {
                 this.Text = "SELECT X-Y CAMERA 1"; // SELECT X-Y Camera
@@ -37,6 +38,8 @@ namespace SC_M4.Forms
             {
                 this.Text = "SELECT X-Y COLOR "; // SELECT X-Y Camera
                 this.lbTitle.Text = "SELECT X-Y COLOR";
+                cbColor.Visible = true;
+                cbColor.Checked = Properties.Settings.Default.isColors;
             }
             timerVideo.Start();
         }
@@ -71,6 +74,12 @@ namespace SC_M4.Forms
             {
                 MessageBox.Show("Please select X-Y area!!!","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
+        }
+
+        private void cbColor_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.isColors = cbColor.Checked;
+            Properties.Settings.Default.Save();
         }
     }
 }

@@ -195,7 +195,6 @@
             this.cameraControlToolStripMenuItem.Name = "cameraControlToolStripMenuItem";
             this.cameraControlToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.cameraControlToolStripMenuItem.Text = "Camera Control";
-            this.cameraControlToolStripMenuItem.Visible = false;
             this.cameraControlToolStripMenuItem.Click += new System.EventHandler(this.cameraControlToolStripMenuItem_Click);
             // 
             // keyCAM1ToolStripMenuItem

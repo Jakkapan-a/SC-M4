@@ -1,4 +1,5 @@
-﻿using SC_M4.Modules;
+﻿using OpenCvSharp.Aruco;
+using SC_M4.Modules;
 using SC_M4.Utilities;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Windows.Media.Ocr;
 using Windows.UI.Xaml.Shapes;
+using static SC_M4.Utilities.Heller;
 using Rectangle = System.Drawing.Rectangle;
 
 namespace SC_M4
@@ -127,25 +129,8 @@ namespace SC_M4
                             this.richTextBox2.Text = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
                         }));
 
-                        Heller.AverageColor rgb;
-                        using (var bm = (Bitmap)bmp2_color.Clone())
-                        {
-                            rgb = Heller.GetAverageColor(bm);
-                        }
 
-                        //Console.WriteLine("Average : R=" + rgb.R + ", G=" + rgb.G + ", B=" + rgb.B);
-                        if (rgb.R > 240 && rgb.G > 240 && rgb.B > 240)
-                        {
-                            //colorName[3] = "White";
-                            rgb.R = 255;
-                            rgb.G = 255;
-                            rgb.B = 255;
-                        }
-                        string[] colorName = _colorName.Name(_colorName.RgbToHex(rgb.R, rgb.G, rgb.B));
-
-                        Console.WriteLine("Color Name : " + colorName[3]);
-
-                        ResultType result = CompareData(result_1, result_2, colorName[3]);
+                        ResultType result = CompareData(result_1, result_2);
 
                         if (result == ResultType.OK || result == ResultType.NG)
                         {
@@ -170,6 +155,7 @@ namespace SC_M4
                     // One or more errors occurred.
                     toolStripStatusLabelError.Text = ex.Message;
                     toolStripStatusLabelError.ForeColor = Color.Red;
+                    LogWriter.SaveLog("Error Test :" + ex.Message);
                 }));
             }
         }
@@ -256,9 +242,9 @@ namespace SC_M4
             serialCommand(status);
         }
 
-        private ResultType CompareData(string txt_sw, string txt_lb, string color)
+        private ResultType CompareData(string txt_sw, string txt_lb)
         {
-            LogWriter.SaveLog($"TXT Read : {PrepareLogMessage(txt_sw)}, {PrepareLogMessage(txt_lb)}, {PrepareLogMessage(color)}");
+            LogWriter.SaveLog($"TXT Read : {PrepareLogMessage(txt_sw)}, {PrepareLogMessage(txt_lb)}");
 
             history = history ?? new History();
 
@@ -271,6 +257,69 @@ namespace SC_M4
             history.master_lb = "null";
             string description = "";
             string color_error = "";
+
+            /*
+             *  Colors name
+             */
+            Heller.AverageColor rgb;
+            Dictionary<string, int> dictionary = new Dictionary<string, int>();
+            dictionary.Add("Red", 0);
+            dictionary.Add("Orange", 0);
+            dictionary.Add("Yellow", 0);
+            dictionary.Add("Green", 0);
+            dictionary.Add("Blue", 0);
+            dictionary.Add("Violet", 0);
+            dictionary.Add("Brown", 0);
+            dictionary.Add("Black", 0);
+            dictionary.Add("Grey", 0);
+            dictionary.Add("White", 0);
+            AverageColor _color = new AverageColor();
+            using (var bm = (Bitmap)bmp2_color.Clone())
+            {
+                rgb = Heller.GetAverageColor(bm, bm.Width, bm.Height);
+
+                for (int h = 0; h < bm.Height; h++)
+                {
+                    for (int w = 0; w < bm.Width; w++)
+                    {
+                        try
+                        {
+                            Color _col = bm.GetPixel(w, h);
+                            _color.R = _col.R;
+                            _color.G = _col.G;
+                            _color.B = _col.B;
+                            if (_color.R > 245 && _color.G > 245 && _color.B > 245)
+                            {
+                                _color.R = 255;
+                                _color.G = 255;
+                                _color.B = 255;
+                            }
+                            string[] _name = _colorName.Name(_colorName.RgbToHex(_color.R, _color.G, _color.B));
+                            dictionary[_name[3]]++;
+                        }
+                        catch (Exception ex)
+                        {
+                            LogWriter.SaveLog("Error RGB :" + ex.Message);
+                        }
+                    }
+                }
+            }
+            // True     
+            string maxKey = dictionary.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
+            Console.WriteLine("The color with the highest count is: " + maxKey);
+            LogWriter.SaveLog("The color with the highest count is: " + maxKey);
+            if (rgb.R > 240 && rgb.G > 240 && rgb.B > 240)
+            {
+                rgb.R = 255;
+                rgb.G = 255;
+                rgb.B = 255;
+            }
+            // False
+            string[] colorName = _colorName.Name(_colorName.RgbToHex(rgb.R, rgb.G, rgb.B));
+            Console.WriteLine("Color Name : " + colorName[3]);
+            LogWriter.SaveLog($"Color name :{colorName[3]},{colorName[1]},{colorName[2]} ,{colorName[0]}, R{rgb.R} G{rgb.G} B{rgb.B}");
+            string color = Properties.Settings.Default.isColors ? maxKey : colorName[3];
+
             foreach (var item in master_lb)
             {
                 history.master_sw = item.nameSW;
@@ -302,13 +351,13 @@ namespace SC_M4
                     if (color.Equals(item.color_name, StringComparison.OrdinalIgnoreCase))
                     {
                         description += " - Color OK";
-                        color_error = item.color_name +" - " + color + " OK";
+                        color_error = item.color_name + " - " + color + " OK";
                     }
                     else
                     {
                         description += " - Color NG";
                         string col = item.color_name == string.Empty ? "No color" : item.color_name;
-                        color_error = col+ " - " + color + " NG";
+                        color_error = col + " - " + color + " NG";
                     }
                     break;
 

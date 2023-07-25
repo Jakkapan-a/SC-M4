@@ -6,142 +6,10 @@ using System.Threading.Tasks;
 
 namespace SC_M4.Utilities
 {
-    public class ColorName
+    internal class Colors
     {
-        public ColorName()
-        {
-            string color;
-            for (int i = 0; i < ntcNames.Count; i++)
-            {
-                color = "#" + ntcNames[i][0];
-                int[] rgb = RGB(color);
-                int[] hsl = HSL(color);
-                ntcNames[i] = ntcNames[i].Concat(new string[] { rgb[0].ToString(), rgb[1].ToString(), rgb[2].ToString(), hsl[0].ToString(), hsl[1].ToString(), hsl[2].ToString() }).ToArray();
-            }
-        }
-
-        public string ValueToHex(int value)
-        {
-            string hex = value.ToString("X");
-            return hex.Length == 1 ? $"0{hex}" : hex;
-        }
-
-        public string RgbToHex(int r, int g, int b)
-        {
-            return $"#{this.ValueToHex(r)}{this.ValueToHex(g)}{this.ValueToHex(b)}";
-        }
-
-        public string[] Name(string color)
-        {
-            color = color.ToUpper();
-
-            if (color.Length < 3 || color.Length > 7)
-                return new string[] { "#000000", "Invalid Color: " + color, "#000000", "", "false" };
-
-            if (color.Length % 3 == 0)
-                color = "#" + color;
-
-            if (color.Length == 4)
-                color = "#" + color[1] + color[1] + color[2] + color[2] + color[3] + color[3];
-
-            int[] rgb = RGB(color);
-            int r = rgb[0], g = rgb[1], b = rgb[2];
-
-            int[] hsl = HSL(color);
-            int h = hsl[0], s = hsl[1], l = hsl[2];
-
-            double ndf1 = 0, ndf2 = 0, ndf = 0;
-            int cl = -1, df = -1;
-
-            for (int i = 0; i < ntcNames.Count; i++)
-            {
-                if (color == "#" + ntcNames[i][0])
-                    return new string[] { "#" + ntcNames[i][0], ntcNames[i][1], ShadeRGB(ntcNames[i][2]), ntcNames[i][2], "true" };
-
-                ndf1 = Math.Pow(r - Convert.ToInt32(ntcNames[i][3]), 2) + Math.Pow(g - Convert.ToInt32(ntcNames[i][4]), 2) + Math.Pow(b - Convert.ToInt32(ntcNames[i][5]), 2);
-
-                ndf2 = Math.Abs(Math.Pow(h - Convert.ToInt32(ntcNames[i][6]), 2)) + Math.Pow(s - Convert.ToInt32(ntcNames[i][7]), 2) + Math.Abs(Math.Pow(l - Convert.ToInt32(ntcNames[i][8]), 2));
-                ndf = ndf1 + ndf2 * 2;
-
-                if (df < 0 || df > ndf)
-                {
-                    df = (int)ndf;
-                    cl = i;
-                }
-            }
-            return cl < 0 ? new string[] { "#000000", "Invalid Color: " + color, "#000000", "", "false" } : new string[] { "#" + ntcNames[cl][0], ntcNames[cl][1], ShadeRGB(ntcNames[cl][2]), ntcNames[cl][2], "false" };
-        }
-
-
-        public static string ShadeRGB(string color)
-        {
-            for (int i = 0; i < shades.Count; i++)
-            {
-                if (color == shades[i].Item1)
-                    return "#" + shades[i].Item2;
-
-            }
-            return "#000000";
-        }
-
-
-        public int[] RGB(string color)
-        {
-            return new int[] { int.Parse(color.Substring(1, 2), System.Globalization.NumberStyles.HexNumber), int.Parse(color.Substring(3, 2), System.Globalization.NumberStyles.HexNumber), int.Parse(color.Substring(5, 2), System.Globalization.NumberStyles.HexNumber) };
-        }
-
-        public int[] HSL(string color)
-        {
-            int r = int.Parse(color.Substring(1, 2), System.Globalization.NumberStyles.HexNumber);
-            int g = int.Parse(color.Substring(3, 2), System.Globalization.NumberStyles.HexNumber);
-            int b = int.Parse(color.Substring(5, 2), System.Globalization.NumberStyles.HexNumber);
-
-            double rd = r / 255.0;
-            double gd = g / 255.0;
-            double bd = b / 255.0;
-
-            double cmax = Math.Max(rd, Math.Max(gd, bd));
-            double cmin = Math.Min(rd, Math.Min(gd, bd));
-
-
-            double delta = cmax - cmin;
-
-            double h = 0, s = 0, l = (cmax + cmin) / 2;
-
-            if (l > 0 && l <= 1)
-                s = delta / (l < 0.5 ? (2 * l) : (2 - 2 * l));
-
-            h = 0;
-
-            if (delta > 0)
-            {
-                if (cmax == rd && cmax != gd)
-                    h += (gd - bd) / delta;
-                if (cmax == gd && cmax != bd)
-                    h += (2 + (bd - rd) / delta);
-                if (cmax == bd && cmax != rd)
-                    h += (4 + (rd - gd) / delta);
-                h /= 6;
-            }
-
-            return new int[] { (int)(h * 255), (int)(s * 255), (int)(l * 255) };
-        }
-        #region Color List
-        public static List<(string, string)> shades = new List<(string, string)>
-        {
-            ("FF0000", "Red"),
-            ("FFA500", "Orange"),
-            ("FFFF00", "Yellow"),
-            ("008000", "Green"),
-            ("0000FF", "Blue"),
-            ("EE82EE", "Violet"),
-            ("A52A2A", "Brown"),
-            ("000000", "Black"),
-            ("808080", "Grey"),
-            ("FFFFFF", "White")
-        };
-
-        public static List<string[]> ntcNames = new List<string[]>
+        #region Master
+        public static List<string[]> ntcNamesM = new List<string[]>
         {
              new string[] {"35312C", "Acadia", "Brown"},
              new string[] {"75AA94", "Acapulco", "Green"},
@@ -1213,7 +1081,7 @@ namespace SC_M4.Utilities
              new string[] {"F984E5", "Pale Magenta", "Violet"},
              new string[] {"9C8D72", "Pale Oyster", "Brown"},
              new string[] {"FADADD", "Pale Pink", "Red"},
-             new string[] {"F9F59F", "Pale Prim", "Yellow"},
+             new string[] {"F9F59F", "Pale Prim", "Green"},
              new string[] {"EFD6DA", "Pale Rose", "Red"},
              new string[] {"636D70", "Pale Sky", "Blue"},
              new string[] {"C3BEBB", "Pale Slate", "Grey"},
@@ -1755,7 +1623,7 @@ namespace SC_M4.Utilities
              new string[] {"F9E8E2", "Wisp Pink", "Red"},
              new string[] {"C9A0DC", "Wisteria", "Violet"},
              new string[] {"A29ECD", "Wistful", "Blue"},
-             new string[] {"FBF073", "Witch Haze", "Yellow"},
+             new string[] {"FBF073", "Witch Haze", "Green"},
              new string[] {"302621", "Wood Bark", "Brown"},
              new string[] {"463629", "Woodburn", "Brown"},
              new string[] {"626746", "Woodland", "Green"},
@@ -1784,6 +1652,5 @@ namespace SC_M4.Utilities
              new string[] {"CDD5D5", "Zumthor", "Grey" }
         };
         #endregion
-      
     }
 }

@@ -36,6 +36,7 @@
             this.lbTitle = new System.Windows.Forms.Label();
             this.timerVideo = new System.Windows.Forms.Timer(this.components);
             this.sqLiteCommand1 = new System.Data.SQLite.SQLiteCommand();
+            this.cbColor = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.scrollablePictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -98,11 +99,24 @@
             // 
             this.sqLiteCommand1.CommandText = null;
             // 
+            // cbColor
+            // 
+            this.cbColor.AutoSize = true;
+            this.cbColor.Location = new System.Drawing.Point(17, 377);
+            this.cbColor.Name = "cbColor";
+            this.cbColor.Size = new System.Drawing.Size(81, 17);
+            this.cbColor.TabIndex = 3;
+            this.cbColor.Text = "Use Color 1";
+            this.cbColor.UseVisualStyleBackColor = true;
+            this.cbColor.CheckedChanged += new System.EventHandler(this.cbColor_CheckedChanged);
+            // 
             // Select_X_Y
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(633, 404);
+            this.Controls.Add(this.cbColor);
             this.Controls.Add(this.lbTitle);
             this.Controls.Add(this.btSave);
             this.Controls.Add(this.panel1);
@@ -116,6 +130,7 @@
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.scrollablePictureBox1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -127,5 +142,6 @@
         private System.Windows.Forms.Timer timerVideo;
         private TConstrols.ScrollablePictureBox scrollablePictureBox1;
         private System.Data.SQLite.SQLiteCommand sqLiteCommand1;
+        private System.Windows.Forms.CheckBox cbColor;
     }
 }

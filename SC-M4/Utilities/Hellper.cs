@@ -49,24 +49,13 @@ namespace SC_M4.Utilities
             Full = 5,
         }
 
-        public static AverageColor GetAverageColor(Bitmap bmp, AverageColorType type = AverageColorType.Full, int maxWidth = 100, int maxHeight = 100)
+        public static AverageColor GetAverageColor(Bitmap bmp, int maxWidth, int maxHeight)
         {
             try
             {
                 if (bmp == null)
                 {
                     throw new ArgumentNullException(nameof(bmp), "Bitmap is null");
-                }
-
-                // Resize bitmap if necessary
-                if (bmp.Width > maxWidth || bmp.Height > maxHeight)
-                {
-                    float scale = Math.Min((float)maxWidth / bmp.Width, (float)maxHeight / bmp.Height);
-
-                    int newWidth = (int)(bmp.Width * scale);
-                    int newHeight = (int)(bmp.Height * scale);
-
-                    bmp = (Bitmap)bmp.GetThumbnailImage(newWidth, newHeight, null, IntPtr.Zero);
                 }
 
                 // Then continue with the previous code...
