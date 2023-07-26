@@ -42,9 +42,9 @@ namespace SC_M4.Forms
             dt.Columns.Add("Color", typeof(string));
             dt.Columns.Add("Updated At", typeof(DateTime));
 
-            var colors = MasterNTC.GetMasterNTC();         
+            var colors = MasterNTC.GetMasterNTC();
             int no = 1;
-            foreach(var color in colors)
+            foreach (var color in colors)
             {
                 dt.Rows.Add(color.id, no, color.hex, color.name, color.color, color.updated_at);
                 no++;
@@ -60,7 +60,7 @@ namespace SC_M4.Forms
             // Set color
             foreach (DataGridViewRow row in dgvMasterColors.Rows)
             {
-                row.DefaultCellStyle.BackColor = ColorTranslator.FromHtml("#"+row.Cells["Hex"].Value.ToString());
+                row.DefaultCellStyle.BackColor = ColorTranslator.FromHtml("#" + row.Cells["Hex"].Value.ToString());
                 // Set font color
                 if (row.DefaultCellStyle.BackColor.GetBrightness() < 0.5)
                 {
@@ -77,7 +77,9 @@ namespace SC_M4.Forms
             if (oldSelectedItems != -1 && oldSelectedItems < dgvMasterColors.Rows.Count)
             {
                 dgvMasterColors.Rows[oldSelectedItems].Selected = true;
-            }else{
+            }
+            else
+            {
                 dgvMasterColors.Rows[0].Selected = true;
             }
             // Scroll to selected row
@@ -90,7 +92,7 @@ namespace SC_M4.Forms
         private void dgvMasterColors_SelectionChanged(object sender, EventArgs e)
         {
             //if(isRender) return;
-            
+
             if (dgvMasterColors.SelectedRows.Count > 0)
             {
                 id = Convert.ToInt32(dgvMasterColors.SelectedRows[0].Cells["id"].Value);
@@ -119,9 +121,9 @@ namespace SC_M4.Forms
         private void UpdateTable()
         {
             var master_ntc = MasterNTC.GetMasterNTC(id);
-            if(master_ntc.Count > 0)
+            if (master_ntc.Count > 0)
             {
-                foreach(DataGridViewRow row in dgvMasterColors.Rows)
+                foreach (DataGridViewRow row in dgvMasterColors.Rows)
                 {
                     if ((int)row.Cells["id"].Value == id)
                     {
@@ -141,7 +143,7 @@ namespace SC_M4.Forms
                 }
             }
         }
-       
+
         private Task task;
         private async void btnFactoryReset_Click(object sender, EventArgs e)
         {
@@ -149,7 +151,7 @@ namespace SC_M4.Forms
             DialogResult dialogResult = MessageBox.Show("Are you sure you want to reset all colors?", "Factory Reset", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
-                if(task != null && !task.IsCompleted)
+                if (task != null && !task.IsCompleted)
                 {
                     return;
                 }
@@ -157,11 +159,11 @@ namespace SC_M4.Forms
                 toolStripProgressBar1.Value = 0;
                 task = FactoryReset();
                 await task;
-                
+
                 RenderTable();
                 toolStripProgressBar1.Visible = false;
             }
-           
+
         }
         private void UpdateProgress(int progress)
         {
@@ -192,13 +194,56 @@ namespace SC_M4.Forms
 
         public async Task FactoryReset()
         {
-            await Task.Run(()=> _FactoryReset());
+            await Task.Run(() => _FactoryReset());
         }
 
         private void cbUseData_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.isUseColorMaster = cbUseData.Checked;
             Properties.Settings.Default.Save();
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {   // Check txtSearchHex is hex or not
+            string hex = txtSearchHex.Text.ToUpper();
+            if (hex.Length != 6)
+            {
+                MessageBox.Show("Hex must be 6 characters", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            if (!IsHex(hex))
+            {
+                MessageBox.Show("Hex must be hex characters", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            bool found = false; 
+            // Clear selection
+            dgvMasterColors.ClearSelection();
+
+            foreach (DataGridViewRow row in dgvMasterColors.Rows)
+            {
+                if (row.Cells["Hex"].Value.Equals(hex))
+                {
+                    row.Selected = true;
+                    dgvMasterColors.FirstDisplayedScrollingRowIndex = row.Index;
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                MessageBox.Show("Hex not found", "Search", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+        private bool IsHex(string hex) => System.Text.RegularExpressions.Regex.IsMatch(hex, @"\A\b[0-9a-fA-F]+\b\Z");
+        private void txtSearchHex_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                btnSearch_Click(sender, e);
+            }
         }
     }
 }

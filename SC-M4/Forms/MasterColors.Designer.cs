@@ -43,9 +43,9 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.btnFactoryReset = new System.Windows.Forms.Button();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtSearchHex = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnSearch = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel_Id = new System.Windows.Forms.ToolStripStatusLabel();
             this.cbUseData = new System.Windows.Forms.CheckBox();
@@ -213,23 +213,24 @@
             this.panel4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel4.Controls.Add(this.textBox1);
+            this.panel4.Controls.Add(this.txtSearchHex);
             this.panel4.Controls.Add(this.label5);
             this.panel4.Controls.Add(this.dgvMasterColors);
             this.panel4.Controls.Add(this.label1);
-            this.panel4.Controls.Add(this.button1);
+            this.panel4.Controls.Add(this.btnSearch);
             this.panel4.Location = new System.Drawing.Point(276, 0);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(659, 518);
             this.panel4.TabIndex = 2;
             // 
-            // textBox1
+            // txtSearchHex
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(370, 12);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(246, 20);
-            this.textBox1.TabIndex = 2;
+            this.txtSearchHex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSearchHex.Location = new System.Drawing.Point(370, 12);
+            this.txtSearchHex.Name = "txtSearchHex";
+            this.txtSearchHex.Size = new System.Drawing.Size(246, 20);
+            this.txtSearchHex.TabIndex = 2;
+            this.txtSearchHex.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtSearchHex_KeyPress);
             // 
             // label5
             // 
@@ -241,16 +242,17 @@
             this.label5.TabIndex = 3;
             this.label5.Text = "Hex : ";
             // 
-            // button1
+            // btnSearch
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.BackgroundImage = global::SC_M4.Properties.Resources.search;
-            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button1.Location = new System.Drawing.Point(622, 10);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(25, 23);
-            this.button1.TabIndex = 2;
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSearch.BackgroundImage = global::SC_M4.Properties.Resources.search;
+            this.btnSearch.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnSearch.Location = new System.Drawing.Point(622, 10);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(25, 23);
+            this.btnSearch.TabIndex = 2;
+            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
             // statusStrip1
             // 
@@ -330,8 +332,8 @@
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Button btnFactoryReset;
         private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox txtSearchHex;
+        private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_Id;

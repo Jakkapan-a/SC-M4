@@ -12,16 +12,6 @@ namespace SC_M4.Utilities
         public ColorName()
         {
             string color;
-            // int count = 0;
-            // var nTCs = MasterNTC.GetMasterNTC();
-            // foreach (var ntc in nTCs)
-            // {
-            //     ntcNames[count][0] = ntc.hex;
-            //     ntcNames[count][1] = ntc.name;
-            //     ntcNames[count][2] = ntc.color;
-            //     count++;
-            // }
-            // 
             for (int i = 0; i < ntcNames.Count; i++)
             {
                 color = "#" + ntcNames[i][0];

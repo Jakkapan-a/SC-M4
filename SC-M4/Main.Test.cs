@@ -262,7 +262,7 @@ namespace SC_M4
              *  Colors name
              */
             Heller.AverageColor rgb;
-            AverageColor _color = new AverageColor();
+            //AverageColor _color = new AverageColor();
             using (var bm = (Bitmap)bmp2_color.Clone())
             {
                 rgb = Heller.GetAverageColor(bm, bm.Width, bm.Height);
@@ -271,12 +271,12 @@ namespace SC_M4
             //string maxKey = dictionary.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
             //Console.WriteLine("The color with the highest count is: " + maxKey);
             //LogWriter.SaveLog("The color with the highest count is: " + maxKey);
-            if (rgb.R > 240 && rgb.G > 240 && rgb.B > 240)
-            {
-                rgb.R = 255;
-                rgb.G = 255;
-                rgb.B = 255;
-            }
+            //if (rgb.R > 240 && rgb.G > 240 && rgb.B > 240)
+            //{
+            //    rgb.R = 255;
+            //    rgb.G = 255;
+            //    rgb.B = 255;
+            //}
             // False
             string[] colorName = _colorName.Name(_colorName.RgbToHex(rgb.R, rgb.G, rgb.B));
             Console.WriteLine("Color Name : " + colorName[3]);

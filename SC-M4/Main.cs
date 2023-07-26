@@ -364,8 +364,14 @@ namespace SC_M4
                     {
                         _colorName = null;
                     }
-
-                    _colorName = new ColorName();
+                    if (Properties.Settings.Default.isUseColorMaster)
+                    {
+                        _colorName = new ColorName(MasterNTC.GetMasterNTC());
+                    }
+                    else
+                    {
+                        _colorName = new ColorName();
+                    }
                     
                     this.serialportName = comboBoxCOMPort.Text;
                     this.serialportBaud = comboBoxBaud.Text;
