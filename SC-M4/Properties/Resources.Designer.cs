@@ -73,6 +73,26 @@ namespace SC_M4.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap camera_logo {
+            get {
+                object obj = ResourceManager.GetObject("camera logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap color_wheel {
+            get {
+                object obj = ResourceManager.GetObject("color-wheel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Edit_File_32 {
             get {
                 object obj = ResourceManager.GetObject("Edit_File_32", resourceCulture);
@@ -142,6 +162,16 @@ namespace SC_M4.Properties {
         internal static System.Drawing.Bitmap screenshot_32 {
             get {
                 object obj = ResourceManager.GetObject("screenshot_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap search {
+            get {
+                object obj = ResourceManager.GetObject("search", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

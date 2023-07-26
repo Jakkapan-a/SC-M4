@@ -298,5 +298,17 @@ namespace SC_M4.Properties {
                 this["isColors"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool isUseColorMaster {
+            get {
+                return ((bool)(this["isUseColorMaster"]));
+            }
+            set {
+                this["isUseColorMaster"] = value;
+            }
+        }
     }
 }

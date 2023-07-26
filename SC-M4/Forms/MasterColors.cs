@@ -1,0 +1,204 @@
+﻿using SC_M4.Modules;
+using SC_M4.Utilities;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace SC_M4.Forms
+{
+    public partial class MasterColors : Form
+    {
+        public MasterColors()
+        {
+            InitializeComponent();
+        }
+
+        string[] colors = new string[] { "Red", "Orange", "Yellow", "Green", "Blue", "Violet", "Brown", "Black", "Grey", "White" };
+        private void MasterColors_Load(object sender, EventArgs e)
+        {
+            cbUseData.Checked = Properties.Settings.Default.isUseColorMaster;
+
+            cbColor.Items.Clear();
+            cbColor.Items.AddRange(colors);
+            RenderTable();
+        }
+        private bool isRender = false;
+        private int oldSelectedItems = -1;
+        private int id = 0;
+        private void RenderTable()
+        {
+            isRender = true;
+            DataTable dt = new DataTable();
+            dt.Columns.Add("id", typeof(int));
+            dt.Columns.Add("No", typeof(int));
+            dt.Columns.Add("Hex", typeof(string));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Color", typeof(string));
+            dt.Columns.Add("Updated At", typeof(DateTime));
+
+            var colors = MasterNTC.GetMasterNTC();         
+            int no = 1;
+            foreach(var color in colors)
+            {
+                dt.Rows.Add(color.id, no, color.hex, color.name, color.color, color.updated_at);
+                no++;
+            }
+
+            dgvMasterColors.DataSource = dt;
+            dgvMasterColors.Columns["id"].Visible = false;
+            dgvMasterColors.Columns["No"].Width = 50;
+            dgvMasterColors.Columns["Hex"].Width = 100;
+            dgvMasterColors.Columns["Name"].Width = 200;
+            dgvMasterColors.Columns["Color"].Width = 100;
+            dgvMasterColors.Columns["Updated At"].Width = 150;
+            // Set color
+            foreach (DataGridViewRow row in dgvMasterColors.Rows)
+            {
+                row.DefaultCellStyle.BackColor = ColorTranslator.FromHtml("#"+row.Cells["Hex"].Value.ToString());
+                // Set font color
+                if (row.DefaultCellStyle.BackColor.GetBrightness() < 0.5)
+                {
+                    row.DefaultCellStyle.ForeColor = Color.White;
+                }
+                else
+                {
+                    row.DefaultCellStyle.ForeColor = Color.Black;
+                }
+            }
+
+            // Clear selection
+            dgvMasterColors.ClearSelection();
+            if (oldSelectedItems != -1 && oldSelectedItems < dgvMasterColors.Rows.Count)
+            {
+                dgvMasterColors.Rows[oldSelectedItems].Selected = true;
+            }else{
+                dgvMasterColors.Rows[0].Selected = true;
+            }
+            // Scroll to selected row
+            if (dgvMasterColors.SelectedRows.Count > 0)
+            {
+                dgvMasterColors.FirstDisplayedScrollingRowIndex = dgvMasterColors.SelectedRows[0].Index;
+            }
+            isRender = false;
+        }
+        private void dgvMasterColors_SelectionChanged(object sender, EventArgs e)
+        {
+            //if(isRender) return;
+            
+            if (dgvMasterColors.SelectedRows.Count > 0)
+            {
+                id = Convert.ToInt32(dgvMasterColors.SelectedRows[0].Cells["id"].Value);
+                txtHex.Text = dgvMasterColors.SelectedRows[0].Cells["Hex"].Value.ToString();
+                txtName.Text = dgvMasterColors.SelectedRows[0].Cells["Name"].Value.ToString();
+                string color = dgvMasterColors.SelectedRows[0].Cells["Color"].Value.ToString();
+                cbColor.SelectedIndex = cbColor.FindStringExact(color);
+                toolStripStatusLabel_Id.Text = "ID : " + id;
+                oldSelectedItems = dgvMasterColors.SelectedRows[0].Index;
+            }
+        }
+        private void txtHex_TextChanged(object sender, EventArgs e)
+        {
+            pictureBoxColor.BackColor = ColorTranslator.FromHtml("#" + txtHex.Text);
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            if (id != 0)
+            {
+                MasterNTC.UpdateColor(id, cbColor.SelectedItem.ToString());
+                UpdateTable();
+            }
+        }
+
+        private void UpdateTable()
+        {
+            var master_ntc = MasterNTC.GetMasterNTC(id);
+            if(master_ntc.Count > 0)
+            {
+                foreach(DataGridViewRow row in dgvMasterColors.Rows)
+                {
+                    if ((int)row.Cells["id"].Value == id)
+                    {
+                        row.Cells["Color"].Value = master_ntc[0].color;
+                        row.DefaultCellStyle.BackColor = ColorTranslator.FromHtml("#" + master_ntc[0].hex);
+                        // Set font color
+                        if (row.DefaultCellStyle.BackColor.GetBrightness() < 0.5)
+                        {
+                            row.DefaultCellStyle.ForeColor = Color.White;
+                        }
+                        else
+                        {
+                            row.DefaultCellStyle.ForeColor = Color.Black;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+       
+        private Task task;
+        private async void btnFactoryReset_Click(object sender, EventArgs e)
+        {
+            // Check if user really want to reset
+            DialogResult dialogResult = MessageBox.Show("Are you sure you want to reset all colors?", "Factory Reset", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                if(task != null && !task.IsCompleted)
+                {
+                    return;
+                }
+                toolStripProgressBar1.Visible = true;
+                toolStripProgressBar1.Value = 0;
+                task = FactoryReset();
+                await task;
+                
+                RenderTable();
+                toolStripProgressBar1.Visible = false;
+            }
+           
+        }
+        private void UpdateProgress(int progress)
+        {
+            // Check if invocation is required,
+            // otherwise it can be done on the current thread
+            if (InvokeRequired)
+                Invoke(new Action(() => toolStripProgressBar1.Value = progress));
+            else
+                toolStripProgressBar1.Value = progress;
+        }
+        private void _FactoryReset()
+        {
+            var ntc_name = new ColorName();
+            int count = ntc_name.ntcNames.Count;
+            int i = 0;
+            foreach (var color in ntc_name.ntcNames)
+            {
+                MasterNTC.UpdateByHex(color[0], color[2]);
+                i++;
+                // Update progress bar invoke
+                // Update progress bar
+                UpdateProgress((int)((float)i / count * 100));
+            }
+
+            // Ensure progress bar is full when finished
+            UpdateProgress(100);
+        }
+
+        public async Task FactoryReset()
+        {
+            await Task.Run(()=> _FactoryReset());
+        }
+
+        private void cbUseData_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.isUseColorMaster = cbUseData.Checked;
+            Properties.Settings.Default.Save();
+        }
+    }
+}

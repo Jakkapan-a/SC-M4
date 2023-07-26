@@ -334,6 +334,7 @@ namespace SC_M4
 
                 if (this.isStart)
                 {
+
                     if (txtEmployee.Text == string.Empty)
                     {
                         this.ActiveControl = txtEmployee;
@@ -359,7 +360,13 @@ namespace SC_M4
                         this.txtEmployee.Focus();
                         throw new Exception("Please input employee ID");
                     }
+                    if (_colorName != null)
+                    {
+                        _colorName = null;
+                    }
 
+                    _colorName = new ColorName();
+                    
                     this.serialportName = comboBoxCOMPort.Text;
                     this.serialportBaud = comboBoxBaud.Text;
                     serialConnect();
@@ -751,12 +758,7 @@ namespace SC_M4
         SettingModel setting;
         private void masterListToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (setting != null)
-            {
-                setting.Close();
-                setting.Dispose();
-            }
-
+            setting?.Close();
             setting = new SettingModel();
             setting.Show();
         }
@@ -983,47 +985,29 @@ namespace SC_M4
         NameList nameList;
         private void changeNameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (nameList != null)
-            {
-                nameList.Close();
-                nameList.Dispose();
-                nameList = null;
-            }
-
+            nameList?.Close();
             nameList = new NameList();
             nameList.Show();
         }
         private CameraControls cameraControlForm;
         private void cameraControlToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (cameraControlForm != null)
-            {
-                cameraControlForm.Close();
-            }
-
+            cameraControlForm?.Close();
             cameraControlForm = new CameraControls(this);
             cameraControlForm.Show();
         }
 
         private Forms.Key key;
         private void keyCAM1ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (key != null)
-            {
-                key.Close();
-            }
-
+        {     
+            key?.Close();
             key = new Key(KeyForms.CAM1);
             key.Show();
         }
 
         private void keyCAM2ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (key != null)
-            {
-                key.Close();
-            }
-
+        {            
+            key?.Close();
             key = new Key(KeyForms.CAM2);
             key.Show();
         }
@@ -1103,13 +1087,26 @@ namespace SC_M4
 
         private void checkBoxAutoFocus_CheckedChanged(object sender, EventArgs e)
         {
+            // var master_ntc = new MasterNTC();
+            //foreach (var color in _colorName.ntcNames)
+            //{
+            //    Console.WriteLine(color[0] + ", " + color[1] + ", " + color[2]);
+            //}
+
             Properties.Settings.Default.isAutoFocus = checkBoxAutoFocus.Checked;
             Properties.Settings.Default.Save();
 
             if (!checkBoxAutoFocus.Checked)
-            { 
+            {
                 cameraControl.setFocus((int)nFocus.Value);
             }
+        }
+        private MasterColors masterColors;
+        private void masterColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            masterColors?.Close();
+            masterColors = new MasterColors();
+            masterColors.Show();
         }
     }
 

@@ -34,6 +34,7 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.masterListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.masterColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectXYCAM1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectXYCAM2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -137,6 +138,7 @@
             // 
             this.settingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.masterListToolStripMenuItem,
+            this.masterColorToolStripMenuItem,
             this.selectXYCAM1ToolStripMenuItem,
             this.selectXYCAM2ToolStripMenuItem,
             this.colorToolStripMenuItem,
@@ -156,6 +158,14 @@
             this.masterListToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.masterListToolStripMenuItem.Text = "Master List";
             this.masterListToolStripMenuItem.Click += new System.EventHandler(this.masterListToolStripMenuItem_Click);
+            // 
+            // masterColorToolStripMenuItem
+            // 
+            this.masterColorToolStripMenuItem.Image = global::SC_M4.Properties.Resources.color_wheel;
+            this.masterColorToolStripMenuItem.Name = "masterColorToolStripMenuItem";
+            this.masterColorToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.masterColorToolStripMenuItem.Text = "Master Color";
+            this.masterColorToolStripMenuItem.Click += new System.EventHandler(this.masterColorToolStripMenuItem_Click);
             // 
             // selectXYCAM1ToolStripMenuItem
             // 
@@ -870,6 +880,7 @@
         private System.Windows.Forms.PictureBox pgRGB;
         public System.Windows.Forms.PictureBox scrollablePictureBoxCamera02;
         public System.Windows.Forms.PictureBox scrollablePictureBoxCamera01;
+        private System.Windows.Forms.ToolStripMenuItem masterColorToolStripMenuItem;
     }
 }
 

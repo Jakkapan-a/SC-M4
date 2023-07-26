@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SC_M4.Modules;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,36 @@ namespace SC_M4.Utilities
         public ColorName()
         {
             string color;
+            // int count = 0;
+            // var nTCs = MasterNTC.GetMasterNTC();
+            // foreach (var ntc in nTCs)
+            // {
+            //     ntcNames[count][0] = ntc.hex;
+            //     ntcNames[count][1] = ntc.name;
+            //     ntcNames[count][2] = ntc.color;
+            //     count++;
+            // }
+            // 
+            for (int i = 0; i < ntcNames.Count; i++)
+            {
+                color = "#" + ntcNames[i][0];
+                int[] rgb = RGB(color);
+                int[] hsl = HSL(color);
+                ntcNames[i] = ntcNames[i].Concat(new string[] { rgb[0].ToString(), rgb[1].ToString(), rgb[2].ToString(), hsl[0].ToString(), hsl[1].ToString(), hsl[2].ToString() }).ToArray();
+            }
+        }
+        public ColorName(List<MasterNTC> nTCs)
+        {
+            string color;
+            int count = 0;
+
+            foreach (var ntc in nTCs)
+            {
+                ntcNames[count][0] = ntc.hex;
+                ntcNames[count][1] = ntc.name;
+                ntcNames[count][2] = ntc.color;
+                count++;
+            }
             for (int i = 0; i < ntcNames.Count; i++)
             {
                 color = "#" + ntcNames[i][0];
@@ -72,7 +103,7 @@ namespace SC_M4.Utilities
             return cl < 0 ? new string[] { "#000000", "Invalid Color: " + color, "#000000", "", "false" } : new string[] { "#" + ntcNames[cl][0], ntcNames[cl][1], ShadeRGB(ntcNames[cl][2]), ntcNames[cl][2], "false" };
         }
 
-        public static string ShadeRGB(string color)
+        public string ShadeRGB(string color)
         {
             for (int i = 0; i < shades.Count; i++)
             {
@@ -125,7 +156,7 @@ namespace SC_M4.Utilities
             return new int[] { (int)(h * 255), (int)(s * 255), (int)(l * 255) };
         }
         #region Color List
-        public static List<(string, string)> shades = new List<(string, string)>
+        public List<(string, string)> shades = new List<(string, string)>
         {
             ("FF0000", "Red"),
             ("FFA500", "Orange"),
@@ -139,7 +170,7 @@ namespace SC_M4.Utilities
             ("FFFFFF", "White")
         };
 
-        public static List<string[]> ntcNames = new List<string[]>
+        public List<string[]> ntcNames = new List<string[]>
         {
              new string[] {"35312C", "Acadia", "Brown"},
              new string[] {"75AA94", "Acapulco", "Green"},

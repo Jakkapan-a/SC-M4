@@ -262,51 +262,10 @@ namespace SC_M4
              *  Colors name
              */
             Heller.AverageColor rgb;
-
-            //Dictionary<string, int> dictionary = new Dictionary<string, int>();
-            //dictionary.Add("Red", 0);
-            //dictionary.Add("Orange", 0);
-            //dictionary.Add("Yellow", 0);
-            //dictionary.Add("Green", 0);
-            //dictionary.Add("Blue", 0);
-            //dictionary.Add("Violet", 0);
-            //dictionary.Add("Brown", 0);
-            //dictionary.Add("Black", 0);
-            //dictionary.Add("Grey", 0);
-            //dictionary.Add("White", 0);
-
             AverageColor _color = new AverageColor();
             using (var bm = (Bitmap)bmp2_color.Clone())
             {
                 rgb = Heller.GetAverageColor(bm, bm.Width, bm.Height);
-                //if (Properties.Settings.Default.isColors)
-                //{
-                //    for (int h = 0; h < bm.Height; h++)
-                //    {
-                //        for (int w = 0; w < bm.Width; w++)
-                //        {
-                //            try
-                //            {
-                //                Color _col = bm.GetPixel(w, h);
-                //                _color.R = _col.R;
-                //                _color.G = _col.G;
-                //                _color.B = _col.B;
-                //                if (_color.R > 240 && _color.G > 240 && _color.B > 240)
-                //                {
-                //                    _color.R = 255;
-                //                    _color.G = 255;
-                //                    _color.B = 255;
-                //                }
-                //                string[] _name = _colorName.Name(_colorName.RgbToHex(_color.R, _color.G, _color.B));
-                //                dictionary[_name[3]]++;
-                //            }
-                //            catch (Exception ex)
-                //            {
-                //                LogWriter.SaveLog("Error RGB :" + ex.Message);
-                //            }
-                //        }
-                //    }
-                //}
             }
             // True     
             //string maxKey = dictionary.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
