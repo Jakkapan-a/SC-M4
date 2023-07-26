@@ -26,6 +26,7 @@ namespace SC_M4.Forms
 
             cbColor.Items.Clear();
             cbColor.Items.AddRange(colors);
+            var color = new MasterNTC();
             RenderTable();
         }
         private bool isRender = false;
@@ -78,7 +79,7 @@ namespace SC_M4.Forms
             {
                 dgvMasterColors.Rows[oldSelectedItems].Selected = true;
             }
-            else
+            else if (dgvMasterColors.SelectedRows.Count > 0)
             {
                 dgvMasterColors.Rows[0].Selected = true;
             }
@@ -179,9 +180,20 @@ namespace SC_M4.Forms
             var ntc_name = new ColorName();
             int count = ntc_name.ntcNames.Count;
             int i = 0;
+            var master_ntc = new MasterNTC();
             foreach (var color in ntc_name.ntcNames)
             {
-                MasterNTC.UpdateByHex(color[0], color[2]);
+                if (MasterNTC.isHexExist(color[0]))
+                {
+                    MasterNTC.UpdateByHex(color[0], color[2]);
+                }
+                else if (!MasterNTC.isHexExist(color[0]))
+                {
+                    master_ntc.hex = color[0];
+                    master_ntc.name = color[1];
+                    master_ntc.color = color[2];
+                    master_ntc.Save();
+                }
                 i++;
                 // Update progress bar invoke
                 // Update progress bar
@@ -204,7 +216,8 @@ namespace SC_M4.Forms
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
-        {   // Check txtSearchHex is hex or not
+        {
+            // Check txtSearchHex is hex or not
             string hex = txtSearchHex.Text.ToUpper();
             if (hex.Length != 6)
             {
@@ -217,7 +230,7 @@ namespace SC_M4.Forms
                 return;
             }
 
-            bool found = false; 
+            bool found = false;
             // Clear selection
             dgvMasterColors.ClearSelection();
 

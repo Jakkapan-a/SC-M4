@@ -15,6 +15,19 @@ namespace SC_M4.Modules
         public string color { get; set; }
         public string created_at { get; set; }
         public string updated_at { get; set;}
+        public MasterNTC()
+        {
+            string sql = string.Format("CREATE TABLE IF NOT EXISTS `master_ntc` (" +
+                "`id`\tINTEGER NOT NULL," +
+                "`hex`\tTEXT," +
+                "\t`name`\tTEXT," +
+                "`color`\tTEXT," +
+                "`created_at`\tTEXT," +
+                "`updated_at`\tTEXT," +
+                " PRIMARY KEY(`id` AUTOINCREMENT)" +
+                ");");
+            SQliteDataAccess.Execute(sql,null);
+        }
 
         public void Save(){
             string sql = "insert into master_ntc (hex,name,color,created_at,updated_at) values (@hex,@name,@color,@created_at,@updated_at)";
