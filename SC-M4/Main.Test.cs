@@ -265,24 +265,15 @@ namespace SC_M4
             //AverageColor _color = new AverageColor();
             using (var bm = (Bitmap)bmp2_color.Clone())
             {
-                rgb = Heller.GetAverageColor(bm, bm.Width, bm.Height);
+                rgb = Heller.GetAverageColor(bm);
             }
-            // True     
-            //string maxKey = dictionary.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
-            //Console.WriteLine("The color with the highest count is: " + maxKey);
-            //LogWriter.SaveLog("The color with the highest count is: " + maxKey);
-            //if (rgb.R > 240 && rgb.G > 240 && rgb.B > 240)
-            //{
-            //    rgb.R = 255;
-            //    rgb.G = 255;
-            //    rgb.B = 255;
-            //}
-            // False
+
             string[] colorName = _colorName.Name(_colorName.RgbToHex(rgb.R, rgb.G, rgb.B));
             Console.WriteLine("Color Name : " + colorName[3]);
             LogWriter.SaveLog($"Color name :{colorName[3]},{colorName[1]},{colorName[2]} ,{colorName[0]}, R{rgb.R} G{rgb.G} B{rgb.B}");
-            string color = colorName[3];
+            description += $"Color name :{colorName[3]},{colorName[1]},{colorName[2]} ,{colorName[0]}, R{rgb.R} G{rgb.G} B{rgb.B}";
 
+            string color = colorName[3];
             foreach (var item in master_lb)
             {
                 history.master_sw = item.nameSW;
@@ -326,7 +317,10 @@ namespace SC_M4
 
                 }
             }
-
+            richTextBox2.Invoke(new Action(() =>
+            {
+                this.richTextBox2.Text += $"\n Color name :{colorName[3]},{colorName[1]},{colorName[2]} ,{colorName[0]}, R{rgb.R} G{rgb.G} B{rgb.B}";
+            }));
             UpdateUIAndInvokeCommand("NG", Color.Red);
 
             history.name = txtEmployee.Text.Trim();

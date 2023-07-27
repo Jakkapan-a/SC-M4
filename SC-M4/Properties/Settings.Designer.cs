@@ -181,7 +181,7 @@ namespace SC_M4.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("731TMC")]
+        [global::System.Configuration.DefaultSettingValueAttribute("MCU-VER")]
         public string keyCAM1 {
             get {
                 return ((string)(this["keyCAM1"]));

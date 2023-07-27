@@ -49,7 +49,7 @@ namespace SC_M4.Utilities
             Full = 5,
         }
 
-        public static AverageColor GetAverageColor(Bitmap bmp, int maxWidth, int maxHeight)
+        public static AverageColor GetAverageColor(Bitmap bmp)
         {
             try
             {
