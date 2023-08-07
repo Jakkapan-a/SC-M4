@@ -229,8 +229,7 @@ namespace SC_M4
         {
             var videoDevices = new List<DsDevice>(DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice));
             cbDriveCam01.Items.Clear();
-            cbDriveCam02.Items.Clear();
-            foreach (DsDevice device in videoDevices)
+            cbDriveCam02.Items.Clear();            foreach (DsDevice device in videoDevices)
             {
                 cbDriveCam01.Items.Add(device.Name);
                 cbDriveCam02.Items.Add(device.Name);
@@ -1094,10 +1093,10 @@ namespace SC_M4
         private void checkBoxAutoFocus_CheckedChanged(object sender, EventArgs e)
         {
             // var master_ntc = new MasterNTC();
-            //foreach (var color in _colorName.ntcNames)
-            //{
+            // foreach (var color in _colorName.ntcNames)
+            // {
             //    Console.WriteLine(color[0] + ", " + color[1] + ", " + color[2]);
-            //}
+            // }
 
             Properties.Settings.Default.isAutoFocus = checkBoxAutoFocus.Checked;
             Properties.Settings.Default.Save();
