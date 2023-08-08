@@ -87,7 +87,6 @@ namespace SC_M4.Utilities
             catch (Exception ex)
             {
                 // Replace this with your actual logging method
-                //LogWriter.SaveLog($"Error in GetAverageColor: {ex.Message}");
                 throw; // Re-throw the exception
             }
         }

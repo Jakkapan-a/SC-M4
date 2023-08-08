@@ -259,12 +259,15 @@
     <Compile Include="Main.Capture.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Modules\Actions.cs" />
     <Compile Include="Modules\History.cs" />
+    <Compile Include="Modules\Items.cs" />
     <Compile Include="Modules\MasterAll.cs" />
     <Compile Include="Modules\MasterLB.cs" />
     <Compile Include="Modules\MasterNTC.cs" />
     <Compile Include="Modules\MasterSW.cs" />
     <Compile Include="Modules\Models.cs" />
+    <Compile Include="Modules\Rect.cs" />
     <Compile Include="Modules\ReplaceName.cs" />
     <Compile Include="Modules\Setting.cs" />
     <Compile Include="Modules\SQliteDataAccess.cs" />

@@ -15,7 +15,7 @@ namespace SC_M4.Modules
         public string color { get; set; }
         public string created_at { get; set; }
         public string updated_at { get; set;}
-        public MasterNTC()
+        public static void CreateTable()
         {
             string sql = string.Format("CREATE TABLE IF NOT EXISTS `master_ntc` (" +
                 "`id`\tINTEGER NOT NULL," +
