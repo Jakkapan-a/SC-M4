@@ -39,6 +39,8 @@ namespace SC_M4
     {
         private Language SelectedLang = null;
         public TControl cameraControl;
+
+        public SelectionType SelectionType = SelectionType.Auto;
         public Main()
         {
             InitializeComponent();
@@ -69,7 +71,6 @@ namespace SC_M4
 
         private bool isOCR1 = false;
 
-        private BackgroundWorker background;
         private System.Windows.Forms.Timer timerOCR;
         private ColorName _colorName;
         private void Main_Load(object sender, EventArgs e)
@@ -81,28 +82,17 @@ namespace SC_M4
                 item.Text = "";
             }
 
-            this.Text = "SC-M4 v.4.53";
-            background = new BackgroundWorker();
-            background.WorkerReportsProgress = true;
-            background.WorkerSupportsCancellation = true;
-
-            background.DoWork += Background_DoWork;
-            background.RunWorkerCompleted += Background_RunWorkerCompleted;
-            background.ProgressChanged += Background_ProgressChanged;
+            this.Text = "SC-M4 v.5.00";
 
             timerOCR = new System.Windows.Forms.Timer(components);
             timerOCR.Interval = 700;
-
             timerOCR.Tick += TimerOCR_Tick;
 
             SelectedLang = new Language("en-US");
             // Create Folder
-            if (!Directory.Exists(Properties.Resources.path_temp))
-                Directory.CreateDirectory(Properties.Resources.path_temp);
-            if (!Directory.Exists(Properties.Resources.path_log))
-                Directory.CreateDirectory(Properties.Resources.path_log);
-            if (!Directory.Exists(Properties.Resources.path_images))
-                Directory.CreateDirectory(Properties.Resources.path_images);
+            CreateDirectoryIfNotExists(Properties.Resources.path_temp);
+            CreateDirectoryIfNotExists(Properties.Resources.path_log);
+            CreateDirectoryIfNotExists(Properties.Resources.path_images);
 
             // Create Video Capture Object
             capture_1 = new TCapture.Capture();
@@ -113,6 +103,7 @@ namespace SC_M4
             capture_2.OnFrameHeader += Capture_2_OnFrameHeader;
             capture_2.OnVideoStarted += Capture_2_OnVideoStarted;
             capture_2.OnVideoStop += Capture_2_OnVideoStop;
+
             this.ActiveControl = txtEmployee;
             txtEmployee.Focus();
             LogWriter = new LogFile();
@@ -151,14 +142,20 @@ namespace SC_M4
             useQrCode = cbQrCode.Checked;
             checkBoxAutoFocus.Checked = Properties.Settings.Default.isAutoFocus;
         }
-        private async void deletedFileTemp()
+
+        public static void CreateDirectoryIfNotExists(string path)
+        {
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+        }
+
+        private void deletedFileTemp()
         {
             try
             {
                 string _dir = Properties.Resources.path_temp;
                 string[] files = Directory.GetFiles(_dir);
                 int i = 0;
-                await Task.Delay(1);
                 foreach (string file in files)
                 {
                     i++;
@@ -313,6 +310,7 @@ namespace SC_M4
         #region SATART
         private Task taskCam1;
         private Task taskCam2;
+
         private async void btStartStop_Click(object sender, EventArgs e)
         {
 
@@ -433,18 +431,8 @@ namespace SC_M4
                     }
 
                     btConnect.Text = "Disconnect";
-                    if (background == null)
-                    {
-                        background = new BackgroundWorker();
-                        background.WorkerReportsProgress = true;
-                        background.WorkerSupportsCancellation = true;
 
-                        background.DoWork += Background_DoWork;
-                        background.RunWorkerCompleted += Background_RunWorkerCompleted;
-                        background.ProgressChanged += Background_ProgressChanged;
-                    }
-
-                    timerOCR.Start();
+                    //timerOCR.Start();
 
 
                     isStarted = true;
@@ -461,17 +449,7 @@ namespace SC_M4
                     if (serialPort.IsOpen)
                         serialPort.Close();
 
-                    timerOCR.Stop();
-                    if (background.IsBusy)
-                    {
-                        background.CancelAsync();
-                        background.Dispose();
-                    }
-
-                    if (background != null)
-                    {
-                        background.Dispose();
-                    }
+                    //timerOCR.Stop();
 
 
                     btStartStop.Text = "START";
@@ -513,29 +491,10 @@ namespace SC_M4
                 if (serialPort.IsOpen)
                     serialPort.Close();
 
-                timerOCR.Stop();
+                //timerOCR.Stop();
 
             }
         }
-
-
-        private void Background_DoWork(object sender, DoWorkEventArgs e)
-        {
-            BackgroundWorker worker = (BackgroundWorker)sender;
-            onTest();
-
-        }
-
-        private void Background_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-
-        }
-
-        private void Background_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-
-        }
-
 
 
         private History history;
@@ -602,48 +561,48 @@ namespace SC_M4
         private string dataSerialReceived = string.Empty;
         private void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            try
-            {
-                readDataSerial = this.serialPort.ReadExisting();
-                this.Invoke(new EventHandler(dataReceived));
-            }
-            catch (Exception ex)
-            {
-                LogWriter.SaveLog("Error :" + ex.Message);
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            //try
+            //{
+            //    readDataSerial = this.serialPort.ReadExisting();
+            //    this.Invoke(new EventHandler(dataReceived));
+            //}
+            //catch (Exception ex)
+            //{
+            //    LogWriter.SaveLog("Error :" + ex.Message);
+            //    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
         }
 
         private void dataReceived(object sender, EventArgs e)
         {
-            this.dataSerialReceived += readDataSerial;
-            if (dataSerialReceived.Contains(">") && dataSerialReceived.Contains("<"))
-            {
-                string data = this.dataSerialReceived.Replace("\r", string.Empty).Replace("\n", string.Empty);
-                data = data.Substring(data.IndexOf(">") + 1, data.IndexOf("<") - 1);
-                this.dataSerialReceived = string.Empty;
-                Console.WriteLine("RST : " + data);
-                data = data.Replace(">", "").Replace("<", "");
-                toolStripStatusSerialData.Text = "DATA :" + data;
-                LogWriter.SaveLog("Serial Received : " + data);
-                if (data == "rst" || data.Contains("rst"))
-                {
-                    isStateReset = true;
-                    is_Blink_NG = false;
-                    if (capture_1.IsOpened && capture_1.IsOpened)
-                    {
-                        lbTitle.Text = "Wiat for detect...."; // Wiat for detect....
-                    }
-                    lbTitle.ForeColor = Color.Black;
-                    lbTitle.BackColor = Color.Yellow;
-                    richTextBox1.Text = "";
-                    richTextBox2.Text = "";
-                }
-            }
-            else if (!dataSerialReceived.Contains(">"))
-            {
-                this.dataSerialReceived = string.Empty;
-            }
+            //this.dataSerialReceived += readDataSerial;
+            //if (dataSerialReceived.Contains(">") && dataSerialReceived.Contains("<"))
+            //{
+            //    string data = this.dataSerialReceived.Replace("\r", string.Empty).Replace("\n", string.Empty);
+            //    data = data.Substring(data.IndexOf(">") + 1, data.IndexOf("<") - 1);
+            //    this.dataSerialReceived = string.Empty;
+            //    Console.WriteLine("RST : " + data);
+            //    data = data.Replace(">", "").Replace("<", "");
+            //    toolStripStatusSerialData.Text = "DATA :" + data;
+            //    LogWriter.SaveLog("Serial Received : " + data);
+            //    if (data == "rst" || data.Contains("rst"))
+            //    {
+            //        isStateReset = true;
+            //        is_Blink_NG = false;
+            //        if (capture_1.IsOpened && capture_1.IsOpened)
+            //        {
+            //            lbTitle.Text = "Wiat for detect...."; // Wiat for detect....
+            //        }
+            //        lbTitle.ForeColor = Color.Black;
+            //        lbTitle.BackColor = Color.Yellow;
+            //        richTextBox1.Text = "";
+            //        richTextBox2.Text = "";
+            //    }
+            //}
+            //else if (!dataSerialReceived.Contains(">"))
+            //{
+            //    this.dataSerialReceived = string.Empty;
+            //}
         }
 
         #endregion
@@ -983,9 +942,6 @@ namespace SC_M4
 
             timerOCR.Stop();
 
-            if (background.IsBusy)
-                background.Dispose();
-
         }
         NameList nameList;
         private void changeNameToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1092,12 +1048,6 @@ namespace SC_M4
 
         private void checkBoxAutoFocus_CheckedChanged(object sender, EventArgs e)
         {
-            // var master_ntc = new MasterNTC();
-            // foreach (var color in _colorName.ntcNames)
-            // {
-            //    Console.WriteLine(color[0] + ", " + color[1] + ", " + color[2]);
-            // }
-
             Properties.Settings.Default.isAutoFocus = checkBoxAutoFocus.Checked;
             Properties.Settings.Default.Save();
 
@@ -1175,8 +1125,6 @@ namespace SC_M4
                 return result;
             }
         }
-
-
     }
 
 }

@@ -74,6 +74,9 @@
   <PropertyGroup>
     <SignManifests>true</SignManifests>
   </PropertyGroup>
+  <PropertyGroup>
+    <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ZXing.Net">
       <Version>0.16.9</Version>
@@ -253,7 +256,7 @@
     <Compile Include="Main.Test.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Main.Video.cs">
+    <Compile Include="Main.Capture.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\History.cs" />
@@ -261,6 +264,7 @@
     <Compile Include="Modules\MasterLB.cs" />
     <Compile Include="Modules\MasterNTC.cs" />
     <Compile Include="Modules\MasterSW.cs" />
+    <Compile Include="Modules\Models.cs" />
     <Compile Include="Modules\ReplaceName.cs" />
     <Compile Include="Modules\Setting.cs" />
     <Compile Include="Modules\SQliteDataAccess.cs" />
@@ -278,6 +282,7 @@
     <Compile Include="Utilities\KeyForms.cs" />
     <Compile Include="Utilities\LogWriter.cs" />
     <Compile Include="Utilities\QrCode.cs" />
+    <Compile Include="Utilities\SelectionType.cs" />
     <EmbeddedResource Include="Forms\CameraControls.resx">
       <DependentUpon>CameraControls.cs</DependentUpon>
     </EmbeddedResource>
