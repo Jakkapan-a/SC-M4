@@ -18,11 +18,12 @@ namespace SC_M4.Modules
         public int type_image { get; set; }
         public int threshold_percent { get; set; }
         public int delay { get; set; }
+        public int index { get; set; }
         public string created_at { get; set; }
         public string updated_at { get; set; }
 
         public static void CreateTable(){
-            string sql = "CREATE TABLE IF NOT EXISTS `actions` (`id` INTEGER NOT NULL, `item_id` INTEGER NOT NULL, `name` TEXT, `type` INTEGER NOT NULL, `action_io_id` INTEGER, `state` INTEGER , `auto_delay` INTEGER , `servo` INTEGER, `image_name` TEXT, `type_image` INTEGER , `threshold_percent` INTEGER, `delay` INTEGER, `created_at` TEXT, `updated_at` TEXT, PRIMARY KEY(`id` AUTOINCREMENT));";
+            string sql = "CREATE TABLE IF NOT EXISTS `actions` (`id` INTEGER NOT NULL, `item_id` INTEGER NOT NULL, `name` TEXT, `type` INTEGER NOT NULL, `action_io_id` INTEGER, `state` INTEGER , `auto_delay` INTEGER , `servo` INTEGER, `image_name` TEXT, `type_image` INTEGER , `threshold_percent` INTEGER, `delay` INTEGER,`index` INTEGER, `created_at` TEXT, `updated_at` TEXT, PRIMARY KEY(`id` AUTOINCREMENT));";
             SQliteDataAccess.Execute(sql, null);
         }
 
@@ -41,6 +42,7 @@ namespace SC_M4.Modules
                     { "@type_image", type_image },
                     { "@threshold_percent", threshold_percent },
                     { "@delay", delay },
+                    { "@index", index },
                     { "@created_at", SQliteDataAccess.GetDateTimeNow() },
                     { "@updated_at", SQliteDataAccess.GetDateTimeNow() }
                 };
@@ -48,6 +50,7 @@ namespace SC_M4.Modules
 
         public void Save(){
             string sql = "insert into actions (item_id,name,type,action_io_id,state,auto_delay,image_name,type_image,threshold_percent,delay,created_at,updated_at) values (@item_id,@name,@type,@action_io_id,@state,@auto_delay,@image_name,@type_image,@threshold_percent,@delay,@created_at,@updated_at)";
+            this.index = GetLastIndex() + 1;
             SQliteDataAccess.Execute(sql, CreateParameters());
         }
 
@@ -84,6 +87,51 @@ namespace SC_M4.Modules
         public static List<Actions> GetListByItemIdAndType(int item_id, int type){
             string sql = "select * from actions where item_id = @item_id and type = @type order by id desc";
             return SQliteDataAccess.Query<Actions>(sql, new Dictionary<string, object> { { "@item_id", item_id }, { "@type", type } });
+        }
+
+        public static int GetLastIndex(){
+            string sql = "select max(`index`) as `index` from actions";
+            var result = SQliteDataAccess.Query<int>(sql, null).FirstOrDefault();
+            return result==null?0:result;
+        }
+
+        public static Actions GetUp(int id){
+            string sql = "select * from actions where `index` < (select `index` from actions where id = @id) and item_id = (select item_id from actions where id = @id) order by `index` desc limit 1";
+            return SQliteDataAccess.Query<Actions>(sql, new Dictionary<string, object> { { "@id", id } }).FirstOrDefault();
+        }
+
+        public static Actions GetDown(int id){
+            string sql = "select * from actions where `index` > (select `index` from actions where id = @id) and item_id = (select item_id from actions where id = @id) order by `index` asc limit 1";
+            return SQliteDataAccess.Query<Actions>(sql, new Dictionary<string, object> { { "@id", id } }).FirstOrDefault();
+        }
+
+        public static bool SetUp(int id){
+            Actions action = Get(id);
+            Actions action_up = GetUp(id);
+            if(action_up != null){
+                int index = action.index;
+                action.index = action_up.index;
+                action_up.index = index;
+                action.Update();
+                action_up.Update();
+
+                return true;
+            }
+            return false;
+        }
+
+        public static bool SetDown(int id){
+            Actions action = Get(id);
+            Actions action_down = GetDown(id);
+            if(action_down != null){
+                int index = action.index;
+                action.index = action_down.index;
+                action_down.index = index;
+                action.Update();
+                action_down.Update();
+                return true;
+            }
+            return false;
         }
     }
 }

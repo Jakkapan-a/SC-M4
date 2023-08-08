@@ -30,21 +30,21 @@
         {
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.btnIODelete = new System.Windows.Forms.Button();
+            this.btnIOEdit = new System.Windows.Forms.Button();
+            this.btnIOSave = new System.Windows.Forms.Button();
+            this.txtHex = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtName = new System.Windows.Forms.TextBox();
             this.dgvIO = new System.Windows.Forms.DataGridView();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnLoadImage = new System.Windows.Forms.Button();
+            this.btnRect = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
@@ -56,12 +56,12 @@
             this.label2 = new System.Windows.Forms.Label();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.radioButton6 = new System.Windows.Forms.RadioButton();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.rdTypeImage = new System.Windows.Forms.RadioButton();
+            this.rdTypeServo = new System.Windows.Forms.RadioButton();
+            this.rdTypeAuto = new System.Windows.Forms.RadioButton();
+            this.rdTypeManual = new System.Windows.Forms.RadioButton();
             this.label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnSave = new System.Windows.Forms.Button();
             this.tServo = new System.Windows.Forms.TrackBar();
             this.nServo = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -101,13 +101,13 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.button6);
-            this.splitContainer1.Panel1.Controls.Add(this.button5);
-            this.splitContainer1.Panel1.Controls.Add(this.button4);
-            this.splitContainer1.Panel1.Controls.Add(this.textBox2);
+            this.splitContainer1.Panel1.Controls.Add(this.btnIODelete);
+            this.splitContainer1.Panel1.Controls.Add(this.btnIOEdit);
+            this.splitContainer1.Panel1.Controls.Add(this.btnIOSave);
+            this.splitContainer1.Panel1.Controls.Add(this.txtHex);
             this.splitContainer1.Panel1.Controls.Add(this.label7);
             this.splitContainer1.Panel1.Controls.Add(this.label6);
-            this.splitContainer1.Panel1.Controls.Add(this.textBox1);
+            this.splitContainer1.Panel1.Controls.Add(this.txtName);
             this.splitContainer1.Panel1.Controls.Add(this.dgvIO);
             // 
             // splitContainer1.Panel2
@@ -123,47 +123,53 @@
             this.splitContainer1.SplitterDistance = 242;
             this.splitContainer1.TabIndex = 2;
             // 
-            // button6
+            // btnIODelete
             // 
-            this.button6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button6.BackgroundImage = global::SC_M4.Properties.Resources.delete_32;
-            this.button6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button6.Location = new System.Drawing.Point(161, 374);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(31, 27);
-            this.button6.TabIndex = 4;
-            this.button6.UseVisualStyleBackColor = true;
+            this.btnIODelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnIODelete.BackgroundImage = global::SC_M4.Properties.Resources.delete_32;
+            this.btnIODelete.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnIODelete.Location = new System.Drawing.Point(161, 374);
+            this.btnIODelete.Name = "btnIODelete";
+            this.btnIODelete.Size = new System.Drawing.Size(31, 27);
+            this.btnIODelete.TabIndex = 4;
+            this.btnIODelete.UseVisualStyleBackColor = true;
+            this.btnIODelete.Click += new System.EventHandler(this.btnIODelete_Click);
             // 
-            // button5
+            // btnIOEdit
             // 
-            this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button5.BackgroundImage = global::SC_M4.Properties.Resources.edit_property_32;
-            this.button5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.button5.Location = new System.Drawing.Point(198, 374);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(31, 27);
-            this.button5.TabIndex = 4;
-            this.button5.UseVisualStyleBackColor = true;
+            this.btnIOEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnIOEdit.BackgroundImage = global::SC_M4.Properties.Resources.edit_property_32;
+            this.btnIOEdit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnIOEdit.Location = new System.Drawing.Point(198, 374);
+            this.btnIOEdit.Name = "btnIOEdit";
+            this.btnIOEdit.Size = new System.Drawing.Size(31, 27);
+            this.btnIOEdit.TabIndex = 4;
+            this.btnIOEdit.UseVisualStyleBackColor = true;
+            this.btnIOEdit.Click += new System.EventHandler(this.btnIOEdit_Click);
             // 
-            // button4
+            // btnIOSave
             // 
-            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.Location = new System.Drawing.Point(161, 407);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 4;
-            this.button4.Text = "Save";
-            this.button4.UseVisualStyleBackColor = true;
+            this.btnIOSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnIOSave.Location = new System.Drawing.Point(161, 407);
+            this.btnIOSave.Name = "btnIOSave";
+            this.btnIOSave.Size = new System.Drawing.Size(75, 23);
+            this.btnIOSave.TabIndex = 4;
+            this.btnIOSave.Text = "Save";
+            this.btnIOSave.UseVisualStyleBackColor = true;
+            this.btnIOSave.Click += new System.EventHandler(this.btnIOSave_Click);
             // 
-            // textBox2
+            // txtHex
             // 
-            this.textBox2.Location = new System.Drawing.Point(45, 407);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 1;
+            this.txtHex.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtHex.Location = new System.Drawing.Point(45, 407);
+            this.txtHex.Name = "txtHex";
+            this.txtHex.Size = new System.Drawing.Size(100, 20);
+            this.txtHex.TabIndex = 1;
             // 
             // label7
             // 
+            this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(7, 410);
             this.label7.Name = "label7";
@@ -173,6 +179,7 @@
             // 
             // label6
             // 
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(3, 384);
             this.label6.Name = "label6";
@@ -180,12 +187,14 @@
             this.label6.TabIndex = 1;
             this.label6.Text = "Name :";
             // 
-            // textBox1
+            // txtName
             // 
-            this.textBox1.Location = new System.Drawing.Point(45, 381);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 1;
+            this.txtName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtName.Location = new System.Drawing.Point(45, 381);
+            this.txtName.Name = "txtName";
+            this.txtName.Size = new System.Drawing.Size(100, 20);
+            this.txtName.TabIndex = 1;
             // 
             // dgvIO
             // 
@@ -195,8 +204,12 @@
             this.dgvIO.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvIO.Location = new System.Drawing.Point(4, 3);
             this.dgvIO.Name = "dgvIO";
+            this.dgvIO.ReadOnly = true;
+            this.dgvIO.RowHeadersVisible = false;
+            this.dgvIO.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvIO.Size = new System.Drawing.Size(232, 365);
             this.dgvIO.TabIndex = 0;
+            this.dgvIO.SelectionChanged += new System.EventHandler(this.dgvIO_SelectionChanged);
             // 
             // groupBox5
             // 
@@ -247,8 +260,8 @@
             // 
             // groupBox7
             // 
-            this.groupBox7.Controls.Add(this.button3);
-            this.groupBox7.Controls.Add(this.button2);
+            this.groupBox7.Controls.Add(this.btnLoadImage);
+            this.groupBox7.Controls.Add(this.btnRect);
             this.groupBox7.Controls.Add(this.pictureBox1);
             this.groupBox7.Location = new System.Drawing.Point(8, 245);
             this.groupBox7.Name = "groupBox7";
@@ -257,25 +270,26 @@
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Image";
             // 
-            // button3
+            // btnLoadImage
             // 
-            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button3.Location = new System.Drawing.Point(356, 101);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 4;
-            this.button3.Text = "Load";
-            this.button3.UseVisualStyleBackColor = true;
+            this.btnLoadImage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnLoadImage.Location = new System.Drawing.Point(356, 101);
+            this.btnLoadImage.Name = "btnLoadImage";
+            this.btnLoadImage.Size = new System.Drawing.Size(75, 23);
+            this.btnLoadImage.TabIndex = 4;
+            this.btnLoadImage.Text = "Load";
+            this.btnLoadImage.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // btnRect
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(275, 101);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "Rect";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnRect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRect.Location = new System.Drawing.Point(275, 101);
+            this.btnRect.Name = "btnRect";
+            this.btnRect.Size = new System.Drawing.Size(75, 23);
+            this.btnRect.TabIndex = 4;
+            this.btnRect.Text = "Rect";
+            this.btnRect.UseVisualStyleBackColor = true;
+            this.btnRect.Visible = false;
             // 
             // pictureBox1
             // 
@@ -372,16 +386,26 @@
             // numericUpDown1
             // 
             this.numericUpDown1.Location = new System.Drawing.Point(64, 46);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            50000,
+            0,
+            0,
+            0});
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
             this.numericUpDown1.TabIndex = 0;
+            this.numericUpDown1.Value = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.radioButton6);
-            this.groupBox1.Controls.Add(this.radioButton3);
-            this.groupBox1.Controls.Add(this.radioButton2);
-            this.groupBox1.Controls.Add(this.radioButton1);
+            this.groupBox1.Controls.Add(this.rdTypeImage);
+            this.groupBox1.Controls.Add(this.rdTypeServo);
+            this.groupBox1.Controls.Add(this.rdTypeAuto);
+            this.groupBox1.Controls.Add(this.rdTypeManual);
             this.groupBox1.Location = new System.Drawing.Point(8, 8);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(437, 75);
@@ -389,49 +413,49 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Type";
             // 
-            // radioButton6
+            // rdTypeImage
             // 
-            this.radioButton6.AutoSize = true;
-            this.radioButton6.Location = new System.Drawing.Point(91, 42);
-            this.radioButton6.Name = "radioButton6";
-            this.radioButton6.Size = new System.Drawing.Size(54, 17);
-            this.radioButton6.TabIndex = 0;
-            this.radioButton6.TabStop = true;
-            this.radioButton6.Text = "Image";
-            this.radioButton6.UseVisualStyleBackColor = true;
+            this.rdTypeImage.AutoSize = true;
+            this.rdTypeImage.Location = new System.Drawing.Point(91, 42);
+            this.rdTypeImage.Name = "rdTypeImage";
+            this.rdTypeImage.Size = new System.Drawing.Size(54, 17);
+            this.rdTypeImage.TabIndex = 0;
+            this.rdTypeImage.TabStop = true;
+            this.rdTypeImage.Text = "Image";
+            this.rdTypeImage.UseVisualStyleBackColor = true;
             // 
-            // radioButton3
+            // rdTypeServo
             // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(91, 19);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(53, 17);
-            this.radioButton3.TabIndex = 0;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "Servo";
-            this.radioButton3.UseVisualStyleBackColor = true;
+            this.rdTypeServo.AutoSize = true;
+            this.rdTypeServo.Location = new System.Drawing.Point(91, 19);
+            this.rdTypeServo.Name = "rdTypeServo";
+            this.rdTypeServo.Size = new System.Drawing.Size(53, 17);
+            this.rdTypeServo.TabIndex = 0;
+            this.rdTypeServo.TabStop = true;
+            this.rdTypeServo.Text = "Servo";
+            this.rdTypeServo.UseVisualStyleBackColor = true;
             // 
-            // radioButton2
+            // rdTypeAuto
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(6, 42);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(47, 17);
-            this.radioButton2.TabIndex = 0;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "Auto";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.rdTypeAuto.AutoSize = true;
+            this.rdTypeAuto.Location = new System.Drawing.Point(6, 42);
+            this.rdTypeAuto.Name = "rdTypeAuto";
+            this.rdTypeAuto.Size = new System.Drawing.Size(47, 17);
+            this.rdTypeAuto.TabIndex = 0;
+            this.rdTypeAuto.TabStop = true;
+            this.rdTypeAuto.Text = "Auto";
+            this.rdTypeAuto.UseVisualStyleBackColor = true;
             // 
-            // radioButton1
+            // rdTypeManual
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(6, 19);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(60, 17);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Manual";
-            this.radioButton1.UseVisualStyleBackColor = true;
+            this.rdTypeManual.AutoSize = true;
+            this.rdTypeManual.Location = new System.Drawing.Point(6, 19);
+            this.rdTypeManual.Name = "rdTypeManual";
+            this.rdTypeManual.Size = new System.Drawing.Size(60, 17);
+            this.rdTypeManual.TabIndex = 0;
+            this.rdTypeManual.TabStop = true;
+            this.rdTypeManual.Text = "Manual";
+            this.rdTypeManual.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
@@ -443,15 +467,15 @@
             this.label1.TabIndex = 3;
             this.label1.Text = "IO :";
             // 
-            // button1
+            // btnSave
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(639, 495);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "Save";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSave.Location = new System.Drawing.Point(639, 495);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(75, 23);
+            this.btnSave.TabIndex = 4;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = true;
             // 
             // tServo
             // 
@@ -480,7 +504,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(726, 543);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnSave);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);
@@ -521,7 +545,7 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.DataGridView dgvIO;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox3;
@@ -529,9 +553,9 @@
         private System.Windows.Forms.RadioButton radioButton4;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.RadioButton rdTypeServo;
+        private System.Windows.Forms.RadioButton rdTypeAuto;
+        private System.Windows.Forms.RadioButton rdTypeManual;
         private System.Windows.Forms.NumericUpDown numericUpDown3;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
 
@@ -539,19 +563,19 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.RadioButton radioButton6;
+        private System.Windows.Forms.RadioButton rdTypeImage;
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Button btnLoadImage;
+        private System.Windows.Forms.Button btnRect;
+        private System.Windows.Forms.TextBox txtHex;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.TextBox txtName;
+        private System.Windows.Forms.Button btnIODelete;
+        private System.Windows.Forms.Button btnIOEdit;
+        private System.Windows.Forms.Button btnIOSave;
         private System.Windows.Forms.TrackBar tServo;
         private System.Windows.Forms.NumericUpDown nServo;
     }
