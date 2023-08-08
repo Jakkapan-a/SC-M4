@@ -117,56 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="edit_property_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\edit_property_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="camera logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\camera logo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="msg_select_camera" xml:space="preserve">
-    <value>Please select drive camera</value>
-  </data>
-  <data name="delete_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\delete_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="path_temp" xml:space="preserve">
-    <value>./system/temp</value>
-  </data>
-  <data name="settings__32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\settings__32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="performance_imac_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\performance_imac_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="screenshot_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\screenshot_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="path_log" xml:space="preserve">
-    <value>./system/logs</value>
-  </data>
-  <data name="Edit_File_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Edit_File_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="path_images" xml:space="preserve">
-    <value>./system/images</value>
-  </data>
-  <data name="color-wheel" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\color-wheel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="search" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\search.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="_refresh_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\_refresh_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Point" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Point.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Spinner_0_4s_800px" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Spinner-0.4s-800px.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="edit_property_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\edit_property_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
+  <metadata name="statusStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
 </root>

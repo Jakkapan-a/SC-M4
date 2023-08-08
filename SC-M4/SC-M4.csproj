@@ -175,6 +175,21 @@
     <PackageReference Include="Microsoft.Windows.SDK.Contracts" Version="10.0.22000.194" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\ListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\ScrollablePictureBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\ScrollablePictureBox.Designer.cs">
+      <DependentUpon>ScrollablePictureBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Actions_io.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Actions_io.Designer.cs">
+      <DependentUpon>Actions_io.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\CameraControls.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -193,6 +208,12 @@
     <Compile Include="Forms\Edit_Items.Designer.cs">
       <DependentUpon>Edit_Items.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ItemList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ItemList.Designer.cs">
+      <DependentUpon>ItemList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Key.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -204,6 +225,12 @@
     </Compile>
     <Compile Include="Forms\Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ManageModels.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ManageModels.Designer.cs">
+      <DependentUpon>ManageModels.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\MasterColors.cs">
       <SubType>Form</SubType>
@@ -222,6 +249,12 @@
     </Compile>
     <Compile Include="Forms\NameListForms.Designer.cs">
       <DependentUpon>NameListForms.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\RectangleImage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RectangleImage.Designer.cs">
+      <DependentUpon>RectangleImage.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Rename.cs">
       <SubType>Form</SubType>
@@ -247,6 +280,7 @@
     <Compile Include="Forms\SettingModel.Designer.cs">
       <DependentUpon>SettingModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces\IModule.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -259,6 +293,7 @@
     <Compile Include="Main.Capture.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Modules\ActionIO.cs" />
     <Compile Include="Modules\Actions.cs" />
     <Compile Include="Modules\History.cs" />
     <Compile Include="Modules\Items.cs" />
@@ -286,6 +321,9 @@
     <Compile Include="Utilities\LogWriter.cs" />
     <Compile Include="Utilities\QrCode.cs" />
     <Compile Include="Utilities\SelectionType.cs" />
+    <EmbeddedResource Include="Forms\Actions_io.resx">
+      <DependentUpon>Actions_io.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\CameraControls.resx">
       <DependentUpon>CameraControls.cs</DependentUpon>
     </EmbeddedResource>
@@ -295,11 +333,17 @@
     <EmbeddedResource Include="Forms\Edit_Items.resx">
       <DependentUpon>Edit_Items.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ItemList.resx">
+      <DependentUpon>ItemList.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Key.resx">
       <DependentUpon>Key.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ManageModels.resx">
+      <DependentUpon>ManageModels.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MasterColors.resx">
       <DependentUpon>MasterColors.cs</DependentUpon>
@@ -309,6 +353,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\NameListForms.resx">
       <DependentUpon>NameListForms.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RectangleImage.resx">
+      <DependentUpon>RectangleImage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Rename.resx">
       <DependentUpon>Rename.cs</DependentUpon>
@@ -392,6 +439,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="layers.ico" />
+    <None Include="Resources\edit_property_32.png" />
+    <None Include="Resources\edit_property_16.png" />
+    <None Include="Resources\delete_32.png" />
     <None Include="Resources\search.png" />
     <None Include="Resources\color-wheel.png" />
     <None Include="Resources\camera logo.png" />

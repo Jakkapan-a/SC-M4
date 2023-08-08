@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SC_M4.Modules
@@ -9,9 +10,10 @@ namespace SC_M4.Modules
         public int item_id { get; set; }
         public string name { get; set; }
         public int type { get; set; }
-        public string pin { get; set; }
+        public int action_io_id { get; set; }
         public int state { get; set; }
         public int auto_delay { get; set; }
+        public int servo { get; set; }
         public string image_name { get; set; }
         public int type_image { get; set; }
         public int threshold_percent { get; set; }
@@ -20,7 +22,7 @@ namespace SC_M4.Modules
         public string updated_at { get; set; }
 
         public static void CreateTable(){
-            string sql = "CREATE TABLE IF NOT EXISTS `actions` (`id` INTEGER NOT NULL, `item_id` INTEGER NOT NULL, `name` TEXT, `type` INTEGER NOT NULL, `pin` TEXT, `state` INTEGER , `auto_delay` INTEGER , `image_name` TEXT, `type_image` INTEGER , `threshold_percent` INTEGER, `delay` INTEGER, `created_at` TEXT, `updated_at` TEXT, PRIMARY KEY(`id` AUTOINCREMENT));";
+            string sql = "CREATE TABLE IF NOT EXISTS `actions` (`id` INTEGER NOT NULL, `item_id` INTEGER NOT NULL, `name` TEXT, `type` INTEGER NOT NULL, `action_io_id` INTEGER, `state` INTEGER , `auto_delay` INTEGER , `servo` INTEGER, `image_name` TEXT, `type_image` INTEGER , `threshold_percent` INTEGER, `delay` INTEGER, `created_at` TEXT, `updated_at` TEXT, PRIMARY KEY(`id` AUTOINCREMENT));";
             SQliteDataAccess.Execute(sql, null);
         }
 
@@ -32,7 +34,7 @@ namespace SC_M4.Modules
                     { "@item_id", item_id },
                     { "@name", name },
                     { "@type", type },
-                    { "@pin", pin },
+                    { "@action_io_id", action_io_id },
                     { "@state", state },
                     { "@auto_delay", auto_delay },
                     { "@image_name", image_name },
@@ -45,12 +47,12 @@ namespace SC_M4.Modules
         }
 
         public void Save(){
-            string sql = "insert into actions (item_id,name,type,pin,state,auto_delay,image_name,type_image,threshold_percent,delay,created_at,updated_at) values (@item_id,@name,@type,@pin,@state,@auto_delay,@image_name,@type_image,@threshold_percent,@delay,@created_at,@updated_at)";
+            string sql = "insert into actions (item_id,name,type,action_io_id,state,auto_delay,image_name,type_image,threshold_percent,delay,created_at,updated_at) values (@item_id,@name,@type,@action_io_id,@state,@auto_delay,@image_name,@type_image,@threshold_percent,@delay,@created_at,@updated_at)";
             SQliteDataAccess.Execute(sql, CreateParameters());
         }
 
         public void Update(){
-            string sql = "update actions set item_id = @item_id, name = @name, type = @type, pin = @pin, state = @state, auto_delay = @auto_delay, image_name = @image_name, type_image = @type_image, threshold_percent = @threshold_percent, delay = @delay, updated_at = @updated_at where id = @id";
+            string sql = "update actions set item_id = @item_id, name = @name, type = @type, action_io_id = @action_io_id, state = @state, auto_delay = @auto_delay, image_name = @image_name, type_image = @type_image, threshold_percent = @threshold_percent, delay = @delay, updated_at = @updated_at where id = @id";
             SQliteDataAccess.Execute(sql, CreateParameters());
         }
 
@@ -83,7 +85,5 @@ namespace SC_M4.Modules
             string sql = "select * from actions where item_id = @item_id and type = @type order by id desc";
             return SQliteDataAccess.Query<Actions>(sql, new Dictionary<string, object> { { "@item_id", item_id }, { "@type", type } });
         }
-
-        
     }
 }

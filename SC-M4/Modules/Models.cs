@@ -98,12 +98,6 @@ namespace SC_M4.Modules
 
 
 
-    public enum TypeAction
-    {
-        io_manual,
-        io_auto,
-        image
-    }
     public enum TypeImage
     {
         full,
