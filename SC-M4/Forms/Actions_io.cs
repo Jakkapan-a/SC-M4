@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SC_M4.Utilities;
 
 namespace SC_M4.Forms
 {
@@ -99,7 +100,7 @@ namespace SC_M4.Forms
                 _values = 0
             };
 
-            if (stateIO == TypeStateIO.Update)
+            if (stateIO == TypeState.Update)
             {
                 // Update
                 action_io.id = int.Parse(dgvIO.SelectedRows[0].Cells["id"].Value.ToString());
@@ -128,7 +129,7 @@ namespace SC_M4.Forms
             txtName.Text = "";
             txtHex.Text = "";
         }
-        private TypeStateIO stateIO = TypeStateIO.Create;
+        private TypeState stateIO = TypeState.Create;
         private void btnIOEdit_Click(object sender, EventArgs e)
         {
             // Get value from dgv
@@ -137,14 +138,14 @@ namespace SC_M4.Forms
                 // Set value to form
                 txtName.Text = dgvIO.SelectedRows[0].Cells["name"].Value.ToString();
                 txtHex.Text = dgvIO.SelectedRows[0].Cells["hex"].Value.ToString();
-                stateIO = TypeStateIO.Update;
+                stateIO = TypeState.Update;
                 btnIOSave.Text = "Update";
             }
         }
 
         private void dgvIO_SelectionChanged(object sender, EventArgs e)
         {
-            stateIO = TypeStateIO.Create;
+            stateIO = TypeState.Create;
             btnIOSave.Text = "Save";
             // Clear form
             txtName.Text = "";
@@ -168,9 +169,5 @@ namespace SC_M4.Forms
         }
     }
 
-    public enum TypeStateIO
-    {
-        Create,
-        Update
-    }
+    
 }

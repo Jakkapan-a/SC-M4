@@ -41,14 +41,14 @@ namespace SC_M4.Modules
 
         public void Save()
         {
-            string sql = "insert into items (model_id,name,index,created_at,updated_at) values (@model_id,@name,@index,@created_at,@updated_at)";
+            string sql = "insert into items (`model_id`,`name`,`index`,`created_at`,`updated_at`) values (@model_id,@name,@index,@created_at,@updated_at)";
             this.index = GetLastIndex() + 1;
             SQliteDataAccess.Execute(sql, CreateParameters());
         }
 
         public void Update()
         {
-            string sql = "update items set model_id = @model_id, name = @name, index = @index, updated_at = @updated_at where id = @id";
+            string sql = "update items set `model_id` = @model_id, `name` = @name, `index` = @index,`updated_at`= @updated_at where id = @id";
             SQliteDataAccess.Execute(sql, CreateParameters());
         }
 
@@ -89,7 +89,7 @@ namespace SC_M4.Modules
             parameters.Add("@name", name);
             return SQliteDataAccess.Query<Items>(sql, parameters);
         }
-        public bool IsExist(string name)
+        public static bool IsExist(string name)
         {
             string sql = "select * from items where name = @name";
             Dictionary<string, object> parameters = new Dictionary<string, object>();
@@ -97,12 +97,27 @@ namespace SC_M4.Modules
             List<Items> items = SQliteDataAccess.Query<Items>(sql, parameters);
             return items.Count > 0;
         }
+        public static bool IsExist(string name, int id)
+        {
+            string sql = "select * from items where name = @name and id != @id";
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@name", name);
+            parameters.Add("@id", id);
+            List<Items> items = SQliteDataAccess.Query<Items>(sql, parameters);
+            return items.Count > 0;
+        }
 
         public static int GetLastIndex()
         {
-            string sql = "select max(`index`) as `index` from items";
-            var result = SQliteDataAccess.Query<int>(sql, null).FirstOrDefault();
-            return result == null ? 0 : result;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+            try
+            {
+                string sql = "select max(`index`) as `index` from items";
+                return SQliteDataAccess.Query<int>(sql, null).FirstOrDefault();
+            }
+            catch
+            {
+                return 0;
+            }
         }
         public static Items Get(int id)
         {

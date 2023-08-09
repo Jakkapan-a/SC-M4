@@ -262,6 +262,12 @@
     <Compile Include="Forms\Rename.Designer.cs">
       <DependentUpon>Rename.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SearchLB.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SearchLB.Designer.cs">
+      <DependentUpon>SearchLB.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Select_X-Y.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -360,6 +366,9 @@
     <EmbeddedResource Include="Forms\Rename.resx">
       <DependentUpon>Rename.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SearchLB.resx">
+      <DependentUpon>SearchLB.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Select_X-Y.resx">
       <DependentUpon>Select_X-Y.cs</DependentUpon>
     </EmbeddedResource>
@@ -439,6 +448,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="layers.ico" />
+    <None Include="Resources\search1.png" />
+    <None Include="Resources\down_32.png" />
+    <None Include="Resources\up_32.png" />
     <None Include="Resources\edit_property_32.png" />
     <None Include="Resources\edit_property_16.png" />
     <None Include="Resources\delete_32.png" />

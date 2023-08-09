@@ -15,6 +15,12 @@ namespace SC_M4.Modules
         public string created_at { get; set;}
         public string updated_at { get; set;}
 
+        public static void CreateTable()
+        {
+            string sql = "CREATE TABLE IF NOT EXISTS `master_lb` (`id` INTEGER NOT NULL, `master_sw_id` INTEGER, `name` TEXT, `color_name` TEXT, `created_at` TEXT, `updated_at` TEXT, PRIMARY KEY(`id` AUTOINCREMENT));";
+            SQliteDataAccess.Execute(sql, null);
+        }
+
         public void Save()
         {
             string sql = "insert into master_lb (master_sw_id,name,color_name,created_at,updated_at) values (@master_sw_id,@name,@color_name,@created_at,@updated_at)";
@@ -45,6 +51,7 @@ namespace SC_M4.Modules
             parameters.Add("@id", id);
             SQliteDataAccess.Execute(sql, parameters);
         }
+        public static List<MasterLB> Get() => SQliteDataAccess.GetRow<MasterLB>("select * from master_lb order by id desc");
  
         public static List<MasterLB> GetMasterLB() => SQliteDataAccess.GetRow<MasterLB>("select * from master_lb order by id desc");
 

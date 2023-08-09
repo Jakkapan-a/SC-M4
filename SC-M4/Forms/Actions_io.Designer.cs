@@ -47,6 +47,8 @@
             this.btnRect = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.nServo = new System.Windows.Forms.NumericUpDown();
+            this.tServo = new System.Windows.Forms.TrackBar();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.radioButton5 = new System.Windows.Forms.RadioButton();
@@ -62,8 +64,6 @@
             this.rdTypeManual = new System.Windows.Forms.RadioButton();
             this.label1 = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
-            this.tServo = new System.Windows.Forms.TrackBar();
-            this.nServo = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -74,12 +74,12 @@
             this.groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nServo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tServo)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tServo)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nServo)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -311,6 +311,28 @@
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Servo Position";
             // 
+            // nServo
+            // 
+            this.nServo.Location = new System.Drawing.Point(294, 19);
+            this.nServo.Maximum = new decimal(new int[] {
+            180,
+            0,
+            0,
+            0});
+            this.nServo.Name = "nServo";
+            this.nServo.Size = new System.Drawing.Size(88, 20);
+            this.nServo.TabIndex = 1;
+            this.nServo.ValueChanged += new System.EventHandler(this.nServo_ValueChanged);
+            // 
+            // tServo
+            // 
+            this.tServo.Location = new System.Drawing.Point(6, 17);
+            this.tServo.Maximum = 180;
+            this.tServo.Name = "tServo";
+            this.tServo.Size = new System.Drawing.Size(291, 45);
+            this.tServo.TabIndex = 0;
+            this.tServo.ValueChanged += new System.EventHandler(this.tServo_ValueChanged);
+            // 
             // groupBox4
             // 
             this.groupBox4.Location = new System.Drawing.Point(8, 171);
@@ -477,28 +499,6 @@
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
             // 
-            // tServo
-            // 
-            this.tServo.Location = new System.Drawing.Point(6, 17);
-            this.tServo.Maximum = 180;
-            this.tServo.Name = "tServo";
-            this.tServo.Size = new System.Drawing.Size(291, 45);
-            this.tServo.TabIndex = 0;
-            this.tServo.ValueChanged += new System.EventHandler(this.tServo_ValueChanged);
-            // 
-            // nServo
-            // 
-            this.nServo.Location = new System.Drawing.Point(294, 19);
-            this.nServo.Maximum = new decimal(new int[] {
-            180,
-            0,
-            0,
-            0});
-            this.nServo.Name = "nServo";
-            this.nServo.Size = new System.Drawing.Size(88, 20);
-            this.nServo.TabIndex = 1;
-            this.nServo.ValueChanged += new System.EventHandler(this.nServo_ValueChanged);
-            // 
             // Actions_io
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -526,6 +526,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nServo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tServo)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -533,8 +535,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tServo)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nServo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

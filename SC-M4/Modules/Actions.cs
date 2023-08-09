@@ -16,14 +16,14 @@ namespace SC_M4.Modules
         public int servo { get; set; }
         public string image_name { get; set; }
         public int type_image { get; set; }
-        public int threshold_percent { get; set; }
+        public int threshold { get; set; }
         public int delay { get; set; }
         public int index { get; set; }
         public string created_at { get; set; }
         public string updated_at { get; set; }
 
         public static void CreateTable(){
-            string sql = "CREATE TABLE IF NOT EXISTS `actions` (`id` INTEGER NOT NULL, `item_id` INTEGER NOT NULL, `name` TEXT, `type` INTEGER NOT NULL, `action_io_id` INTEGER, `state` INTEGER , `auto_delay` INTEGER , `servo` INTEGER, `image_name` TEXT, `type_image` INTEGER , `threshold_percent` INTEGER, `delay` INTEGER,`index` INTEGER, `created_at` TEXT, `updated_at` TEXT, PRIMARY KEY(`id` AUTOINCREMENT));";
+            string sql = "CREATE TABLE IF NOT EXISTS `actions` (`id` INTEGER NOT NULL, `item_id` INTEGER NOT NULL, `name` TEXT, `type` INTEGER NOT NULL, `action_io_id` INTEGER, `state` INTEGER , `auto_delay` INTEGER , `servo` INTEGER, `image_name` TEXT, `type_image` INTEGER , `threshold` INTEGER, `delay` INTEGER,`index` INTEGER, `created_at` TEXT, `updated_at` TEXT, PRIMARY KEY(`id` AUTOINCREMENT));";
             SQliteDataAccess.Execute(sql, null);
         }
 
@@ -40,7 +40,7 @@ namespace SC_M4.Modules
                     { "@auto_delay", auto_delay },
                     { "@image_name", image_name },
                     { "@type_image", type_image },
-                    { "@threshold_percent", threshold_percent },
+                    { "@threshold", threshold },
                     { "@delay", delay },
                     { "@index", index },
                     { "@created_at", SQliteDataAccess.GetDateTimeNow() },
@@ -49,13 +49,13 @@ namespace SC_M4.Modules
         }
 
         public void Save(){
-            string sql = "insert into actions (item_id,name,type,action_io_id,state,auto_delay,image_name,type_image,threshold_percent,delay,created_at,updated_at) values (@item_id,@name,@type,@action_io_id,@state,@auto_delay,@image_name,@type_image,@threshold_percent,@delay,@created_at,@updated_at)";
+            string sql = "insert into actions (item_id,name,type,action_io_id,state,auto_delay,image_name,type_image,threshold,delay,created_at,updated_at) values (@item_id,@name,@type,@action_io_id,@state,@auto_delay,@image_name,@type_image,@threshold,@delay,@created_at,@updated_at)";
             this.index = GetLastIndex() + 1;
             SQliteDataAccess.Execute(sql, CreateParameters());
         }
 
         public void Update(){
-            string sql = "update actions set item_id = @item_id, name = @name, type = @type, action_io_id = @action_io_id, state = @state, auto_delay = @auto_delay, image_name = @image_name, type_image = @type_image, threshold_percent = @threshold_percent, delay = @delay, updated_at = @updated_at where id = @id";
+            string sql = "update actions set item_id = @item_id, name = @name, type = @type, action_io_id = @action_io_id, state = @state, auto_delay = @auto_delay, image_name = @image_name, type_image = @type_image, threshold = @threshold, delay = @delay, updated_at = @updated_at where id = @id";
             SQliteDataAccess.Execute(sql, CreateParameters());
         }
 
@@ -90,9 +90,16 @@ namespace SC_M4.Modules
         }
 
         public static int GetLastIndex(){
-            string sql = "select max(`index`) as `index` from actions";
-            var result = SQliteDataAccess.Query<int>(sql, null).FirstOrDefault();
-            return result==null?0:result;
+            try
+            {
+                string sql = "select max(`index`) as `index` from actions";
+                return SQliteDataAccess.Query<int>(sql, null).FirstOrDefault();
+            }
+            catch
+            {
+                return 0;
+            }
+
         }
 
         public static Actions GetUp(int id){

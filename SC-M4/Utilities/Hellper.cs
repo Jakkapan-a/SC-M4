@@ -9,7 +9,11 @@ using TClass;
 
 namespace SC_M4.Utilities
 {
-
+    public enum TypeState
+    {
+        Create,
+        Update
+    }
     public enum PageType
     {
         None,

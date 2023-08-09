@@ -90,6 +90,16 @@ namespace SC_M4.Modules
             parameters.Add("@name", name);
             return SQliteDataAccess.Query<Models>(sql, parameters).Count > 0;
         }
+        public static bool IsExist(string name, int id)
+        {
+            string sql = "select * from models where name = @name and id != @id";
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@name", name);
+            parameters.Add("@id", id);
+            return SQliteDataAccess.Query<Models>(sql, parameters).Count > 0;
+        }
+
+
     }
 
 
