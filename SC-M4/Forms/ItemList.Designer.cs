@@ -39,6 +39,8 @@
             this.txtName = new System.Windows.Forms.TextBox();
             this.dgvItems = new System.Windows.Forms.DataGridView();
             this.label2 = new System.Windows.Forms.Label();
+            this.btnIODown = new System.Windows.Forms.Button();
+            this.btnIOUp = new System.Windows.Forms.Button();
             this.btnIODelete = new System.Windows.Forms.Button();
             this.btnIOEdit = new System.Windows.Forms.Button();
             this.btnIONew = new System.Windows.Forms.Button();
@@ -46,8 +48,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.cbModels = new System.Windows.Forms.ComboBox();
             this.btnManage = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -96,8 +96,8 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.button2);
-            this.splitContainer1.Panel2.Controls.Add(this.button1);
+            this.splitContainer1.Panel2.Controls.Add(this.btnIODown);
+            this.splitContainer1.Panel2.Controls.Add(this.btnIOUp);
             this.splitContainer1.Panel2.Controls.Add(this.btnIODelete);
             this.splitContainer1.Panel2.Controls.Add(this.btnIOEdit);
             this.splitContainer1.Panel2.Controls.Add(this.btnIONew);
@@ -191,6 +191,7 @@
             this.dgvItems.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvItems.Size = new System.Drawing.Size(250, 299);
             this.dgvItems.TabIndex = 0;
+            this.dgvItems.SelectionChanged += new System.EventHandler(this.dgvItems_SelectionChanged);
             // 
             // label2
             // 
@@ -201,6 +202,28 @@
             this.label2.Size = new System.Drawing.Size(45, 16);
             this.label2.TabIndex = 0;
             this.label2.Text = "Items :";
+            // 
+            // btnIODown
+            // 
+            this.btnIODown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnIODown.BackgroundImage = global::SC_M4.Properties.Resources.down_32;
+            this.btnIODown.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnIODown.Location = new System.Drawing.Point(39, 360);
+            this.btnIODown.Name = "btnIODown";
+            this.btnIODown.Size = new System.Drawing.Size(28, 23);
+            this.btnIODown.TabIndex = 2;
+            this.btnIODown.UseVisualStyleBackColor = true;
+            // 
+            // btnIOUp
+            // 
+            this.btnIOUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnIOUp.BackgroundImage = global::SC_M4.Properties.Resources.up_32;
+            this.btnIOUp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnIOUp.Location = new System.Drawing.Point(6, 360);
+            this.btnIOUp.Name = "btnIOUp";
+            this.btnIOUp.Size = new System.Drawing.Size(27, 23);
+            this.btnIOUp.TabIndex = 2;
+            this.btnIOUp.UseVisualStyleBackColor = true;
             // 
             // btnIODelete
             // 
@@ -231,6 +254,7 @@
             this.btnIONew.TabIndex = 2;
             this.btnIONew.Text = "New";
             this.btnIONew.UseVisualStyleBackColor = true;
+            this.btnIONew.Click += new System.EventHandler(this.btnIONew_Click);
             // 
             // dgvIO
             // 
@@ -279,24 +303,6 @@
             this.btnManage.UseVisualStyleBackColor = true;
             this.btnManage.Click += new System.EventHandler(this.btnManage_Click);
             // 
-            // button1
-            // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.Location = new System.Drawing.Point(6, 360);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(27, 23);
-            this.button1.TabIndex = 2;
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button2.Location = new System.Drawing.Point(39, 360);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(28, 23);
-            this.button2.TabIndex = 2;
-            this.button2.UseVisualStyleBackColor = true;
-            // 
             // ItemList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -344,7 +350,7 @@
         private System.Windows.Forms.Button btnItemDown;
         private System.Windows.Forms.ComboBox cbModels;
         private System.Windows.Forms.Button btnManage;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnIODown;
+        private System.Windows.Forms.Button btnIOUp;
     }
 }

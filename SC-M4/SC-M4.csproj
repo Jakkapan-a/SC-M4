@@ -190,6 +190,12 @@
     <Compile Include="Forms\Actions_io.Designer.cs">
       <DependentUpon>Actions_io.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Camera.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Camera.Designer.cs">
+      <DependentUpon>Camera.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\CameraControls.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -329,6 +335,9 @@
     <Compile Include="Utilities\SelectionType.cs" />
     <EmbeddedResource Include="Forms\Actions_io.resx">
       <DependentUpon>Actions_io.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Camera.resx">
+      <DependentUpon>Camera.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CameraControls.resx">
       <DependentUpon>CameraControls.cs</DependentUpon>

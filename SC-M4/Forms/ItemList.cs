@@ -65,6 +65,7 @@ namespace SC_M4.Forms
                 btnItemDown.Enabled = true;
                 btnItemDelete.Enabled = true;
                 btnItemEdit.Enabled = true;
+                  btnIONew.Enabled = true;
             }
             else
             {
@@ -72,6 +73,7 @@ namespace SC_M4.Forms
                 btnItemDown.Enabled = false;
                 btnItemDelete.Enabled = false;
                 btnItemEdit.Enabled = false;
+                btnIONew.Enabled = false;
             }
 
             // Hide id column
@@ -82,6 +84,73 @@ namespace SC_M4.Forms
             dgvItems.Columns["name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             // Set width for date column
             dgvItems.Columns["Date"].Width = 100;
+
+        }
+
+        private void RenderDGV_IO(int item_id)
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("id", typeof(int));
+            dt.Columns.Add("No", typeof(int));
+            dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("Type", typeof(string));
+            dt.Columns.Add("Value", typeof(string));
+            dt.Columns.Add("Date", typeof(string));
+            int no = 0;
+            foreach (var item in Modules.Actions.GetListByItemId(item_id))
+            {
+                dt.Rows.Add(item.id, ++no, item.name, item.type, item.state, item.updated_at);
+            }
+
+            // Get old row selected
+            int oldRow = 0;
+            if (dgvIO.SelectedRows.Count > 0)
+            {
+                oldRow = dgvIO.SelectedRows[0].Index;
+            }
+
+            // Render data to dgv
+            dgvIO.DataSource = dt;
+
+            // Clear selection
+            dgvIO.ClearSelection();
+
+            // Select old row
+            if (dgvIO.Rows.Count > 0 && oldRow < dgvIO.Rows.Count)
+            {
+                dgvIO.Rows[oldRow].Selected = true;
+            }
+            else if (oldRow >= dgvIO.Rows.Count && dgvIO.Rows.Count > 0)
+            {
+                dgvIO.Rows[dgvIO.Rows.Count - 1].Selected = true;
+            }
+
+            // Enable/Disable button
+            if (dgvIO.Rows.Count > 0)
+            {
+                btnIOUp.Enabled = true;
+                btnIODown.Enabled = true;
+                btnIODelete.Enabled = true;
+                btnIOEdit.Enabled = true;
+            }
+            else
+            {
+                btnIOUp.Enabled = false;
+                btnIODown.Enabled = false;
+                btnIODelete.Enabled = false;
+                btnIOEdit.Enabled = false;
+            }
+
+            // Hide id column
+            dgvIO.Columns["id"].Visible = false;
+            // Hide No column
+            dgvIO.Columns["No"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            // Set width for name column
+            dgvIO.Columns["Name"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dgvIO.Columns["Type"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dgvIO.Columns["Value"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            // Set width for date column
+            dgvIO.Columns["Date"].Width = 100;
 
         }
         private TypeState typeStateItem = TypeState.Create;
@@ -261,7 +330,7 @@ namespace SC_M4.Forms
 
         private void btnItemDown_Click(object sender, EventArgs e)
         {
-             MoveItem(false);
+            MoveItem(false);
         }
 
         private void MoveItem(bool up)
@@ -297,5 +366,30 @@ namespace SC_M4.Forms
             RenderDGVItem(model_id);
         }
 
+        private void dgvItems_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgvItems.SelectedRows.Count > 0)
+            {
+                // Get item_id
+                int item_id = (int)dgvItems.SelectedRows[0].Cells["id"].Value;
+                // Render dgvIO
+                RenderDGV_IO(item_id);
+            }
+
+        }
+
+        private Actions_io actions_io;
+        private void btnIONew_Click(object sender, EventArgs e)
+        {
+            // Get item_id
+            if (dgvItems.SelectedRows.Count > 0)
+            {
+                int id = (int)dgvItems.SelectedRows[0].Cells["id"].Value;
+
+                actions_io?.Close();
+                actions_io = new Actions_io(id);
+                actions_io.Show();
+            }
+        }
     }
 }

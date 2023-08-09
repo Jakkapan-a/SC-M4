@@ -35,6 +35,8 @@
             // dgvModels
             // 
             this.dgvModels.AllowDrop = true;
+            this.dgvModels.AllowUserToAddRows = false;
+            this.dgvModels.AllowUserToDeleteRows = false;
             this.dgvModels.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));

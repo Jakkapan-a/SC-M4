@@ -13,11 +13,20 @@ namespace SC_M4.Forms
 {
     public partial class Actions_io : Form
     {
-        public Actions_io()
+        private int item_id = -1;
+        private TypeState typeState = TypeState.Create;
+        public Actions_io(int item_id, TypeState typeState = TypeState.Create)
         {
             InitializeComponent();
+            this.item_id = item_id;
+            this.typeState = typeState;
         }
 
+        private void Actions_io_Load(object sender, EventArgs e)
+        {
+            Modules.ActionIO.CreateTable();
+            RenderDGV_IO();
+        }
 
         private void nServo_ValueChanged(object sender, EventArgs e)
         {
@@ -35,12 +44,6 @@ namespace SC_M4.Forms
             {
                 nServo.Value = servo.Value;
             }
-        }
-
-        private void Actions_io_Load(object sender, EventArgs e)
-        {
-            Modules.ActionIO.CreateTable();
-            RenderDGV_IO();
         }
 
         private void RenderDGV_IO()
