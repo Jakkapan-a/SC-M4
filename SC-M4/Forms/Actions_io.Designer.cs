@@ -43,6 +43,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.nDelay = new System.Windows.Forms.NumericUpDown();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.nThreshold = new System.Windows.Forms.NumericUpDown();
+            this.label8 = new System.Windows.Forms.Label();
             this.btnLoadImage = new System.Windows.Forms.Button();
             this.btnRect = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -64,8 +66,6 @@
             this.rdTypeManual = new System.Windows.Forms.RadioButton();
             this.label1 = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
-            this.label8 = new System.Windows.Forms.Label();
-            this.nThreshold = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -74,6 +74,7 @@
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nDelay)).BeginInit();
             this.groupBox7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nThreshold)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nServo)).BeginInit();
@@ -82,7 +83,6 @@
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nAutoDelay)).BeginInit();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nThreshold)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -277,6 +277,36 @@
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Image";
             // 
+            // nThreshold
+            // 
+            this.nThreshold.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.nThreshold.Location = new System.Drawing.Point(275, 36);
+            this.nThreshold.Maximum = new decimal(new int[] {
+            2500,
+            0,
+            0,
+            0});
+            this.nThreshold.Name = "nThreshold";
+            this.nThreshold.Size = new System.Drawing.Size(156, 20);
+            this.nThreshold.TabIndex = 6;
+            this.nThreshold.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // label8
+            // 
+            this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(272, 19);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(54, 13);
+            this.label8.TabIndex = 5;
+            this.label8.Text = "Threshold";
+            // 
             // btnLoadImage
             // 
             this.btnLoadImage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -297,6 +327,7 @@
             this.btnRect.TabIndex = 4;
             this.btnRect.Text = "Rect";
             this.btnRect.UseVisualStyleBackColor = true;
+            this.btnRect.Click += new System.EventHandler(this.btnRect_Click);
             // 
             // pictureBox1
             // 
@@ -512,36 +543,6 @@
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // label8
-            // 
-            this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(272, 19);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(54, 13);
-            this.label8.TabIndex = 5;
-            this.label8.Text = "Threshold";
-            // 
-            // nThreshold
-            // 
-            this.nThreshold.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.nThreshold.Location = new System.Drawing.Point(275, 36);
-            this.nThreshold.Maximum = new decimal(new int[] {
-            2500,
-            0,
-            0,
-            0});
-            this.nThreshold.Name = "nThreshold";
-            this.nThreshold.Size = new System.Drawing.Size(156, 20);
-            this.nThreshold.TabIndex = 6;
-            this.nThreshold.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            // 
             // Actions_io
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -568,6 +569,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nDelay)).EndInit();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nThreshold)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
@@ -580,7 +582,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nAutoDelay)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nThreshold)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

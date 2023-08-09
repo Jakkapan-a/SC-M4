@@ -543,6 +543,19 @@ namespace SC_M4.Forms
             actions.threshold = (int)nThreshold.Value;
             return "Image " + fileNameImage;
         }
+        private Forms.RectangleImage rectangleImage;
+        private void btnRect_Click(object sender, EventArgs e)
+        {
+            if(pictureBox1.Image == null)
+            {
+                MessageBox.Show("Please choose image", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            rectangleImage?.Close();
+            rectangleImage = new RectangleImage(action.id);
+            rectangleImage.Show();
+        }
     }
 
 }

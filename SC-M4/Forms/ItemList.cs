@@ -24,6 +24,8 @@ namespace SC_M4.Forms
             Modules.Actions.CreateTable();
             Modules.ActionIO.CreateTable();
             Modules.Items.CreateTable();
+            Modules.Rect.CreateTable();
+
             RenderCBModels();
             // RenderDGVItem();
         }

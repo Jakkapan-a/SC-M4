@@ -14,7 +14,7 @@ namespace SC_M4.Modules
         public int y { get; set; }
         public int width { get; set; }
         public int height { get; set; }
-        public int threshold_percent { get; set; }
+        public int threshold { get; set; }
         public string created_at { get; set; }
         public string updated_at { get; set; }
 
@@ -27,7 +27,7 @@ namespace SC_M4.Modules
                 "`y`\tINTEGER NOT NULL," +
                 "`width`\tINTEGER NOT NULL," +
                 "`height`\tINTEGER NOT NULL," +
-                "`threshold_percent`\tINTEGER NOT NULL," +
+                "`threshold`\tINTEGER NOT NULL," +
                 "`created_at`\tTEXT," +
                 "`updated_at`\tTEXT," +
                 " PRIMARY KEY(`id` AUTOINCREMENT)" +
@@ -44,20 +44,20 @@ namespace SC_M4.Modules
                     { "@y", y },
                     { "@width", width },
                     { "@height", height },
-                    { "@threshold_percent", threshold_percent },
+                    { "@threshold", threshold },
                     { "@created_at", SQliteDataAccess.GetDateTimeNow() },
                     { "@updated_at", SQliteDataAccess.GetDateTimeNow() }
                 };
         }
         public void Save()
         {
-            string sql = "insert into rect (action_id,x,y,width,height,threshold_percent,created_at,updated_at) values (@action_id,@x,@y,@width,@height,@threshold_percent,@created_at,@updated_at)";
+            string sql = "insert into rect (action_id,x,y,width,height,threshold,created_at,updated_at) values (@action_id,@x,@y,@width,@height,@threshold,@created_at,@updated_at)";
             SQliteDataAccess.Execute(sql, CreateParameters());
         }
 
         public void Update()
         {
-            string sql = "update rect set action_id = @action_id, x = @x, y = @y, width = @width, height = @height, threshold_percent = @threshold_percent, updated_at = @updated_at where id = @id";
+            string sql = "update rect set action_id = @action_id, x = @x, y = @y, width = @width, height = @height, threshold = @threshold, updated_at = @updated_at where id = @id";
             SQliteDataAccess.Execute(sql, CreateParameters());
         }
 
@@ -71,9 +71,14 @@ namespace SC_M4.Modules
         {
             string sql = "select * from rect order by id desc limit 1000";
             return SQliteDataAccess.Query<Rect>(sql, null);
-        } 
-
-        public static List<Rect> Get(int action_id)
+        }
+        public static Rect Get(int id)
+        {
+            string sql = "select * from rect where id = @id";
+            Dictionary<string, object> parameters = new Dictionary<string, object> { { "@id", id } };
+            return SQliteDataAccess.Query<Rect>(sql, parameters).FirstOrDefault();
+        }
+        public static List<Rect> GetByAction(int action_id)
         {
             string sql = "select * from rect where action_id = @action_id order by id desc limit 1000";
             Dictionary<string, object> parameters = new Dictionary<string, object> { { "@action_id", action_id } };
