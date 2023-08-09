@@ -40,6 +40,7 @@ namespace SC_M4.Modules
                     { "@auto_delay", auto_delay },
                     { "@image_name", image_name },
                     { "@type_image", type_image },
+                    { "@servo",servo },
                     { "@threshold", threshold },
                     { "@delay", delay },
                     { "@index", index },
@@ -49,13 +50,13 @@ namespace SC_M4.Modules
         }
 
         public void Save(){
-            string sql = "insert into actions (item_id,name,type,action_io_id,state,auto_delay,image_name,type_image,threshold,delay,`index`,created_at,updated_at) values (@item_id,@name,@type,@action_io_id,@state,@auto_delay,@image_name,@type_image,@threshold,@delay,@index,@created_at,@updated_at)";
+            string sql = "insert into actions (item_id,name,type,action_io_id,state,auto_delay,image_name,servo,type_image,threshold,delay,`index`,created_at,updated_at) values (@item_id,@name,@type,@action_io_id,@state,@auto_delay,@image_name,@servo,@type_image,@threshold,@delay,@index,@created_at,@updated_at)";
             this.index = GetLastIndex() + 1;
             SQliteDataAccess.Execute(sql, CreateParameters());
         }
 
         public void Update(){
-            string sql = "update actions set item_id = @item_id, name = @name, type = @type, action_io_id = @action_io_id, state = @state, auto_delay = @auto_delay, image_name = @image_name, type_image = @type_image, threshold = @threshold, delay = @delay,`index` = @index, updated_at = @updated_at where id = @id";
+            string sql = "update actions set item_id = @item_id, name = @name, type = @type, action_io_id = @action_io_id, state = @state, auto_delay = @auto_delay, image_name = @image_name, servo=@servo, type_image = @type_image, threshold = @threshold, delay = @delay,`index` = @index, updated_at = @updated_at where id = @id";
             SQliteDataAccess.Execute(sql, CreateParameters());
         }
 
@@ -63,7 +64,7 @@ namespace SC_M4.Modules
             string sql = "delete from actions where id = @id";
             SQliteDataAccess.Execute(sql, CreateParameters());
         }  
-         public void Delete(int id){
+         public static void Delete(int id){
             string sql = "delete from actions where id = @id";
             SQliteDataAccess.Execute(sql, new Dictionary<string, object> { { "@id", id } });
             

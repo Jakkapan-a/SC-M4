@@ -236,6 +236,7 @@
             this.btnIODelete.TabIndex = 2;
             this.btnIODelete.Text = "Delete";
             this.btnIODelete.UseVisualStyleBackColor = true;
+            this.btnIODelete.Click += new System.EventHandler(this.btnIODelete_Click);
             // 
             // btnIOEdit
             // 
@@ -246,6 +247,7 @@
             this.btnIOEdit.TabIndex = 2;
             this.btnIOEdit.Text = "Edit";
             this.btnIOEdit.UseVisualStyleBackColor = true;
+            this.btnIOEdit.Click += new System.EventHandler(this.btnIOEdit_Click);
             // 
             // btnIONew
             // 

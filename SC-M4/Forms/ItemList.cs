@@ -405,9 +405,14 @@ namespace SC_M4.Forms
 
                 actions_io?.Close();
                 actions_io = new Actions_io(id);
-                actions_io.Show();
                 actions_io.FormClosed += Actions_io_FormClosed;
+                actions_io.Show();
             }
+        }
+
+        private void Actions_io_OnSave()
+        {
+          
         }
 
         private void Actions_io_FormClosed(object sender, FormClosedEventArgs e)
@@ -462,6 +467,29 @@ namespace SC_M4.Forms
             }
 
             RenderDGV_IO(item_id);
+        }
+
+        private void btnIOEdit_Click(object sender, EventArgs e)
+        {
+            actions_io?.Close();
+            int io_id = (int)dgvIO.SelectedRows[0].Cells["id"].Value;
+            actions_io = new Actions_io(io_id, TypeState.Update);
+            actions_io.FormClosed += Actions_io_FormClosed;
+            actions_io.Show();
+        }
+
+        private void btnIODelete_Click(object sender, EventArgs e)
+        {
+            // Ask user to confirm
+            DialogResult dialogResult = MessageBox.Show("Are you sure?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dialogResult == DialogResult.Yes)
+            {
+                // Set value to form
+                int io_id = (int)dgvIO.SelectedRows[0].Cells["id"].Value;
+                Modules.Actions.Delete(io_id);
+                int item_id = (int)dgvItems.SelectedRows[0].Cells["id"].Value;
+                RenderDGV_IO(item_id);
+            }
         }
     }
 }
