@@ -21,6 +21,8 @@ namespace SC_M4.Forms
 
         private void ItemList_Load(object sender, EventArgs e)
         {
+            Modules.Actions.CreateTable();
+            Modules.ActionIO.CreateTable();
             Modules.Items.CreateTable();
             RenderCBModels();
             // RenderDGVItem();
@@ -65,7 +67,7 @@ namespace SC_M4.Forms
                 btnItemDown.Enabled = true;
                 btnItemDelete.Enabled = true;
                 btnItemEdit.Enabled = true;
-                  btnIONew.Enabled = true;
+                btnIONew.Enabled = true;
             }
             else
             {
@@ -99,7 +101,7 @@ namespace SC_M4.Forms
             int no = 0;
             foreach (var item in Modules.Actions.GetListByItemId(item_id))
             {
-                dt.Rows.Add(item.id, ++no, item.name, item.type, item.state, item.updated_at);
+                dt.Rows.Add(item.id, ++no, item.name, GetTypeAction((TypeAction)item.type), item.state, item.updated_at);
             }
 
             // Get old row selected
@@ -152,6 +154,21 @@ namespace SC_M4.Forms
             // Set width for date column
             dgvIO.Columns["Date"].Width = 100;
 
+        }
+
+        private string GetTypeAction(TypeAction type)
+        {
+            switch (type)
+            {
+                case TypeAction.Auto:
+                    return "Auto";
+                case TypeAction.Manual:
+                    return "Manual";
+                case TypeAction.Image:
+                    return "Image";
+                default:
+                    return "Servo";
+            }
         }
         private TypeState typeStateItem = TypeState.Create;
 
@@ -389,7 +406,62 @@ namespace SC_M4.Forms
                 actions_io?.Close();
                 actions_io = new Actions_io(id);
                 actions_io.Show();
+                actions_io.FormClosed += Actions_io_FormClosed;
             }
+        }
+
+        private void Actions_io_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (dgvItems.SelectedRows.Count > 0)
+            {
+                // Get item_id
+                int item_id = (int)dgvItems.SelectedRows[0].Cells["id"].Value;
+                // Render dgvIO
+                RenderDGV_IO(item_id);
+            }
+        }
+
+        private void btnIOUp_Click(object sender, EventArgs e)
+        {
+            MoveIO(true);
+        }
+
+        private void btnIODown_Click(object sender, EventArgs e)
+        {
+            MoveIO(false);
+        }
+
+        private void MoveIO(bool up){
+            // Ensure a row is selected
+            if (dgvIO.SelectedRows.Count == 0) return;
+
+            int rowIndex = dgvIO.SelectedRows[0].Index;
+
+            // If selected row is first row and moving up, or last row and moving down
+            if ((rowIndex == 0 && up) || (rowIndex == dgvIO.Rows.Count - 1 && !up))
+            {
+                return;
+            }
+
+            // Set value to form
+            int io_id = (int)dgvIO.SelectedRows[0].Cells["id"].Value;
+            int item_id = (int)dgvItems.SelectedRows[0].Cells["id"].Value;
+            if (up)
+            {
+                // Set selected row to previous row
+                dgvIO.Rows[rowIndex - 1].Selected = true;
+                // Move item up
+                Modules.Actions.SetUp(io_id);
+            }
+            else
+            {
+                // Set selected row to next row
+                dgvIO.Rows[rowIndex + 1].Selected = true;
+                // Move item down
+                Modules.Actions.SetDown(io_id);
+            }
+
+            RenderDGV_IO(item_id);
         }
     }
 }

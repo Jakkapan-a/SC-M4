@@ -325,6 +325,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\ColorName.cs" />
     <Compile Include="Utilities\Colors.cs" />
+    <Compile Include="Utilities\CopyFile.cs" />
     <Compile Include="Utilities\GrayBMP_File.cs" />
     <Compile Include="Utilities\Hellper.cs" />
     <Compile Include="Utilities\ImageConverter.cs" />

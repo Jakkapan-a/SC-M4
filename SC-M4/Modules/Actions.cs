@@ -15,7 +15,7 @@ namespace SC_M4.Modules
         public int auto_delay { get; set; }
         public int servo { get; set; }
         public string image_name { get; set; }
-        public int type_image { get; set; }
+        public int type_image { get; set; } // Not use
         public int threshold { get; set; }
         public int delay { get; set; }
         public int index { get; set; }
@@ -49,13 +49,13 @@ namespace SC_M4.Modules
         }
 
         public void Save(){
-            string sql = "insert into actions (item_id,name,type,action_io_id,state,auto_delay,image_name,type_image,threshold,delay,created_at,updated_at) values (@item_id,@name,@type,@action_io_id,@state,@auto_delay,@image_name,@type_image,@threshold,@delay,@created_at,@updated_at)";
+            string sql = "insert into actions (item_id,name,type,action_io_id,state,auto_delay,image_name,type_image,threshold,delay,`index`,created_at,updated_at) values (@item_id,@name,@type,@action_io_id,@state,@auto_delay,@image_name,@type_image,@threshold,@delay,@index,@created_at,@updated_at)";
             this.index = GetLastIndex() + 1;
             SQliteDataAccess.Execute(sql, CreateParameters());
         }
 
         public void Update(){
-            string sql = "update actions set item_id = @item_id, name = @name, type = @type, action_io_id = @action_io_id, state = @state, auto_delay = @auto_delay, image_name = @image_name, type_image = @type_image, threshold = @threshold, delay = @delay, updated_at = @updated_at where id = @id";
+            string sql = "update actions set item_id = @item_id, name = @name, type = @type, action_io_id = @action_io_id, state = @state, auto_delay = @auto_delay, image_name = @image_name, type_image = @type_image, threshold = @threshold, delay = @delay,`index` = @index, updated_at = @updated_at where id = @id";
             SQliteDataAccess.Execute(sql, CreateParameters());
         }
 
@@ -70,7 +70,7 @@ namespace SC_M4.Modules
         }
 
         public static List<Actions> GetList(){
-            string sql = "select * from actions order by id desc";
+            string sql = "select * from actions order by `index` asc";
             return SQliteDataAccess.Query<Actions>(sql, null);
         }
 
@@ -80,7 +80,7 @@ namespace SC_M4.Modules
         }
 
         public static List<Actions> GetListByItemId(int item_id){
-            string sql = "select * from actions where item_id = @item_id order by id desc";
+            string sql = "select * from actions where item_id = @item_id order by `index` asc";
             return SQliteDataAccess.Query<Actions>(sql, new Dictionary<string, object> { { "@item_id", item_id } });
         }
 

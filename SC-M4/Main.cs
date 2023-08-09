@@ -226,7 +226,8 @@ namespace SC_M4
         {
             var videoDevices = new List<DsDevice>(DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice));
             cbDriveCam01.Items.Clear();
-            cbDriveCam02.Items.Clear();            foreach (DsDevice device in videoDevices)
+            cbDriveCam02.Items.Clear();            
+            foreach (DsDevice device in videoDevices)
             {
                 cbDriveCam01.Items.Add(device.Name);
                 cbDriveCam02.Items.Add(device.Name);

@@ -213,6 +213,7 @@
             this.btnIODown.Size = new System.Drawing.Size(28, 23);
             this.btnIODown.TabIndex = 2;
             this.btnIODown.UseVisualStyleBackColor = true;
+            this.btnIODown.Click += new System.EventHandler(this.btnIODown_Click);
             // 
             // btnIOUp
             // 
@@ -224,6 +225,7 @@
             this.btnIOUp.Size = new System.Drawing.Size(27, 23);
             this.btnIOUp.TabIndex = 2;
             this.btnIOUp.UseVisualStyleBackColor = true;
+            this.btnIOUp.Click += new System.EventHandler(this.btnIOUp_Click);
             // 
             // btnIODelete
             // 

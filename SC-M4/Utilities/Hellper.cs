@@ -14,6 +14,13 @@ namespace SC_M4.Utilities
         Create,
         Update
     }
+    public enum TypeAction
+    {
+        Manual = 0,
+        Auto = 1,
+        Image = 2,
+        Servo = 3
+    }
     public enum PageType
     {
         None,

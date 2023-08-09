@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,8 +25,20 @@ namespace SC_M4.Forms
 
         private void Actions_io_Load(object sender, EventArgs e)
         {
-            Modules.ActionIO.CreateTable();
+            
             RenderDGV_IO();
+
+
+            btnRect.Enabled = false;
+
+            rdOff.Enabled = false;
+            rdOn.Enabled = false;
+            nAutoDelay.Enabled = false;
+            btnLoadImage.Enabled = false;
+            btnRect.Enabled = false;
+            tServo.Enabled = false;
+            nServo.Enabled = false;
+            nThreshold.Enabled = false;
         }
 
         private void nServo_ValueChanged(object sender, EventArgs e)
@@ -170,7 +183,137 @@ namespace SC_M4.Forms
                 }
             }
         }
-    }
+        private Camera camera;
+        private void btnLoadImage_Click(object sender, EventArgs e)
+        {
+            camera?.Close();
+            camera = new Camera();
+            camera.Show();
+            camera.OnSave += Camera_OnSave;
+        }
+        private string fileNameImage = string.Empty;
+        private void Camera_OnSave(string fileName)
+        {
+            fileNameImage = fileName;
+            string path = Path.Combine(Properties.Resources.path_images, fileName);
+            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+            {
+                pictureBox1.Image?.Dispose();
+                pictureBox1.Image = Image.FromStream(fs);
+            }
+        }
 
-    
+        private void type_Checked(object sender, EventArgs e)
+        {
+            var radioButton = (RadioButton)sender;
+
+            rdOff.Enabled = false;
+            rdOn.Enabled = false;
+            nAutoDelay.Enabled = false;
+            btnLoadImage.Enabled = false;
+            btnRect.Enabled = false;
+            tServo.Enabled = false;
+            nServo.Enabled = false;
+            nThreshold.Enabled = false;
+
+            if (radioButton.Checked && radioButton == rdTypeManual)
+            {
+                rdOff.Enabled = true;
+                rdOn.Enabled = true;
+            }
+            else if (radioButton.Checked && radioButton == rdTypeAuto)
+            {
+                nAutoDelay.Enabled = true;
+            }
+            else if (radioButton.Checked && radioButton == rdTypeImage)
+            {
+                btnLoadImage.Enabled = true;
+                btnRect.Enabled = true;
+                nThreshold.Enabled = true;
+
+                if (typeState == TypeState.Create)
+                {
+                    btnRect.Enabled = false;
+                }
+                else if (typeState == TypeState.Update)
+                {
+                    btnRect.Enabled = true;
+                }
+            }
+            else if (radioButton.Checked && radioButton == rdTypeServo)
+            {
+                tServo.Enabled = true;
+                nServo.Enabled = true;
+            }
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            Modules.Actions  actions = new Modules.Actions();
+            if (typeState == TypeState.Create)
+            {
+                string name_details = string.Empty;
+                // Validate rdType
+                if (!rdTypeManual.Checked && !rdTypeAuto.Checked && !rdTypeImage.Checked && !rdTypeServo.Checked)
+                {
+                    MessageBox.Show("Please choose type", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (rdTypeManual.Checked || rdTypeAuto.Checked)
+                {
+                    // Get id action IO
+                    int id  =  int.Parse(dgvIO.SelectedRows[0].Cells["id"].Value.ToString());
+                    actions.action_io_id = id;
+
+                    if(rdTypeManual.Checked){
+                        // Validate dgvIO selected
+                        if (dgvIO.SelectedRows.Count == 0)
+                        {
+                            MessageBox.Show("Please choose IO", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        if (!rdOn.Checked && !rdOff.Checked)
+                        {
+                            MessageBox.Show("Please choose state", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        actions.type = (int)TypeAction.Manual;
+                        actions.state = rdOn.Checked ? 1 : 0;
+                        name_details = "Manual " + (actions.state == 1 ? "On" : "Off") + " " + dgvIO.SelectedRows[0].Cells["name"].Value.ToString() + " " + dgvIO.SelectedRows[0].Cells["hex"].Value.ToString();
+                    }
+                    else if(rdTypeAuto.Checked){
+                        actions.type = (int)TypeAction.Auto;
+                        actions.auto_delay = (int)nAutoDelay.Value;
+                        name_details = "Auto " + actions.auto_delay + "s " + dgvIO.SelectedRows[0].Cells["name"].Value.ToString() + " " + dgvIO.SelectedRows[0].Cells["hex"].Value.ToString();
+                    }
+                }else if(rdTypeServo.Checked){
+                    actions.type = (int)TypeAction.Servo;
+                    actions.servo = (int)nServo.Value;
+                    name_details = "Servo " + actions.servo;
+                }else if(rdTypeImage.Checked){
+                    // Validate image selected
+                    if (string.IsNullOrEmpty(fileNameImage))
+                    {
+                        MessageBox.Show("Please choose image", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    actions.type = (int)TypeAction.Image;
+                    actions.image_name = fileNameImage;
+                    actions.type_image = 0;
+                    actions.threshold = (int)nThreshold.Value;
+                    name_details = "Image " + fileNameImage;
+                }
+                actions.item_id = item_id;
+                actions.name = name_details;
+                actions.delay = (int)nDelay.Value;
+                actions.Save();
+            }
+            else if (typeState == TypeState.Update)
+            {
+                
+            }
+            this.Close();
+        }
+    }
+   
 }
