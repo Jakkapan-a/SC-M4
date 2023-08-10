@@ -114,7 +114,7 @@ namespace SC_M4.Forms
                     g.DrawImage(image, 0, 0);
                     for (int i = 0; i < rects.Count; i++)
                     {
-                        var item = rects[i];            
+                        var item = rects[i];
                         Rectangle rectangle = new Rectangle(item.x, item.y, item.width, item.height);
                         RenderRectangle(g, rectangle, oldRow == i);
                     }
@@ -127,21 +127,32 @@ namespace SC_M4.Forms
         private TypeState typeState = TypeState.Create;
         private void btnSave_Click(object sender, EventArgs e)
         {
-            Rectangle rectangle = scrollablePictureBox1.GetRect();
-            if (rectangle == Rectangle.Empty)
-            {
-                MessageBox.Show("Please select rectangle");
-                return;
-            }
 
             // Clear Rectangle
             scrollablePictureBox1.Refresh();
             if (typeState == TypeState.Update)
             {
+                if (dgvRect.SelectedRows.Count == 0) return;
+                int id = (int)dgvRect.SelectedRows[0].Cells["id"].Value;
 
+                Rect rect = Rect.Get(id);
+                if (rect == null)
+                {
+                    MessageBox.Show("Not found rect");
+                    return;
+                }
+                rect.threshold = (int)nThreshold.Value;
+                rect.Save();
             }
             else if (typeState == TypeState.Create)
             {
+                Rectangle rectangle = scrollablePictureBox1.GetRect();
+                if (rectangle == Rectangle.Empty)
+                {
+                    MessageBox.Show("Please select rectangle");
+                    return;
+                }
+
                 Rect rect = new Rect();
                 rect.action_id = id;
                 rect.x = rectangle.X;
@@ -151,7 +162,7 @@ namespace SC_M4.Forms
                 rect.threshold = (int)nThreshold.Value;
                 rect.Save();
             }
-            
+
             RandersDGV_Rect(id);
         }
 
@@ -161,7 +172,7 @@ namespace SC_M4.Forms
             btnSave.Text = "Create";
             DrawRectanglesOnImage();
         }
-
+        private bool IsEdit = false;
         private void btnEdit_Click(object sender, EventArgs e)
         {
             if (dgvRect.SelectedRows.Count == 0) return;
@@ -173,12 +184,34 @@ namespace SC_M4.Forms
                 MessageBox.Show("Not found rect");
                 return;
             }
-
+            IsEdit = true;
             nThreshold.Value = rect.threshold;
             typeState = TypeState.Update;
             btnSave.Text = "Update";
 
-            RandersDGV_Rect(this.id);
+            //RandersDGV_Rect(this.id);
+            IsEdit = false;
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (dgvRect.SelectedRows.Count == 0) return;
+
+            // Ask for confirmation
+            DialogResult dialogResult = MessageBox.Show("Are you sure you want to delete?", "Delete", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                int id = (int)dgvRect.SelectedRows[0].Cells["id"].Value;
+
+                Rect rect = Rect.Get(id);
+                if (rect == null)
+                {
+                    MessageBox.Show("Not found rect");
+                    return;
+                }
+                rect.Delete();
+                RandersDGV_Rect(this.id);
+            }
         }
     }
 }
