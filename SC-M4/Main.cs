@@ -44,6 +44,7 @@ namespace SC_M4
         public Main()
         {
             InitializeComponent();
+            InitializeSerial();
         }
 
         public TCapture.Capture capture_1;
@@ -960,68 +961,18 @@ namespace SC_M4
             masterColors = new MasterColors();
             masterColors.Show();
         }
-    }
 
-    public static class OcrProcessor
-    {
-        public static IReadOnlyList<Language> GetOcrLangList()
+        private ItemList itemList;
+        private void sTEPTESTToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            return OcrEngine.AvailableRecognizerLanguages;
+            itemList?.Close();
+            itemList = new ItemList();
+            itemList.Show();
         }
 
-        public static async Task<List<string>> GetText(SoftwareBitmap imageItem, Language SelectedLang)
+        private void btnSearch_Click(object sender, EventArgs e)
         {
-            //check item is null
-            //check no selectedLang
-            //check image is too large
-            if (imageItem == null ||
-                SelectedLang == null ||
-                imageItem.PixelWidth > OcrEngine.MaxImageDimension ||
-                imageItem.PixelHeight > OcrEngine.MaxImageDimension
-                )
-            {
-                return new List<string> { "" };
-            }
-
-
-            //check ocr image exist
-            var ocrEngine = OcrEngine.TryCreateFromLanguage(SelectedLang);
-            if (ocrEngine == null)
-            {
-                return new List<string> { "" };
-            }
-
-
-            var ocrResult = await ocrEngine.RecognizeAsync(imageItem);
-
-
-            List<string> textList = new List<string>() { };
-            foreach (var line in ocrResult.Lines)
-            {
-                textList.Add(line.Text);
-            }
-            return textList;
-        }
-        public async static Task<OcrResult> GetOcrResultFromBitmap(Bitmap scaledBitmap, Language selectedLanguage)
-        {
-            using (MemoryStream memory = new MemoryStream())
-            {
-                scaledBitmap.Save(memory, ImageFormat.Bmp);
-                memory.Position = 0;
-
-                BitmapDecoder bmpDecoder = await BitmapDecoder.CreateAsync(memory.AsRandomAccessStream());
-                SoftwareBitmap softwareBmp = await bmpDecoder.GetSoftwareBitmapAsync();
-
-                OcrEngine ocrEngine = OcrEngine.TryCreateFromLanguage(selectedLanguage);
-
-                // Run the RecognizeAsync call in a separate thread to allow message pumping
-                OcrResult result = await Task.Run(async () => await ocrEngine.RecognizeAsync(softwareBmp));
-                scaledBitmap.Dispose();
-                softwareBmp.Dispose();
-                ocrEngine = null;
-                return result;
-            }
+            SerialCommand(templateData["Query_Mode"]);
         }
     }
-
 }

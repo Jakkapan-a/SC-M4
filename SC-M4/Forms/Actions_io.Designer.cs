@@ -33,7 +33,6 @@
             this.btnIODelete = new System.Windows.Forms.Button();
             this.btnIOEdit = new System.Windows.Forms.Button();
             this.btnIOSave = new System.Windows.Forms.Button();
-            this.txtHex = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
@@ -66,6 +65,7 @@
             this.rdTypeManual = new System.Windows.Forms.RadioButton();
             this.label1 = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
+            this.nPIN = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -83,6 +83,7 @@
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nAutoDelay)).BeginInit();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nPIN)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -104,10 +105,10 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.nPIN);
             this.splitContainer1.Panel1.Controls.Add(this.btnIODelete);
             this.splitContainer1.Panel1.Controls.Add(this.btnIOEdit);
             this.splitContainer1.Panel1.Controls.Add(this.btnIOSave);
-            this.splitContainer1.Panel1.Controls.Add(this.txtHex);
             this.splitContainer1.Panel1.Controls.Add(this.label7);
             this.splitContainer1.Panel1.Controls.Add(this.label6);
             this.splitContainer1.Panel1.Controls.Add(this.txtName);
@@ -161,24 +162,15 @@
             this.btnIOSave.UseVisualStyleBackColor = true;
             this.btnIOSave.Click += new System.EventHandler(this.btnIOSave_Click);
             // 
-            // txtHex
-            // 
-            this.txtHex.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtHex.Location = new System.Drawing.Point(45, 407);
-            this.txtHex.Name = "txtHex";
-            this.txtHex.Size = new System.Drawing.Size(99, 20);
-            this.txtHex.TabIndex = 1;
-            // 
             // label7
             // 
             this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(7, 410);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(32, 13);
+            this.label7.Size = new System.Drawing.Size(31, 13);
             this.label7.TabIndex = 1;
-            this.label7.Text = "Hex :";
+            this.label7.Text = "PIN :";
             // 
             // label6
             // 
@@ -543,6 +535,18 @@
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
+            // nPIN
+            // 
+            this.nPIN.Location = new System.Drawing.Point(45, 407);
+            this.nPIN.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nPIN.Name = "nPIN";
+            this.nPIN.Size = new System.Drawing.Size(100, 20);
+            this.nPIN.TabIndex = 5;
+            // 
             // Actions_io
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -582,6 +586,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nAutoDelay)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nPIN)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -616,7 +621,6 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button btnLoadImage;
         private System.Windows.Forms.Button btnRect;
-        private System.Windows.Forms.TextBox txtHex;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txtName;
@@ -627,5 +631,6 @@
         private System.Windows.Forms.NumericUpDown nServo;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.NumericUpDown nThreshold;
+        private System.Windows.Forms.NumericUpDown nPIN;
     }
 }

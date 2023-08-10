@@ -330,6 +330,7 @@
     <Compile Include="OCR\OCR.cs" />
     <Compile Include="OCR\OCRImageEntity.cs" />
     <Compile Include="OCR\OCRImages.cs" />
+    <Compile Include="OCR\OcrProcessor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\ColorName.cs" />

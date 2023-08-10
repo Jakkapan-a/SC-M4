@@ -19,7 +19,8 @@ namespace SC_M4.Utilities
         Manual = 0,
         Auto = 1,
         Image = 2,
-        Servo = 3
+        Servo = 3,
+        None = 4,
     }
     public enum PageType
     {

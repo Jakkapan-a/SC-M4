@@ -17,7 +17,7 @@ namespace SC_M4
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ItemList());
+            Application.Run(new Main());
         }
     }
 }

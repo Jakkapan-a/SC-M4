@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "array": "cpp",
+        "ranges": "cpp",
+        "span": "cpp",
+        "vector": "cpp",
+        "xstring": "cpp",
+        "xutility": "cpp",
+        "bitset": "cpp",
+        "deque": "cpp",
+        "sstream": "cpp",
+        "string": "cpp",
+        "valarray": "cpp"
+    }
+}

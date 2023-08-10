@@ -107,13 +107,13 @@ namespace SC_M4.Forms
             dt.Columns.Add("id", typeof(int));
             dt.Columns.Add("No", typeof(int));
             dt.Columns.Add("name", typeof(string));
-            dt.Columns.Add("Hex", typeof(string));
+            dt.Columns.Add("Pin", typeof(string));
             dt.Columns.Add("Date", typeof(string));
 
             int no = 0;
             foreach (var item in Modules.ActionIO.Get())
             {
-                dt.Rows.Add(item.id, ++no, item.name, item.hex, item.created_at);
+                dt.Rows.Add(item.id, ++no, item.name, item.pin, item.created_at);
             }
 
             // Get old row selected
@@ -138,22 +138,17 @@ namespace SC_M4.Forms
 
         private void btnIOSave_Click(object sender, EventArgs e)
         {
-            // Validate txtName, txtHex
+            // Validate txtName, txtPin
             if (string.IsNullOrEmpty(txtName.Text))
             {
                 MessageBox.Show("Please enter name", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            if (string.IsNullOrEmpty(txtHex.Text))
-            {
-                MessageBox.Show("Please enter hex", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             var action_io = new Modules.ActionIO
             {
                 name = txtName.Text.Trim(),
-                hex = txtHex.Text.Trim(),
+                pin = (int)nPIN.Value,
                 type = 0,
                 _values = 0
             };
@@ -162,9 +157,9 @@ namespace SC_M4.Forms
             {
                 // Update
                 action_io.id = int.Parse(dgvIO.SelectedRows[0].Cells["id"].Value.ToString());
-                if (Modules.ActionIO.IsExist(action_io.name, action_io.id) || Modules.ActionIO.IsExistHex(action_io.hex, action_io.id))
+                if (Modules.ActionIO.IsExist(action_io.name, action_io.id) || Modules.ActionIO.IsExistPin(action_io.pin, action_io.id))
                 {
-                    MessageBox.Show("Name or Hex is exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Name or Pin is exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 action_io.Update();
@@ -172,9 +167,9 @@ namespace SC_M4.Forms
             else
             {
                 // Save
-                if (Modules.ActionIO.IsExist(action_io.name) || Modules.ActionIO.IsExistHex(action_io.hex))
+                if (Modules.ActionIO.IsExist(action_io.name) || Modules.ActionIO.IsExistPin(action_io.pin))
                 {
-                    MessageBox.Show("Name or Hex is exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Name or Pin is exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 action_io.Save();
@@ -185,7 +180,7 @@ namespace SC_M4.Forms
 
             // Clear form
             txtName.Text = "";
-            txtHex.Text = "";
+            nPIN.Value = 0;
         }
         private TypeState stateIO = TypeState.Create;
         private void btnIOEdit_Click(object sender, EventArgs e)
@@ -195,7 +190,7 @@ namespace SC_M4.Forms
             {
                 // Set value to form
                 txtName.Text = dgvIO.SelectedRows[0].Cells["name"].Value.ToString();
-                txtHex.Text = dgvIO.SelectedRows[0].Cells["hex"].Value.ToString();
+                nPIN.Value = (decimal)dgvIO.SelectedRows[0].Cells["Pin"].Value;
                 stateIO = TypeState.Update;
                 btnIOSave.Text = "Update";
             }
@@ -207,7 +202,7 @@ namespace SC_M4.Forms
             btnIOSave.Text = "Save";
             // Clear form
             txtName.Text = "";
-            txtHex.Text = "";
+            nPIN.Value = 0;
         }
 
         private void btnIODelete_Click(object sender, EventArgs e)
@@ -323,13 +318,13 @@ namespace SC_M4.Forms
                         }
                         actions.type = (int)TypeAction.Manual;
                         actions.state = rdOn.Checked ? 1 : 0;
-                        name_details = "Manual " + (actions.state == 1 ? "On" : "Off") + " " + dgvIO.SelectedRows[0].Cells["name"].Value.ToString() + " " + dgvIO.SelectedRows[0].Cells["hex"].Value.ToString();
+                        name_details = "Manual " + (actions.state == 1 ? "On" : "Off") + " " + dgvIO.SelectedRows[0].Cells["name"].Value.ToString() + " " + dgvIO.SelectedRows[0].Cells["Pin"].Value.ToString();
                     }
                     else if (rdTypeAuto.Checked)
                     {
                         actions.type = (int)TypeAction.Auto;
                         actions.auto_delay = (int)nAutoDelay.Value;
-                        name_details = "Auto " + actions.auto_delay + "s " + dgvIO.SelectedRows[0].Cells["name"].Value.ToString() + " " + dgvIO.SelectedRows[0].Cells["hex"].Value.ToString();
+                        name_details = "Auto " + actions.auto_delay + "s " + dgvIO.SelectedRows[0].Cells["name"].Value.ToString() + " " + dgvIO.SelectedRows[0].Cells["Pin"].Value.ToString();
                     }
                 }
                 else if (rdTypeServo.Checked)
@@ -387,13 +382,13 @@ namespace SC_M4.Forms
                         }
                         action.type = (int)TypeAction.Manual;
                         action.state = rdOn.Checked ? 1 : 0;
-                        name_details = "Manual " + (action.state == 1 ? "On" : "Off") + " " + dgvIO.SelectedRows[0].Cells["name"].Value.ToString() + " " + dgvIO.SelectedRows[0].Cells["hex"].Value.ToString();
+                        name_details = "Manual " + (action.state == 1 ? "On" : "Off") + " " + dgvIO.SelectedRows[0].Cells["name"].Value.ToString() + " " + dgvIO.SelectedRows[0].Cells["Pin"].Value.ToString();
                     }
                     else if (rdTypeAuto.Checked)
                     {
                         action.type = (int)TypeAction.Auto;
                         action.auto_delay = (int)nAutoDelay.Value;
-                        name_details = "Auto " + action.auto_delay + "s " + dgvIO.SelectedRows[0].Cells["name"].Value.ToString() + " " + dgvIO.SelectedRows[0].Cells["hex"].Value.ToString();
+                        name_details = "Auto " + action.auto_delay + "s " + dgvIO.SelectedRows[0].Cells["name"].Value.ToString() + " " + dgvIO.SelectedRows[0].Cells["Pin"].Value.ToString();
                     }
                 }
                 else if (rdTypeServo.Checked)
@@ -518,7 +513,7 @@ namespace SC_M4.Forms
             actions.action_io_id = int.Parse(dgvIO.SelectedRows[0].Cells["id"].Value.ToString());
             actions.type = (int)TypeAction.Manual;
             actions.state = rdOn.Checked ? 1 : 0;
-            return "Manual " + (actions.state == 1 ? "On" : "Off") + " " + dgvIO.SelectedRows[0].Cells["name"].Value.ToString() + " " + dgvIO.SelectedRows[0].Cells["hex"].Value.ToString();
+            return "Manual " + (actions.state == 1 ? "On" : "Off") + " " + dgvIO.SelectedRows[0].Cells["name"].Value.ToString() + " " + dgvIO.SelectedRows[0].Cells["Pin"].Value.ToString();
         }
 
         private string HandleAutoType(Modules.Actions actions)
@@ -526,7 +521,7 @@ namespace SC_M4.Forms
             actions.type = (int)TypeAction.Auto;
             actions.action_io_id = int.Parse(dgvIO.SelectedRows[0].Cells["id"].Value.ToString());
             actions.auto_delay = (int)nAutoDelay.Value;
-            return "Auto " + actions.auto_delay + "s " + dgvIO.SelectedRows[0].Cells["name"].Value.ToString() + " " + dgvIO.SelectedRows[0].Cells["hex"].Value.ToString();
+            return "Auto " + actions.auto_delay + "s " + dgvIO.SelectedRows[0].Cells["name"].Value.ToString() + " " + dgvIO.SelectedRows[0].Cells["Pin"].Value.ToString();
         }
 
         private string HandleImageType(Modules.Actions actions)
