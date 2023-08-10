@@ -293,11 +293,20 @@
       <DependentUpon>SettingModel.cs</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\IModule.cs" />
+    <Compile Include="Main.AutoTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main.ManualTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main.Serial.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Main.Test.cs">
       <SubType>Form</SubType>

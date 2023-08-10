@@ -305,8 +305,7 @@ namespace SC_M4
         private bool isStarted = false;
         private int driveindex_01 = -1;
         private int driveindex_02 = -1;
-        private string serialportName = string.Empty;
-        private string serialportBaud = string.Empty;
+
         private Thread thread;
         #region SATART
         private Task taskCam1;
@@ -371,9 +370,9 @@ namespace SC_M4
                         _colorName = new ColorName();
                     }
                     
-                    this.serialportName = comboBoxCOMPort.Text;
-                    this.serialportBaud = comboBoxBaud.Text;
-                    serialConnect();
+                    //this.serialportName = comboBoxCOMPort.Text;
+                    //this.serialportBaud = comboBoxBaud.Text;
+                    SerialConnect(comboBoxCOMPort.Text,int.Parse(comboBoxBaud.Text));
 
                     if (capture_1.IsOpened)
                         capture_1.Stop();
@@ -503,110 +502,7 @@ namespace SC_M4
 
         #endregion
 
-        #region Serial Port 
-
-        public void setSerialPort(string portName, string baud)
-        {
-            this.serialportName = portName;
-            this.serialportBaud = baud;
-        }
-
-        private void serialConnect(string portName, int baud)
-        {
-            try
-            {
-                if (this.serialPort != null && this.serialPort.IsOpen)
-                {
-                    this.serialPort.Close();
-                }
-                //this.serialPort = new SerialPort();
-                this.serialPort.PortName = portName;
-                this.serialPort.BaudRate = baud;
-                this.serialPort.Open();
-                this.serialCommand("conn");
-                Thread.Sleep(50);
-                this.serialCommand("conn");
-                this.toolStripStatusConnectSerialPort.Text = "Serial Connected"; // Serial Connected
-                this.toolStripStatusConnectSerialPort.ForeColor = Color.Green;
-
-            }
-            catch (Exception ex)
-            {
-                LogWriter.SaveLog("Error :" + ex.Message);
-                this.toolStripStatusConnectSerialPort.Text = "Serial Port: Disconnect"; // "Serial Port: Disconnect";
-                this.toolStripStatusConnectSerialPort.ForeColor = Color.Red;
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-        }
-
-        public void serialConnect()
-        {
-            if (this.serialportName == string.Empty || this.serialportBaud == string.Empty)
-                throw new Exception("Please select serial port and baud rate");
-
-            this.serialConnect(this.serialportName, int.Parse(this.serialportBaud));
-        }
-
-        public void serialCommand(string command)
-        {
-            if (this.serialPort.IsOpen)
-            {
-                this.serialPort.Write(">" + command + "<#");
-                LogWriter.SaveLog("Serial send : " + command);
-                toolStripStatusSerialData.Text = "DATA :" + command;
-            }
-        }
-
-        private string readDataSerial = string.Empty;
-        private string dataSerialReceived = string.Empty;
-        private void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-            //try
-            //{
-            //    readDataSerial = this.serialPort.ReadExisting();
-            //    this.Invoke(new EventHandler(dataReceived));
-            //}
-            //catch (Exception ex)
-            //{
-            //    LogWriter.SaveLog("Error :" + ex.Message);
-            //    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
-        }
-
-        private void dataReceived(object sender, EventArgs e)
-        {
-            //this.dataSerialReceived += readDataSerial;
-            //if (dataSerialReceived.Contains(">") && dataSerialReceived.Contains("<"))
-            //{
-            //    string data = this.dataSerialReceived.Replace("\r", string.Empty).Replace("\n", string.Empty);
-            //    data = data.Substring(data.IndexOf(">") + 1, data.IndexOf("<") - 1);
-            //    this.dataSerialReceived = string.Empty;
-            //    Console.WriteLine("RST : " + data);
-            //    data = data.Replace(">", "").Replace("<", "");
-            //    toolStripStatusSerialData.Text = "DATA :" + data;
-            //    LogWriter.SaveLog("Serial Received : " + data);
-            //    if (data == "rst" || data.Contains("rst"))
-            //    {
-            //        isStateReset = true;
-            //        is_Blink_NG = false;
-            //        if (capture_1.IsOpened && capture_1.IsOpened)
-            //        {
-            //            lbTitle.Text = "Wiat for detect...."; // Wiat for detect....
-            //        }
-            //        lbTitle.ForeColor = Color.Black;
-            //        lbTitle.BackColor = Color.Yellow;
-            //        richTextBox1.Text = "";
-            //        richTextBox2.Text = "";
-            //    }
-            //}
-            //else if (!dataSerialReceived.Contains(">"))
-            //{
-            //    this.dataSerialReceived = string.Empty;
-            //}
-        }
-
-        #endregion
+    
 
         #region SELECT X Y
 

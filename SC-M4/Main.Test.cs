@@ -239,7 +239,7 @@ namespace SC_M4
             }));
 
             is_Blink_NG = status == "NG";
-            serialCommand(status);
+            SerialCommand(status);
         }
 
         private ResultType CompareData(string txt_sw, string txt_lb)
@@ -399,7 +399,7 @@ namespace SC_M4
                     lbTitle.BackColor = Color.Red;
                 }));
                 is_Blink_NG = true;
-                serialCommand("NG");
+                SerialCommand("NG");
                 result = 1;
             }
             else
@@ -413,7 +413,7 @@ namespace SC_M4
                     //loadTableHistory();
                 }));
                 result = 2;
-                serialCommand("OK");
+                SerialCommand("OK");
             }
             history.name = txtEmployee.Text.Trim();
             history.name_lb = txt_lb;

@@ -308,9 +308,9 @@
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.txtEmployee);
-            this.groupBox2.Location = new System.Drawing.Point(647, 357);
+            this.groupBox2.Location = new System.Drawing.Point(647, 329);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(225, 56);
+            this.groupBox2.Size = new System.Drawing.Size(225, 84);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "USER INPUT";
@@ -318,7 +318,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(32, 31);
+            this.label6.Location = new System.Drawing.Point(32, 26);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(59, 13);
             this.label6.TabIndex = 1;
@@ -326,7 +326,7 @@
             // 
             // txtEmployee
             // 
-            this.txtEmployee.Location = new System.Drawing.Point(97, 28);
+            this.txtEmployee.Location = new System.Drawing.Point(97, 19);
             this.txtEmployee.Name = "txtEmployee";
             this.txtEmployee.Size = new System.Drawing.Size(125, 20);
             this.txtEmployee.TabIndex = 0;
