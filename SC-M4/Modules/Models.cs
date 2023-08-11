@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SC_M4.Forms;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SC_M4.Modules
 {
-    public class Models
+    public class Models : IDataItem
     {
         public int id { get; set; }
         public string name { get; set; }
@@ -54,7 +55,7 @@ namespace SC_M4.Modules
 
         public static List<Models> Get()
         {
-            string sql = "select * from models order by id desc limit 1000";
+            string sql = "select * from models order by id desc";
             return SQliteDataAccess.Query<Models>(sql, null);
         }
 

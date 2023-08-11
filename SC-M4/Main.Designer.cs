@@ -56,8 +56,24 @@
             this.btnSearch = new System.Windows.Forms.Button();
             this.label16 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtModel = new System.Windows.Forms.TextBox();
             this.txtEmployee = new System.Windows.Forms.TextBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.checkBoxAutoFocus = new System.Windows.Forms.CheckBox();
+            this.nFocus = new System.Windows.Forms.NumericUpDown();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.cbDriveCam01 = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.comboBoxCOMPort = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.btRefresh = new System.Windows.Forms.Button();
+            this.btConnect = new System.Windows.Forms.Button();
+            this.cbDriveCam02 = new System.Windows.Forms.ComboBox();
+            this.comboBoxBaud = new System.Windows.Forms.ComboBox();
             this.splitContainerHomeBody = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelChild01 = new System.Windows.Forms.TableLayoutPanel();
@@ -81,22 +97,6 @@
             this.toolStripStatusLabelError = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerMain = new System.Windows.Forms.Timer(this.components);
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.comboBoxBaud = new System.Windows.Forms.ComboBox();
-            this.cbDriveCam02 = new System.Windows.Forms.ComboBox();
-            this.btConnect = new System.Windows.Forms.Button();
-            this.btRefresh = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.comboBoxCOMPort = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.cbDriveCam01 = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.nFocus = new System.Windows.Forms.NumericUpDown();
-            this.checkBoxAutoFocus = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerHomeMain)).BeginInit();
@@ -106,6 +106,8 @@
             this.panel2.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nFocus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerHomeBody)).BeginInit();
             this.splitContainerHomeBody.Panel1.SuspendLayout();
             this.splitContainerHomeBody.Panel2.SuspendLayout();
@@ -122,8 +124,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCamera02)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewHistory)).BeginInit();
             this.statusStripHome.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nFocus)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -280,6 +280,7 @@
             this.btStartStop.TabIndex = 8;
             this.btStartStop.Text = "START";
             this.btStartStop.UseVisualStyleBackColor = true;
+            this.btStartStop.Visible = false;
             this.btStartStop.Click += new System.EventHandler(this.btStartStop_Click);
             // 
             // lbTitle
@@ -363,7 +364,7 @@
             this.groupBox2.Controls.Add(this.btnSearch);
             this.groupBox2.Controls.Add(this.label16);
             this.groupBox2.Controls.Add(this.label6);
-            this.groupBox2.Controls.Add(this.textBox1);
+            this.groupBox2.Controls.Add(this.txtModel);
             this.groupBox2.Controls.Add(this.txtEmployee);
             this.groupBox2.Location = new System.Drawing.Point(3, 294);
             this.groupBox2.Name = "groupBox2";
@@ -402,15 +403,15 @@
             this.label6.TabIndex = 1;
             this.label6.Text = "Employee :";
             // 
-            // textBox1
+            // txtModel
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.txtModel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(69, 45);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(114, 20);
-            this.textBox1.TabIndex = 0;
-            this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtEmployee_KeyDown);
+            this.txtModel.Location = new System.Drawing.Point(69, 45);
+            this.txtModel.Name = "txtModel";
+            this.txtModel.Size = new System.Drawing.Size(114, 20);
+            this.txtModel.TabIndex = 0;
+            this.txtModel.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtEmployee_KeyDown);
             // 
             // txtEmployee
             // 
@@ -419,6 +420,178 @@
             this.txtEmployee.Size = new System.Drawing.Size(143, 20);
             this.txtEmployee.TabIndex = 0;
             this.txtEmployee.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtEmployee_KeyDown);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.checkBoxAutoFocus);
+            this.groupBox1.Controls.Add(this.nFocus);
+            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.cbDriveCam01);
+            this.groupBox1.Controls.Add(this.label7);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.label8);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.comboBoxCOMPort);
+            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.btRefresh);
+            this.groupBox1.Controls.Add(this.btConnect);
+            this.groupBox1.Controls.Add(this.cbDriveCam02);
+            this.groupBox1.Controls.Add(this.comboBoxBaud);
+            this.groupBox1.Location = new System.Drawing.Point(3, 6);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(217, 282);
+            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "SETTING";
+            // 
+            // checkBoxAutoFocus
+            // 
+            this.checkBoxAutoFocus.AutoSize = true;
+            this.checkBoxAutoFocus.Checked = true;
+            this.checkBoxAutoFocus.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxAutoFocus.Location = new System.Drawing.Point(145, 255);
+            this.checkBoxAutoFocus.Name = "checkBoxAutoFocus";
+            this.checkBoxAutoFocus.Size = new System.Drawing.Size(77, 17);
+            this.checkBoxAutoFocus.TabIndex = 7;
+            this.checkBoxAutoFocus.Text = "AutoFocus";
+            this.checkBoxAutoFocus.UseVisualStyleBackColor = true;
+            this.checkBoxAutoFocus.CheckedChanged += new System.EventHandler(this.checkBoxAutoFocus_CheckedChanged);
+            // 
+            // nFocus
+            // 
+            this.nFocus.Location = new System.Drawing.Point(94, 230);
+            this.nFocus.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nFocus.Name = "nFocus";
+            this.nFocus.Size = new System.Drawing.Size(125, 20);
+            this.nFocus.TabIndex = 6;
+            this.nFocus.Value = new decimal(new int[] {
+            68,
+            0,
+            0,
+            0});
+            this.nFocus.ValueChanged += new System.EventHandler(this.numericUpDownFocus_ValueChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 148);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(59, 13);
+            this.label4.TabIndex = 12;
+            this.label4.Text = "COM Port :";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(2, 31);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(73, 13);
+            this.label3.TabIndex = 15;
+            this.label3.Text = "Drive CAM 1 :";
+            // 
+            // cbDriveCam01
+            // 
+            this.cbDriveCam01.FormattingEnabled = true;
+            this.cbDriveCam01.Location = new System.Drawing.Point(79, 28);
+            this.cbDriveCam01.Name = "cbDriveCam01";
+            this.cbDriveCam01.Size = new System.Drawing.Size(132, 21);
+            this.cbDriveCam01.TabIndex = 0;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(15, 232);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(75, 13);
+            this.label7.TabIndex = 13;
+            this.label7.Text = "Focus Cam 2 :";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(15, 121);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(38, 13);
+            this.label2.TabIndex = 13;
+            this.label2.Text = "Baud :";
+            // 
+            // label8
+            // 
+            this.label8.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label8.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.label8.Location = new System.Drawing.Point(6, 202);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(220, 12);
+            this.label8.TabIndex = 10;
+            // 
+            // label1
+            // 
+            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.label1.Location = new System.Drawing.Point(80, 87);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(131, 12);
+            this.label1.TabIndex = 10;
+            // 
+            // comboBoxCOMPort
+            // 
+            this.comboBoxCOMPort.FormattingEnabled = true;
+            this.comboBoxCOMPort.Location = new System.Drawing.Point(80, 148);
+            this.comboBoxCOMPort.Name = "comboBoxCOMPort";
+            this.comboBoxCOMPort.Size = new System.Drawing.Size(132, 21);
+            this.comboBoxCOMPort.TabIndex = 3;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(2, 63);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(76, 13);
+            this.label5.TabIndex = 14;
+            this.label5.Text = "Drive CAM  2 :";
+            // 
+            // btRefresh
+            // 
+            this.btRefresh.BackgroundImage = global::SC_M4.Properties.Resources._refresh_16;
+            this.btRefresh.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btRefresh.Location = new System.Drawing.Point(6, 174);
+            this.btRefresh.Name = "btRefresh";
+            this.btRefresh.Size = new System.Drawing.Size(23, 21);
+            this.btRefresh.TabIndex = 4;
+            this.btRefresh.UseVisualStyleBackColor = true;
+            this.btRefresh.Click += new System.EventHandler(this.btRefresh_Click);
+            // 
+            // btConnect
+            // 
+            this.btConnect.Location = new System.Drawing.Point(136, 174);
+            this.btConnect.Name = "btConnect";
+            this.btConnect.Size = new System.Drawing.Size(75, 25);
+            this.btConnect.TabIndex = 5;
+            this.btConnect.Text = "Connect";
+            this.btConnect.UseVisualStyleBackColor = true;
+            this.btConnect.Click += new System.EventHandler(this.btConnect_Click);
+            // 
+            // cbDriveCam02
+            // 
+            this.cbDriveCam02.FormattingEnabled = true;
+            this.cbDriveCam02.Location = new System.Drawing.Point(79, 55);
+            this.cbDriveCam02.Name = "cbDriveCam02";
+            this.cbDriveCam02.Size = new System.Drawing.Size(132, 21);
+            this.cbDriveCam02.TabIndex = 1;
+            // 
+            // comboBoxBaud
+            // 
+            this.comboBoxBaud.FormattingEnabled = true;
+            this.comboBoxBaud.Location = new System.Drawing.Point(80, 121);
+            this.comboBoxBaud.Name = "comboBoxBaud";
+            this.comboBoxBaud.Size = new System.Drawing.Size(132, 21);
+            this.comboBoxBaud.TabIndex = 2;
             // 
             // splitContainerHomeBody
             // 
@@ -682,178 +855,6 @@
             // 
             this.serialPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort_DataReceived);
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.checkBoxAutoFocus);
-            this.groupBox1.Controls.Add(this.nFocus);
-            this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.cbDriveCam01);
-            this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.label8);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.comboBoxCOMPort);
-            this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.btRefresh);
-            this.groupBox1.Controls.Add(this.btConnect);
-            this.groupBox1.Controls.Add(this.cbDriveCam02);
-            this.groupBox1.Controls.Add(this.comboBoxBaud);
-            this.groupBox1.Location = new System.Drawing.Point(3, 6);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(217, 282);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "SETTING";
-            // 
-            // comboBoxBaud
-            // 
-            this.comboBoxBaud.FormattingEnabled = true;
-            this.comboBoxBaud.Location = new System.Drawing.Point(80, 121);
-            this.comboBoxBaud.Name = "comboBoxBaud";
-            this.comboBoxBaud.Size = new System.Drawing.Size(132, 21);
-            this.comboBoxBaud.TabIndex = 2;
-            // 
-            // cbDriveCam02
-            // 
-            this.cbDriveCam02.FormattingEnabled = true;
-            this.cbDriveCam02.Location = new System.Drawing.Point(79, 55);
-            this.cbDriveCam02.Name = "cbDriveCam02";
-            this.cbDriveCam02.Size = new System.Drawing.Size(132, 21);
-            this.cbDriveCam02.TabIndex = 1;
-            // 
-            // btConnect
-            // 
-            this.btConnect.Location = new System.Drawing.Point(136, 174);
-            this.btConnect.Name = "btConnect";
-            this.btConnect.Size = new System.Drawing.Size(75, 25);
-            this.btConnect.TabIndex = 5;
-            this.btConnect.Text = "Connect";
-            this.btConnect.UseVisualStyleBackColor = true;
-            this.btConnect.Click += new System.EventHandler(this.btConnect_Click);
-            // 
-            // btRefresh
-            // 
-            this.btRefresh.BackgroundImage = global::SC_M4.Properties.Resources._refresh_16;
-            this.btRefresh.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btRefresh.Location = new System.Drawing.Point(6, 174);
-            this.btRefresh.Name = "btRefresh";
-            this.btRefresh.Size = new System.Drawing.Size(23, 21);
-            this.btRefresh.TabIndex = 4;
-            this.btRefresh.UseVisualStyleBackColor = true;
-            this.btRefresh.Click += new System.EventHandler(this.btRefresh_Click);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(2, 63);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(76, 13);
-            this.label5.TabIndex = 14;
-            this.label5.Text = "Drive CAM  2 :";
-            // 
-            // comboBoxCOMPort
-            // 
-            this.comboBoxCOMPort.FormattingEnabled = true;
-            this.comboBoxCOMPort.Location = new System.Drawing.Point(80, 148);
-            this.comboBoxCOMPort.Name = "comboBoxCOMPort";
-            this.comboBoxCOMPort.Size = new System.Drawing.Size(132, 21);
-            this.comboBoxCOMPort.TabIndex = 3;
-            // 
-            // label1
-            // 
-            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.label1.Location = new System.Drawing.Point(80, 87);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(131, 12);
-            this.label1.TabIndex = 10;
-            // 
-            // label8
-            // 
-            this.label8.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label8.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.label8.Location = new System.Drawing.Point(6, 202);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(220, 12);
-            this.label8.TabIndex = 10;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 121);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(38, 13);
-            this.label2.TabIndex = 13;
-            this.label2.Text = "Baud :";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(15, 232);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(75, 13);
-            this.label7.TabIndex = 13;
-            this.label7.Text = "Focus Cam 2 :";
-            // 
-            // cbDriveCam01
-            // 
-            this.cbDriveCam01.FormattingEnabled = true;
-            this.cbDriveCam01.Location = new System.Drawing.Point(79, 28);
-            this.cbDriveCam01.Name = "cbDriveCam01";
-            this.cbDriveCam01.Size = new System.Drawing.Size(132, 21);
-            this.cbDriveCam01.TabIndex = 0;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(2, 31);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(73, 13);
-            this.label3.TabIndex = 15;
-            this.label3.Text = "Drive CAM 1 :";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 148);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(59, 13);
-            this.label4.TabIndex = 12;
-            this.label4.Text = "COM Port :";
-            // 
-            // nFocus
-            // 
-            this.nFocus.Location = new System.Drawing.Point(94, 230);
-            this.nFocus.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.nFocus.Name = "nFocus";
-            this.nFocus.Size = new System.Drawing.Size(125, 20);
-            this.nFocus.TabIndex = 6;
-            this.nFocus.Value = new decimal(new int[] {
-            68,
-            0,
-            0,
-            0});
-            this.nFocus.ValueChanged += new System.EventHandler(this.numericUpDownFocus_ValueChanged);
-            // 
-            // checkBoxAutoFocus
-            // 
-            this.checkBoxAutoFocus.AutoSize = true;
-            this.checkBoxAutoFocus.Checked = true;
-            this.checkBoxAutoFocus.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxAutoFocus.Location = new System.Drawing.Point(145, 255);
-            this.checkBoxAutoFocus.Name = "checkBoxAutoFocus";
-            this.checkBoxAutoFocus.Size = new System.Drawing.Size(77, 17);
-            this.checkBoxAutoFocus.TabIndex = 7;
-            this.checkBoxAutoFocus.Text = "AutoFocus";
-            this.checkBoxAutoFocus.UseVisualStyleBackColor = true;
-            this.checkBoxAutoFocus.CheckedChanged += new System.EventHandler(this.checkBoxAutoFocus_CheckedChanged);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -884,6 +885,9 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nFocus)).EndInit();
             this.splitContainerHomeBody.Panel1.ResumeLayout(false);
             this.splitContainerHomeBody.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerHomeBody)).EndInit();
@@ -901,9 +905,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewHistory)).EndInit();
             this.statusStripHome.ResumeLayout(false);
             this.statusStripHome.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nFocus)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -958,7 +959,7 @@
         private System.Windows.Forms.ToolStripMenuItem sTEPTESTToolStripMenuItem;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtModel;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.RichTextBox richTextBox3;
         private System.Windows.Forms.Button btnSearch;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -109,7 +110,7 @@ namespace SC_M4
         }
 
         private Bitmap bmp1;
-
+        private Stopwatch stopwatchManualTest = new Stopwatch();
         private void Capture_1_OnFrameHeader(Bitmap bitmap)
         {
             if (InvokeRequired)
@@ -136,6 +137,14 @@ namespace SC_M4
                 using (Graphics g = Graphics.FromImage(pictureBoxCamera01.Image))
                 {
                     g.DrawRectangle(new Pen(Color.Red, 2), rect_1);
+                }
+            }
+
+            if(typeSelected == Utilities.TypeAction.Manual)
+            {
+                if(stopwatchManualTest.ElapsedMilliseconds > 500)
+                {
+                    stopwatchManualTest.Restart();
                 }
             }
         }

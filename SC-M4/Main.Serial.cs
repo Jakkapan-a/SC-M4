@@ -11,16 +11,15 @@ namespace SC_M4
 {
     public partial class Main
     {
-        private byte[] bytes = new byte[6];
         private TypeAction typeSelected = TypeAction.Manual;
         private Dictionary<string, byte[]> templateData;
         private void InitializeSerial()
         {
             // Default byte data
-            Array.Clear(bytes, 0, bytes.Length);
             templateData = new Dictionary<string, byte[]>();
             templateData.Add("Query_Mode", new byte[8] { 0x02, 0x51, 0x4D, 0x00, 0x00, 0x00, 0x00, 0x03 });
             templateData.Add("Query_Status", new byte[8] { 0x02, 0x51, 0x53, 0x00, 0x00, 0x00, 0x00, 0x03 });
+            templateData.Add("Command", new byte[8] { 0x02, 0x43, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03 });
         }
         #region Serial Port 
 

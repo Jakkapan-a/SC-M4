@@ -30,6 +30,7 @@ using System.Windows.Markup;
 using TClass;
 using Windows.UI.Xaml.Controls;
 using SC_M4.Utilities;
+using System.Xml.Linq;
 
 //using Windows.UI.Xaml.Controls;
 
@@ -227,7 +228,7 @@ namespace SC_M4
         {
             var videoDevices = new List<DsDevice>(DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice));
             cbDriveCam01.Items.Clear();
-            cbDriveCam02.Items.Clear();            
+            cbDriveCam02.Items.Clear();
             foreach (DsDevice device in videoDevices)
             {
                 cbDriveCam01.Items.Add(device.Name);
@@ -311,199 +312,402 @@ namespace SC_M4
         #region SATART
         private Task taskCam1;
         private Task taskCam2;
-
-        private async void btStartStop_Click(object sender, EventArgs e)
+        private void btStartStop_Click(object sender, EventArgs e)
         {
-
-            if (taskCam1 != null && taskCam1.Status == TaskStatus.Running)
-            {
-                Console.WriteLine("Task 1 is running");
+            StartStopCamera();
+        }
+        private async void StartStopCamera()
+        {
+            if (IsTaskRunning(taskCam1) || IsTaskRunning(taskCam2))
                 return;
-            }
 
-            if (taskCam2 != null && taskCam2.Status == TaskStatus.Running)
-            {
-                Console.WriteLine("Task 2 is running");
-                return;
-            }
-            this.isStart = !this.isStart;
+
             try
             {
-
+                this.isStart = !this.isStart;
                 if (this.isStart)
                 {
-
-                    if (txtEmployee.Text == string.Empty)
-                    {
-                        this.ActiveControl = txtEmployee;
-                        txtEmployee.Focus();
-                        lbTitle.Text = "Please input employee ID"; //
-                        throw new Exception("Please input employee ID");
-                    }
-
-                    if (cbDriveCam01.SelectedIndex == cbDriveCam02.SelectedIndex)
-                    {
-                        lbTitle.Text = "Please select camera drive!";
-                        throw new Exception("Please select camera drive!");
-                    }
-
-                    if (this.cbDriveCam01.SelectedIndex == -1 || this.cbDriveCam02.SelectedIndex == -1)
-                    {
-                        throw new Exception(Properties.Resources.msg_select_camera);
-                    }
-                    if (txtEmployee.Text == string.Empty)
-                    {
-                        lbTitle.Text = "Please input employee ID"; // 
-                        this.ActiveControl = txtEmployee;
-                        this.txtEmployee.Focus();
-                        throw new Exception("Please input employee ID");
-                    }
-                    if (_colorName != null)
-                    {
-                        _colorName = null;
-                    }
-                    if (Properties.Settings.Default.isUseColorMaster)
-                    {
-                        _colorName = new ColorName(MasterNTC.GetMasterNTC());
-                    }
-                    else
-                    {
-                        _colorName = new ColorName();
-                    }
-                    
-                    //this.serialportName = comboBoxCOMPort.Text;
-                    //this.serialportBaud = comboBoxBaud.Text;
-                    SerialConnect(comboBoxCOMPort.Text,int.Parse(comboBoxBaud.Text));
-
-                    if (capture_1.IsOpened)
-                        capture_1.Stop();
-                    if (capture_2.IsOpened)
-                        capture_2.Stop();
-
-                    replaceNames1.Clear();
-                    replaceNames1 = Modules.ReplaceName.GetList(0);
-
-                    replaceNames2.Clear();
-                    replaceNames2 = Modules.ReplaceName.GetList(1);
-
-
-                    driveindex_01 = cbDriveCam01.SelectedIndex;
-                    driveindex_02 = cbDriveCam02.SelectedIndex;
-
-                    lbTitle.Text = "Camera opening...";
-
-                    btConnect.Text = "Opening...";
-                    pictureBoxCamera01.Image?.Dispose();
-                    pictureBoxCamera02.Image?.Dispose();
-                    pictureBoxCamera01.Image = Properties.Resources.Spinner_0_4s_800px;
-                    pictureBoxCamera02.Image = Properties.Resources.Spinner_0_4s_800px;
-
-                    taskCam1 = Task.Run(() => capture_1.Start(driveindex_01));
-
-                    await taskCam1;
-
-                    taskCam2 = Task.Run(() => capture_2.Start(driveindex_02));
-
-                    await taskCam2;
-
-                    btStartStop.Text = "STOP";
-
-                    this.richTextBox1.Text = string.Empty;
-                    this.richTextBox2.Text = string.Empty;
-
-                    scrollablePictureBoxCamera01.Image?.Dispose();
-                    scrollablePictureBoxCamera02.Image?.Dispose();
-                    scrollablePictureBoxCamera01.Image = null;
-                    scrollablePictureBoxCamera02.Image = null;
+                    ValidateInputs();
+                    InitializeComponents();
+                    await StartCameras();
                     await Task.Delay(1000);
-                    if (!checkBoxAutoFocus.Checked)
-                    {
-                        cameraControl.set(driveindex_02);
-                        cameraControl.setFocus(Properties.Settings.Default.dFocus);
-                        cameraControl.setZoom(Properties.Settings.Default.dZoom);
-                        cameraControl.setPan(Properties.Settings.Default.dPan);
-                        cameraControl.setTilt(Properties.Settings.Default.dTilt);
-                        cameraControl.setExposure(Properties.Settings.Default.dExposure);
-
-                        nFocus.Value = cameraControl.fValue;
-                        nFocus.Value = 68 > cameraControl.fmax ? cameraControl.fmax : 68;
-                        nFocus.Maximum = cameraControl.fmax;
-                        nFocus.Minimum = cameraControl.fmin;
-                    }
-
-                    btConnect.Text = "Disconnect";
-
-                    //timerOCR.Start();
-
-
-                    isStarted = true;
-                    isStateReset = true;
+                    PostStartActions();
                 }
                 else
                 {
-                    if (capture_1._isRunning)
-                        capture_1.Stop();
-
-                    if (capture_2._isRunning)
-                        capture_2.Stop();
-
-                    if (serialPort.IsOpen)
-                        serialPort.Close();
-
-                    //timerOCR.Stop();
-
-
-                    btStartStop.Text = "START";
-                    btConnect.Text = "Connect";
-                    pictureBoxCamera01.Image = null;
-                    pictureBoxCamera02.Image = null;
-
-                    this.richTextBox1.Text = string.Empty;
-                    this.richTextBox2.Text = string.Empty;
-
-
-
-                    scrollablePictureBoxCamera01.Image = null;
-                    scrollablePictureBoxCamera02.Image = null;
-                    lbTitle.Text = "Camera close.";
-                    lbTitle.ForeColor = Color.Black;
-                    lbTitle.BackColor = Color.Yellow;
-                    is_Blink_NG = false;
-                    pictureBoxCamera01.Image = null;
-                    pictureBoxCamera02.Image = null;
+                    StopComponents();
+                    ResetUIAfterStop();
                 }
-                lbTitle.BackColor = Color.Yellow;
-                lbTitle.ForeColor = Color.Black;
             }
             catch (Exception ex)
             {
-                LogWriter.SaveLog("Error Start :" + ex.Message);
-                MessageBox.Show(ex.Message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                this.isStart = false;
-                btStartStop.Text = "START";
-                lbTitle.Text = "Camera close.";
-                btConnect.Text = "Connect";
-                if (capture_1._isRunning)
-                    capture_1.Stop();
-
-                if (capture_2._isRunning)
-                    capture_2.Stop();
-
-                if (serialPort.IsOpen)
-                    serialPort.Close();
-
-                //timerOCR.Stop();
-
+                HandleException(ex);
             }
         }
 
+        private void ResetUIAfterStop()
+        {
+
+        }
+
+        private void PostStartActions()
+        {
+            btStartStop.Text = "STOP";
+
+            this.richTextBox1.Text = string.Empty;
+            this.richTextBox2.Text = string.Empty;
+
+            scrollablePictureBoxCamera01.Image?.Dispose();
+            scrollablePictureBoxCamera02.Image?.Dispose();
+            scrollablePictureBoxCamera01.Image = null;
+            scrollablePictureBoxCamera02.Image = null;
+            if (!checkBoxAutoFocus.Checked)
+            {
+                cameraControl.set(driveindex_02);
+                cameraControl.setFocus(Properties.Settings.Default.dFocus);
+                cameraControl.setZoom(Properties.Settings.Default.dZoom);
+                cameraControl.setPan(Properties.Settings.Default.dPan);
+                cameraControl.setTilt(Properties.Settings.Default.dTilt);
+                cameraControl.setExposure(Properties.Settings.Default.dExposure);
+
+                nFocus.Value = cameraControl.fValue;
+                nFocus.Value = 68 > cameraControl.fmax ? cameraControl.fmax : 68;
+                nFocus.Maximum = cameraControl.fmax;
+                nFocus.Minimum = cameraControl.fmin;
+            }
+
+            btConnect.Text = "Disconnect";
+
+            //timerOCR.Start();
+
+            stopwatchManualTest.Restart();
+
+            isStarted = true;
+            isStateReset = true;
+        }
+
+        private bool IsTaskRunning(Task task)
+        {
+            if (task != null && task.Status == TaskStatus.Running)
+            {
+                Console.WriteLine($"Task {task.Id} is running");
+                return true;
+            }
+            return false;
+        }
+
+        private void InitializeComponents()
+        {
+            _colorName = Properties.Settings.Default.isUseColorMaster ? new ColorName(MasterNTC.GetMasterNTC()) : new ColorName();
+            replaceNames1?.Clear();
+            replaceNames1 = Modules.ReplaceName.GetList(0);
+
+            replaceNames2?.Clear();
+            replaceNames2 = Modules.ReplaceName.GetList(1);
+
+            btConnect.Text = "Opening...";
+            pictureBoxCamera01.Image?.Dispose();
+            pictureBoxCamera02.Image?.Dispose();
+            pictureBoxCamera01.Image = Properties.Resources.Spinner_0_4s_800px;
+            pictureBoxCamera02.Image = Properties.Resources.Spinner_0_4s_800px;
+
+            // ... Other initialization logic
+        }
+
+
+        private void ValidateInputs()
+        {
+            if (string.IsNullOrEmpty(txtEmployee.Text))
+            {
+                SetError("Please input employee ID", txtEmployee);
+                throw new ArgumentException("Please input employee ID");
+            }
+
+            if (cbDriveCam01.SelectedIndex == cbDriveCam02.SelectedIndex)
+            {
+                lbTitle.Text = "Please select camera drive!";
+                throw new ArgumentException("Please select camera drive!");
+            }
+
+            if (cbDriveCam01.SelectedIndex == -1 || cbDriveCam02.SelectedIndex == -1)
+            {
+                throw new ArgumentException("Select a camera");
+            }
+        }
+
+        private void SetError(string v, System.Windows.Forms.TextBox TextBox)
+        {
+
+            this.ActiveControl = TextBox;
+            TextBox.Focus();
+            lbTitle.Text = v; //
+        }
+
+        private async Task StartCameras()
+        {
+            if (capture_1.IsOpened) capture_1.Stop();
+            if (capture_2.IsOpened) capture_2.Stop();
+
+            driveindex_01 = cbDriveCam01.SelectedIndex;
+            driveindex_02 = cbDriveCam02.SelectedIndex;
+            lbTitle.Text = "Camera opening...";
+
+            taskCam1 = Task.Run(() => capture_1.Start(driveindex_01));
+            await taskCam1;
+
+            taskCam2 = Task.Run(() => capture_2.Start(driveindex_02));
+            await taskCam2;
+            SerialConnect(comboBoxCOMPort.Text, int.Parse(comboBoxBaud.Text));
+
+        }
+
+        private void HandleException(Exception ex)
+        {
+            LogWriter.SaveLog("Error Start :" + ex.Message);
+            MessageBox.Show(ex.Message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            this.isStart = false;
+            btStartStop.Text = "START";
+            lbTitle.Text = "Camera close.";
+            StopComponents();
+        }
+
+        private void StopComponents()
+        {
+
+            if (capture_1._isRunning)
+                capture_1.Stop();
+
+            if (capture_2._isRunning)
+                capture_2.Stop();
+
+            if (serialPort.IsOpen)
+                serialPort.Close();
+
+            //timerOCR.Stop();
+
+            btStartStop.Text = "START";
+            btConnect.Text = "Connect";
+            pictureBoxCamera01.Image = null;
+            pictureBoxCamera02.Image = null;
+
+            this.richTextBox1.Text = string.Empty;
+            this.richTextBox2.Text = string.Empty;
+
+
+            scrollablePictureBoxCamera01.Image?.Dispose();
+            scrollablePictureBoxCamera02.Image?.Dispose();
+
+            scrollablePictureBoxCamera01.Image = null;
+            scrollablePictureBoxCamera02.Image = null;
+
+            lbTitle.Text = "Camera close.";
+            lbTitle.ForeColor = Color.Black;
+            lbTitle.BackColor = Color.Yellow;
+
+            is_Blink_NG = false;
+
+            pictureBoxCamera01.Image?.Dispose();
+            pictureBoxCamera02.Image?.Dispose();
+
+            pictureBoxCamera01.Image = null;
+            pictureBoxCamera02.Image = null;
+
+            stopwatchManualTest.Stop();
+        }
+
+        /*  private async void btStartStop_Click(object sender, EventArgs e)
+          {
+
+              if (taskCam1 != null && taskCam1.Status == TaskStatus.Running)
+              {
+                  Console.WriteLine("Task 1 is running");
+                  return;
+              }
+
+              if (taskCam2 != null && taskCam2.Status == TaskStatus.Running)
+              {
+                  Console.WriteLine("Task 2 is running");
+                  return;
+              }
+              this.isStart = !this.isStart;
+              try
+              {
+
+                  if (this.isStart)
+                  {
+
+                      if (txtEmployee.Text == string.Empty)
+                      {
+                          this.ActiveControl = txtEmployee;
+                          txtEmployee.Focus();
+                          lbTitle.Text = "Please input employee ID"; //
+                          throw new Exception("Please input employee ID");
+                      }
+
+                      if (cbDriveCam01.SelectedIndex == cbDriveCam02.SelectedIndex)
+                      {
+                          lbTitle.Text = "Please select camera drive!";
+                          throw new Exception("Please select camera drive!");
+                      }
+
+                      if (this.cbDriveCam01.SelectedIndex == -1 || this.cbDriveCam02.SelectedIndex == -1)
+                      {
+                          throw new Exception(Properties.Resources.msg_select_camera);
+                      }
+                      if (txtEmployee.Text == string.Empty)
+                      {
+                          lbTitle.Text = "Please input employee ID"; // 
+                          this.ActiveControl = txtEmployee;
+                          this.txtEmployee.Focus();
+                          throw new Exception("Please input employee ID");
+                      }
+                      if (_colorName != null)
+                      {
+                          _colorName = null;
+                      }
+                      if (Properties.Settings.Default.isUseColorMaster)
+                      {
+                          _colorName = new ColorName(MasterNTC.GetMasterNTC());
+                      }
+                      else
+                      {
+                          _colorName = new ColorName();
+                      }
+
+                      SerialConnect(comboBoxCOMPort.Text,int.Parse(comboBoxBaud.Text));
+
+                      if (capture_1.IsOpened)
+                          capture_1.Stop();
+                      if (capture_2.IsOpened)
+                          capture_2.Stop();
+
+                      replaceNames1?.Clear();
+                      replaceNames1 = Modules.ReplaceName.GetList(0);
+
+                      replaceNames2?.Clear();
+                      replaceNames2 = Modules.ReplaceName.GetList(1);
+
+
+                      driveindex_01 = cbDriveCam01.SelectedIndex;
+                      driveindex_02 = cbDriveCam02.SelectedIndex;
+
+                      lbTitle.Text = "Camera opening...";
+
+                      btConnect.Text = "Opening...";
+                      pictureBoxCamera01.Image?.Dispose();
+                      pictureBoxCamera02.Image?.Dispose();
+                      pictureBoxCamera01.Image = Properties.Resources.Spinner_0_4s_800px;
+                      pictureBoxCamera02.Image = Properties.Resources.Spinner_0_4s_800px;
+
+                      taskCam1 = Task.Run(() => capture_1.Start(driveindex_01));
+
+                      await taskCam1;
+
+                      taskCam2 = Task.Run(() => capture_2.Start(driveindex_02));
+
+                      await taskCam2;
+
+                      btStartStop.Text = "STOP";
+
+                      this.richTextBox1.Text = string.Empty;
+                      this.richTextBox2.Text = string.Empty;
+
+                      scrollablePictureBoxCamera01.Image?.Dispose();
+                      scrollablePictureBoxCamera02.Image?.Dispose();
+                      scrollablePictureBoxCamera01.Image = null;
+                      scrollablePictureBoxCamera02.Image = null;
+                      await Task.Delay(1000);
+                      if (!checkBoxAutoFocus.Checked)
+                      {
+                          cameraControl.set(driveindex_02);
+                          cameraControl.setFocus(Properties.Settings.Default.dFocus);
+                          cameraControl.setZoom(Properties.Settings.Default.dZoom);
+                          cameraControl.setPan(Properties.Settings.Default.dPan);
+                          cameraControl.setTilt(Properties.Settings.Default.dTilt);
+                          cameraControl.setExposure(Properties.Settings.Default.dExposure);
+
+                          nFocus.Value = cameraControl.fValue;
+                          nFocus.Value = 68 > cameraControl.fmax ? cameraControl.fmax : 68;
+                          nFocus.Maximum = cameraControl.fmax;
+                          nFocus.Minimum = cameraControl.fmin;
+                      }
+
+                      btConnect.Text = "Disconnect";
+
+                      //timerOCR.Start();
+
+                      stopwatchManualTest.Restart();
+
+                      isStarted = true;
+                      isStateReset = true;
+                  }
+                  else
+                  {
+                      if (capture_1._isRunning)
+                          capture_1.Stop();
+
+                      if (capture_2._isRunning)
+                          capture_2.Stop();
+
+                      if (serialPort.IsOpen)
+                          serialPort.Close();
+
+                      //timerOCR.Stop();
+
+
+                      btStartStop.Text = "START";
+                      btConnect.Text = "Connect";
+                      pictureBoxCamera01.Image = null;
+                      pictureBoxCamera02.Image = null;
+
+                      this.richTextBox1.Text = string.Empty;
+                      this.richTextBox2.Text = string.Empty;
+
+
+
+                      scrollablePictureBoxCamera01.Image = null;
+                      scrollablePictureBoxCamera02.Image = null;
+                      lbTitle.Text = "Camera close.";
+                      lbTitle.ForeColor = Color.Black;
+                      lbTitle.BackColor = Color.Yellow;
+                      is_Blink_NG = false;
+                      pictureBoxCamera01.Image = null;
+                      pictureBoxCamera02.Image = null;
+                  }
+                  lbTitle.BackColor = Color.Yellow;
+                  lbTitle.ForeColor = Color.Black;
+                  stopwatchManualTest.Stop();
+              }
+              catch (Exception ex)
+              {
+                  LogWriter.SaveLog("Error Start :" + ex.Message);
+                  MessageBox.Show(ex.Message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                  this.isStart = false;
+                  btStartStop.Text = "START";
+                  lbTitle.Text = "Camera close.";
+                  btConnect.Text = "Connect";
+                  if (capture_1._isRunning)
+                      capture_1.Stop();
+
+                  if (capture_2._isRunning)
+                      capture_2.Stop();
+
+                  if (serialPort.IsOpen)
+                      serialPort.Close();
+
+                  // timerOCR.Stop();
+                  stopwatchManualTest.Stop();
+
+              }
+          }
+        */
 
         private History history;
         private bool is_Blink_NG = false;
 
         #endregion
 
-    
+
 
         #region SELECT X Y
 
@@ -538,7 +742,8 @@ namespace SC_M4
 
         private void btConnect_Click(object sender, EventArgs e)
         {
-            btStartStop.PerformClick();
+            //btStartStop.PerformClick();
+            StartStopCamera();
         }
 
         private void Main_FormClosed(object sender, FormClosedEventArgs e)
@@ -858,14 +1063,14 @@ namespace SC_M4
 
         private Forms.Key key;
         private void keyCAM1ToolStripMenuItem_Click(object sender, EventArgs e)
-        {     
+        {
             key?.Close();
             key = new Key(KeyForms.CAM1);
             key.Show();
         }
 
         private void keyCAM2ToolStripMenuItem_Click(object sender, EventArgs e)
-        {            
+        {
             key?.Close();
             key = new Key(KeyForms.CAM2);
             key.Show();
@@ -878,7 +1083,6 @@ namespace SC_M4
                 Properties.Settings.Default.useQrCode = cbQrCode.Checked;
                 Properties.Settings.Default.Save();
                 useQrCode = cbQrCode.Checked;
-
             }
             catch (Exception ex)
             {
@@ -969,10 +1173,27 @@ namespace SC_M4
             itemList = new ItemList();
             itemList.Show();
         }
-
+        private SearchLB searchModel;
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            SerialCommand(templateData["Query_Mode"]);
+            //SerialCommand(templateData["Query_Mode"]);
+            searchModel?.Close();
+            searchModel = new SearchLB(SearchType.Models);
+            searchModel.OnSelect += SearchModel_OnSelect;
+            searchModel.Show();
+        }
+
+        private void SearchModel_OnSelect(string name)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() =>
+                {
+                    txtModel.Text = name;
+                }));
+                return;
+            }
+            txtModel.Text = name;
         }
     }
 }

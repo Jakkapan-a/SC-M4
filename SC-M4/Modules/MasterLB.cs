@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SC_M4.Forms;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SC_M4.Modules
 {
-    public class MasterLB
+    public class MasterLB : IDataItem
     {
         public int id { get; set;}
         public int master_sw_id { get; set;}
