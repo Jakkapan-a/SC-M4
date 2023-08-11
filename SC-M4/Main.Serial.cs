@@ -132,7 +132,47 @@ namespace SC_M4
 
         private void DecodeDataReceived(byte[] dataReceived)
         {
-            if ((dataReceived[1] == 0x52 || dataReceived[1] == 0x55) && dataReceived[2] == 0x4D)
+            // Tile data received
+            switch (dataReceived[1])
+            {
+                case 0x43:
+                    // 0X43 is Command
+                    DataReceivedCommand(dataReceived);
+                    break;
+                case 0x52:
+                    // 0X52 is Response
+                    DataReceivedResponse(dataReceived);
+                    break;
+                case 0x55:
+                    // 0X55 is Update
+                    DataReceivedResponse(dataReceived);
+                    break;
+            }
+
+            foreach (var d in dataReceived)
+            {
+                // Print to hex
+                Console.Write(d.ToString("X2") + ", ");
+            }
+        }
+
+        private void DataReceivedCommand(byte[] dataReceived)
+        {
+            switch(dataReceived[2]){
+                case 0x49:
+                    if(dataReceived[3] == 0x53 && dataReceived[6] == 0x00){
+                        Console.WriteLine("Command : IS - IO START");
+                    }else if(dataReceived[3] == 0x53 && dataReceived[6] != 0x00){
+                        Console.WriteLine("Command : IS - IO STOP, " + dataReceived[6].ToString("X2"));
+                    }
+                break;
+            }
+        }
+
+        private void DataReceivedResponse(byte[] dataReceived)
+        {
+            // Check data is Mode 0x52 or 0x55 is Response and Update Mode
+            if (dataReceived[2] == 0x4D)
             {
                 // Check data is Mode Auto 
                 if (dataReceived[6] == 0x40)
@@ -149,15 +189,11 @@ namespace SC_M4
                 {
                     typeSelected = TypeAction.Manual;
                 }
-
+                // Set title 
+                lbTitle.Text = "Mode : " + (typeSelected == TypeAction.Auto ? "Auto" : typeSelected == TypeAction.Manual ? "Manual" : "None");
+                Console.WriteLine(" Mode : " + (typeSelected == TypeAction.Auto ? "Auto" : typeSelected == TypeAction.Manual ? "Manual" : "None"));
             }
 
-            Console.WriteLine(" Mode : " + (typeSelected == TypeAction.Auto ? "Auto" : typeSelected == TypeAction.Manual ? "Manual" : "None"));
-            foreach (var d in dataReceived)
-            {
-                // Print to hex
-                Console.Write(d.ToString("X2") + ", ");
-            }
         }
         #endregion
     }

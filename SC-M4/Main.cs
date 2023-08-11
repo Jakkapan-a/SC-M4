@@ -96,6 +96,14 @@ namespace SC_M4
             CreateDirectoryIfNotExists(Properties.Resources.path_log);
             CreateDirectoryIfNotExists(Properties.Resources.path_images);
 
+            Task.Run(()=>{
+                //Creae Database
+                Modules.Actions.CreateTable();
+                Modules.ActionIO.CreateTable();
+                Modules.Items.CreateTable();
+                Modules.Rect.CreateTable();
+            });
+
             // Create Video Capture Object
             capture_1 = new TCapture.Capture();
             capture_1.OnFrameHeader += Capture_1_OnFrameHeader;

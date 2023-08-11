@@ -10,6 +10,7 @@
         "deque": "cpp",
         "sstream": "cpp",
         "string": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "ostream": "cpp"
     }
 }

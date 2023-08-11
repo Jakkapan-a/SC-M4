@@ -20,13 +20,15 @@ namespace SC_M4
             {
                 Invoke(new Action(() =>
                 {
+                    pictureBoxCamera02.Image?.Dispose();
                     pictureBoxCamera02.Image = null;
                 }));
+                return;
             }
-            else
-            {
-                pictureBoxCamera02.Image = null;
-            }
+
+            pictureBoxCamera02.Image?.Dispose();
+            pictureBoxCamera02.Image = null;
+
         }
 
         private void Capture_2_OnVideoStarted()
@@ -65,11 +67,11 @@ namespace SC_M4
                 using (Graphics g = Graphics.FromImage(scrollablePictureBoxCamera02.Image))
                 {
                     g.DrawRectangle(new Pen(Color.Red, 2), rectangle);
-                   
+
                 }
 
                 bmp2_color?.Dispose();
-                rectangle = new Rectangle(Properties.Settings.Default.color_x + 2, Properties.Settings.Default.color_y+2, Properties.Settings.Default.color_width-6, Properties.Settings.Default.color_high-6);
+                rectangle = new Rectangle(Properties.Settings.Default.color_x + 2, Properties.Settings.Default.color_y + 2, Properties.Settings.Default.color_width - 6, Properties.Settings.Default.color_high - 6);
 
                 bmp2_color = new Bitmap(rectangle.Width, rectangle.Height);
                 using (Graphics gx = Graphics.FromImage(bmp2_color))
@@ -94,13 +96,15 @@ namespace SC_M4
             {
                 Invoke(new Action(() =>
                 {
+                    pictureBoxCamera01.Image?.Dispose();
                     pictureBoxCamera01.Image = null;
                 }));
+                return;
             }
-            else
-            {
-                pictureBoxCamera01.Image = null;
-            }
+
+            pictureBoxCamera01.Image?.Dispose();
+            pictureBoxCamera01.Image = null;
+
         }
 
         private void Capture_1_OnVideoStarted()
@@ -140,9 +144,9 @@ namespace SC_M4
                 }
             }
 
-            if(typeSelected == Utilities.TypeAction.Manual)
+            if (typeSelected == Utilities.TypeAction.Manual)
             {
-                if(stopwatchManualTest.ElapsedMilliseconds > 500)
+                if (stopwatchManualTest.ElapsedMilliseconds > 500)
                 {
                     stopwatchManualTest.Restart();
                 }

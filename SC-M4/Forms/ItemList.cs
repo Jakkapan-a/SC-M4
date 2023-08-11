@@ -21,10 +21,7 @@ namespace SC_M4.Forms
 
         private void ItemList_Load(object sender, EventArgs e)
         {
-            Modules.Actions.CreateTable();
-            Modules.ActionIO.CreateTable();
-            Modules.Items.CreateTable();
-            Modules.Rect.CreateTable();
+          
 
             RenderCBModels();
             // RenderDGVItem();
