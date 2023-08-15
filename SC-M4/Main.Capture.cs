@@ -123,6 +123,10 @@ namespace SC_M4
                 Invoke(new Action(() => Capture_1_OnFrameHeader(bitmap)));
                 return;
             }
+            if(stopwatchManualTest == null)
+            {
+                stopwatchManualTest = new Stopwatch();
+            }
             pictureBoxCamera01.Image?.Dispose();
             pictureBoxCamera01.Image = (System.Drawing.Image)bitmap.Clone();
 
@@ -149,6 +153,7 @@ namespace SC_M4
             {
                 if (stopwatchManualTest.ElapsedMilliseconds > 1000)
                 {
+                    //Console.WriteLine("Manual Test "+ stopwatchManualTest.ElapsedMilliseconds);
                     StartManualTest();
                     stopwatchManualTest.Restart();
                 }

@@ -802,26 +802,29 @@ namespace SC_M4
             isOCR1 = true;
         }
         private bool toggle_blink_ng = false;
+        private bool IsChangeSelectedMode = false;
         private void timerMain_Tick(object sender, EventArgs e)
         {
-            if (is_Blink_NG)
-            {
-                toggle_blink_ng = !toggle_blink_ng;
-                if (toggle_blink_ng)
+            if(!IsChangeSelectedMode){
+                if (is_Blink_NG)
                 {
-                    lbTitle.BackColor = Color.Red;
-                    lbTitle.ForeColor = Color.White;
+                    toggle_blink_ng = !toggle_blink_ng;
+                    if (toggle_blink_ng)
+                    {
+                        lbTitle.BackColor = Color.Red;
+                        lbTitle.ForeColor = Color.White;
+                    }
+                    else
+                    {
+                        lbTitle.BackColor = Color.White;
+                        lbTitle.ForeColor = Color.Red;
+                    }
                 }
-                else
+                else if (lbTitle.BackColor != Color.Yellow && isStateReset && lbTitle.Text != "OK" && lbTitle.Text != "NG")
                 {
-                    lbTitle.BackColor = Color.White;
-                    lbTitle.ForeColor = Color.Red;
+                    lbTitle.BackColor = Color.Yellow;
+                    lbTitle.ForeColor = Color.Black;
                 }
-            }
-            else if (lbTitle.BackColor != Color.Yellow && isStateReset && lbTitle.Text != "OK" && lbTitle.Text != "NG")
-            {
-                lbTitle.BackColor = Color.Yellow;
-                lbTitle.ForeColor = Color.Black;
             }
         }
 

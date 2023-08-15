@@ -62,6 +62,7 @@ namespace SC_M4
                         capture_2.setFocus((int)nFocus.Value);
                         isStarted = false;
                     }
+                    IsChangeSelectedMode = false;
                     stopwatch.Reset();
                     ToggleDetectionStatus();
 

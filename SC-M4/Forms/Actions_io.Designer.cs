@@ -30,6 +30,7 @@
         {
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.nPIN = new System.Windows.Forms.NumericUpDown();
             this.btnIODelete = new System.Windows.Forms.Button();
             this.btnIOEdit = new System.Windows.Forms.Button();
             this.btnIOSave = new System.Windows.Forms.Button();
@@ -65,11 +66,11 @@
             this.rdTypeManual = new System.Windows.Forms.RadioButton();
             this.label1 = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
-            this.nPIN = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nPIN)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvIO)).BeginInit();
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nDelay)).BeginInit();
@@ -83,7 +84,6 @@
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nAutoDelay)).BeginInit();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nPIN)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -127,11 +127,24 @@
             this.splitContainer1.SplitterDistance = 240;
             this.splitContainer1.TabIndex = 2;
             // 
+            // nPIN
+            // 
+            this.nPIN.Location = new System.Drawing.Point(45, 407);
+            this.nPIN.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nPIN.Name = "nPIN";
+            this.nPIN.Size = new System.Drawing.Size(100, 20);
+            this.nPIN.TabIndex = 5;
+            // 
             // btnIODelete
             // 
             this.btnIODelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnIODelete.BackgroundImage = global::SC_M4.Properties.Resources.delete_32;
             this.btnIODelete.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnIODelete.Enabled = false;
             this.btnIODelete.Location = new System.Drawing.Point(160, 374);
             this.btnIODelete.Name = "btnIODelete";
             this.btnIODelete.Size = new System.Drawing.Size(31, 27);
@@ -154,6 +167,7 @@
             // btnIOSave
             // 
             this.btnIOSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnIOSave.Enabled = false;
             this.btnIOSave.Location = new System.Drawing.Point(160, 407);
             this.btnIOSave.Name = "btnIOSave";
             this.btnIOSave.Size = new System.Drawing.Size(75, 23);
@@ -535,18 +549,6 @@
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // nPIN
-            // 
-            this.nPIN.Location = new System.Drawing.Point(45, 407);
-            this.nPIN.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.nPIN.Name = "nPIN";
-            this.nPIN.Size = new System.Drawing.Size(100, 20);
-            this.nPIN.TabIndex = 5;
-            // 
             // Actions_io
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -567,6 +569,7 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.nPIN)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvIO)).EndInit();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
@@ -586,7 +589,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nAutoDelay)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nPIN)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

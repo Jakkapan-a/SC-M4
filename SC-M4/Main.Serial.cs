@@ -1,6 +1,7 @@
 ﻿using SC_M4.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO.Ports;
 using System.Linq;
@@ -20,6 +21,8 @@ namespace SC_M4
             templateData.Add("Query_Mode", new byte[8] { 0x02, 0x51, 0x4D, 0x00, 0x00, 0x00, 0x00, 0x03 });
             templateData.Add("Query_Status", new byte[8] { 0x02, 0x51, 0x53, 0x00, 0x00, 0x00, 0x00, 0x03 });
             templateData.Add("Command", new byte[8] { 0x02, 0x43, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03 });
+            templateData.Add("Command_io", new byte[8] { 0x02, 0x43, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03 });
+
         }
         #region Serial Port 
 
@@ -162,6 +165,7 @@ namespace SC_M4
                 case 0x49:
                     if(dataReceived[3] == 0x53 && dataReceived[6] == 0x00){
                         Console.WriteLine("Command : IS - IO START");
+                        
                         StartAutoTest();
                     }else if(dataReceived[3] == 0x53 && dataReceived[6] != 0x00){
                         Console.WriteLine("Command : IS - IO STOP, " + dataReceived[6].ToString("X2"));
@@ -173,6 +177,7 @@ namespace SC_M4
 
         private void DataReceivedResponse(byte[] dataReceived)
         {
+            IsChangeSelectedMode = true;
             // Check data is Mode 0x52 or 0x55 is Response and Update Mode
             if (dataReceived[2] == 0x4D)
             {
@@ -180,16 +185,27 @@ namespace SC_M4
                 if (dataReceived[6] == 0x40)
                 {
                     typeSelected = TypeAction.None;
+                    stopwatchManualTest.Stop();
+                    lbTitle.BackColor = Color.Gray;
                 }
                 else if (dataReceived[6] == 0x41)
                 {
                     typeSelected = TypeAction.Auto;
-
+                    stopwatchManualTest.Stop();
+                    lbTitle.BackColor = Color.Orange;
                 }
                 // Check data is Mode Manual
                 else if (dataReceived[6] == 0x42)
                 {
-                    stopwatchManualTest.Reset();
+                    if (stopwatchManualTest == null)
+                    {
+                        stopwatchManualTest = new Stopwatch();
+                        stopwatchManualTest.Start();
+                    }
+                    lbTitle.BackColor = Color.Yellow;
+
+                    stopwatchManualTest.Restart();
+
                     typeSelected = TypeAction.Manual;
                 }
                 // Set title 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SC_M4.Utilities;
+using System.Collections.Generic;
 
 namespace SC_M4.Modules
 {
@@ -89,11 +90,5 @@ namespace SC_M4.Modules
             Dictionary<string, object> parameters = new Dictionary<string, object> { { "@pin", pin }, { "@id", id } };
             return SQliteDataAccess.Query<ActionIO>(sql, parameters).Count > 0;
         }
-    }
-
-    public enum TypeAction
-    {
-        io,
-        servo,
     }
 }

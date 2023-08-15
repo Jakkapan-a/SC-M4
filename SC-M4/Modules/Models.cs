@@ -99,19 +99,5 @@ namespace SC_M4.Modules
             parameters.Add("@id", id);
             return SQliteDataAccess.Query<Models>(sql, parameters).Count > 0;
         }
-
-
-    }
-
-
-
-
-
-
-
-    public enum TypeImage
-    {
-        full,
-        rect
     }
 }
