@@ -96,12 +96,37 @@ namespace SC_M4
             CreateDirectoryIfNotExists(Properties.Resources.path_log);
             CreateDirectoryIfNotExists(Properties.Resources.path_images);
 
+            LogWriter = new LogFile();
+            LogWriter.path = Properties.Resources.path_log;
+
             Task.Run(()=>{
                 //Creae Database
+                Modules.Models.CreateTable();
                 Modules.Actions.CreateTable();
                 Modules.ActionIO.CreateTable();
                 Modules.Items.CreateTable();
                 Modules.Rect.CreateTable();
+
+                try
+                {
+                    var s = Setting.GetSettingRemove();
+                    if (s.Count > 0)
+                    {
+                        foreach (var set in s)
+                        {
+                            if (File.Exists(set.path_image))
+                            {
+                                File.Delete(set.path_image);
+                                set.Delete();
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogWriter.SaveLog("Error delete file : " + ex.Message);
+                }
+
             });
 
             // Create Video Capture Object
@@ -116,8 +141,7 @@ namespace SC_M4
 
             this.ActiveControl = txtEmployee;
             txtEmployee.Focus();
-            LogWriter = new LogFile();
-            LogWriter.path = Properties.Resources.path_log;
+
             LogWriter.SaveLog("Start Program");
             btRefresh.PerformClick();
 
@@ -125,25 +149,7 @@ namespace SC_M4
 
             loadRect(0);
             loadRect(1);
-            try
-            {
-                var s = Setting.GetSettingRemove();
-                if (s.Count > 0)
-                {
-                    foreach (var set in s)
-                    {
-                        if (File.Exists(set.path_image))
-                        {
-                            File.Delete(set.path_image);
-                            set.Delete();
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                LogWriter.SaveLog("Error delete file : " + ex.Message);
-            }
+          
             timerMain.Start();
             deletedFileTemp();
             loadTableHistory();

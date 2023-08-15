@@ -24,14 +24,7 @@ namespace SC_M4
 
         private Task taskProcess;
 
-        private string result_1 = string.Empty;
-        private string result_2 = string.Empty;
-
-        private Stopwatch stopwatch = new Stopwatch();
-        private OcrResult ocrResult1, ocrResult2;
-        private bool useQrCode = false;
-        private CancellationTokenSource cts = new CancellationTokenSource();
-
+    
         private void TimerOCR_Tick(object sender, EventArgs e)
         {
             onTest();

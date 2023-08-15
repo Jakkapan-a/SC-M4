@@ -39,6 +39,7 @@ namespace SC_M4
 
         public Bitmap bmp2;
         public Bitmap bmp2_color;
+
         private void Capture_2_OnFrameHeader(Bitmap bitmap)
         {
             if (pictureBoxCamera02.InvokeRequired)
@@ -146,8 +147,9 @@ namespace SC_M4
 
             if (typeSelected == Utilities.TypeAction.Manual)
             {
-                if (stopwatchManualTest.ElapsedMilliseconds > 500)
+                if (stopwatchManualTest.ElapsedMilliseconds > 1000)
                 {
+                    StartManualTest();
                     stopwatchManualTest.Restart();
                 }
             }

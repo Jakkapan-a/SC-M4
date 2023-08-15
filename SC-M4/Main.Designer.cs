@@ -51,7 +51,7 @@
             this.splitContainerHomeMain = new System.Windows.Forms.SplitContainer();
             this.panel2 = new System.Windows.Forms.Panel();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.richTextBox3 = new System.Windows.Forms.RichTextBox();
+            this.txtDebug = new System.Windows.Forms.RichTextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnSearch = new System.Windows.Forms.Button();
             this.label16 = new System.Windows.Forms.Label();
@@ -339,7 +339,7 @@
             this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox4.Controls.Add(this.richTextBox3);
+            this.groupBox4.Controls.Add(this.txtDebug);
             this.groupBox4.Location = new System.Drawing.Point(3, 377);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(217, 77);
@@ -347,16 +347,16 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "DEBUG";
             // 
-            // richTextBox3
+            // txtDebug
             // 
-            this.richTextBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.txtDebug.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBox3.Location = new System.Drawing.Point(7, 19);
-            this.richTextBox3.Name = "richTextBox3";
-            this.richTextBox3.Size = new System.Drawing.Size(205, 52);
-            this.richTextBox3.TabIndex = 0;
-            this.richTextBox3.Text = "";
+            this.txtDebug.Location = new System.Drawing.Point(7, 19);
+            this.txtDebug.Name = "txtDebug";
+            this.txtDebug.Size = new System.Drawing.Size(205, 52);
+            this.txtDebug.TabIndex = 0;
+            this.txtDebug.Text = "";
             // 
             // groupBox2
             // 
@@ -961,7 +961,7 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.TextBox txtModel;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.RichTextBox richTextBox3;
+        private System.Windows.Forms.RichTextBox txtDebug;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox checkBoxAutoFocus;

@@ -162,8 +162,10 @@ namespace SC_M4
                 case 0x49:
                     if(dataReceived[3] == 0x53 && dataReceived[6] == 0x00){
                         Console.WriteLine("Command : IS - IO START");
+                        StartAutoTest();
                     }else if(dataReceived[3] == 0x53 && dataReceived[6] != 0x00){
                         Console.WriteLine("Command : IS - IO STOP, " + dataReceived[6].ToString("X2"));
+                        StopAutoTest();
                     }
                 break;
             }
@@ -187,11 +189,13 @@ namespace SC_M4
                 // Check data is Mode Manual
                 else if (dataReceived[6] == 0x42)
                 {
+                    stopwatchManualTest.Reset();
                     typeSelected = TypeAction.Manual;
                 }
                 // Set title 
                 lbTitle.Text = "Mode : " + (typeSelected == TypeAction.Auto ? "Auto" : typeSelected == TypeAction.Manual ? "Manual" : "None");
                 Console.WriteLine(" Mode : " + (typeSelected == TypeAction.Auto ? "Auto" : typeSelected == TypeAction.Manual ? "Manual" : "None"));
+                txtDebug.Text += " Mode : " + (typeSelected == TypeAction.Auto ? "Auto" : typeSelected == TypeAction.Manual ? "Manual" : "None") + "\r\n";
             }
 
         }

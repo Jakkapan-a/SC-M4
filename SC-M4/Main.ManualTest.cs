@@ -1,15 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.Media.Ocr;
 
 namespace SC_M4
 {
     public partial class Main
     {
+        private string result_1 = string.Empty;
+        private string result_2 = string.Empty;
+
+        private Stopwatch stopwatch = new Stopwatch();
+        private OcrResult ocrResult1, ocrResult2;
+        private bool useQrCode = false;
+        private CancellationTokenSource cts = new CancellationTokenSource();
 
         private CancellationTokenSource cts_manual = new CancellationTokenSource();
         private Task task_manual;
@@ -21,16 +30,31 @@ namespace SC_M4
 
         private void StartManualTest()
         {
-            if (task_manual != null && task_manual.Status == TaskStatus.Running)
+            if (task_auto != null && task_auto.Status == TaskStatus.Running)
             {
                 return;
             }
-
-            // Reset the cancellation token.
-            cts_manual?.Dispose();
-            cts_manual = new CancellationTokenSource();
+            onTest();
         }
+        private void DoWorkManualTest(CancellationToken cancellationToken)
+        {
+            try
+            {
 
+                if (capture_1._isRunning && capture_2._isRunning && bitmapCamera_01 != null && bitmapCamera_02 != null && isStateReset && scrollablePictureBoxCamera01.Image != null && scrollablePictureBoxCamera02.Image != null)
+                {
+
+                    stopwatch.Reset();
+                    ToggleDetectionStatus();
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
         private string CleanAndReplaceText1(string input)
         {
             int index731 = input.IndexOf("-731");

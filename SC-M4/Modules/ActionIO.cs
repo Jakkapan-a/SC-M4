@@ -53,7 +53,7 @@ namespace SC_M4.Modules
 
         public static List<ActionIO> Get()
         {
-            string sql = "select * from action_io order by id desc limit 3000";
+            string sql = "select * from action_io order by id asc limit 3000";
             return SQliteDataAccess.Query<ActionIO>(sql, null);
         }
 

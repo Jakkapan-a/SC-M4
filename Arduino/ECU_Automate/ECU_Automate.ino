@@ -15,9 +15,7 @@ void btnStartPressed(void);
 void btnStartReleased(void);
 TcBUTTON btnStart(BUTTON_START_PIN, btnStartPressed, btnStartReleased);
 
-#define LED_PIN 44
-void ledChanged(bool pressed);
-TcPINOUT led(LED_PIN, ledChanged);
+
 
 #define SERVO_PIN 4
 Servo servo;
@@ -70,13 +68,6 @@ void loop() {
   btnManualSelector.update();
   btnStart.update();
   btnStartOnPush();
-}
-void ledChanged(bool pressed) {
-  if (pressed) {
-    Serial.println("Led on");
-  } else {
-    Serial.println("Led off");
-  }
 }
 
 void btnSelectorAutoChanged(bool pressed) {

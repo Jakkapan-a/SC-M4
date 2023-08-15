@@ -23,7 +23,7 @@ namespace SC_M4.Forms
 
         private void ManageModels_Load(object sender, EventArgs e)
         {
-            Modules.Models.CreateTable();
+            
             RenderDGV_Models();
         }
 
