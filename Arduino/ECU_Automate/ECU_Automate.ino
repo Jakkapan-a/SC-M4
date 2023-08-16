@@ -64,38 +64,63 @@ const byte ResponseModeManual[8] = { 0x02, 0x52, 0x4D, 0x00, 0x00, 0x00, 0x42, 0
 const byte CommandStart[8] = { 0x02, 0x43, 0X49, 0x53, 0x00, 0x00, 0x00, 0x03 };
 
 unsigned long lastTimeBtnStart = 0;
-uint8_t countBtnStart = 0;
+int countBtnStart = 0;
+const int LENGTH = 8;
+byte data[LENGTH];
+int dataIndex = 0;
+bool startReceived = false;
 
 void serialEvent() {
-  while (Serial.available() > 7) {
-    byte data[8];
-    for (int i = 0; i < 8; i++) {
-      data[i] = Serial.read();
-    }
-    // Ask for Mode Auto or Manual
-    if (data[0] == 0x02 && data[1] == 0x51 && data[2] == 0x4D && data[7] == 0x03) {
-      // Check Selector Button
-      if (btnAutoSelector.getState() || btnManualSelector.getState()) {
-        if (btnAutoSelector.getState()) {
-          Serial.write(ResponseModeAuto, sizeof(ResponseModeAuto));
-        } else {
-          Serial.write(ResponseModeManual, sizeof(ResponseModeManual));
+  while (Serial.available()) {
+    byte incomingByte = Serial.read();
+    if (incomingByte == 0x02) {  // Start byte
+      startReceived = true;
+      dataIndex = 0;
+    } else if (startReceived) {
+      data[dataIndex++] = incomingByte;
+      // End byte
+      if (dataIndex == LENGTH - 1 && incomingByte == 0x03) {
+        // Check and process the data
+        // Ask for Mode Auto or Manual
+        if (data[0] == 0x02 && data[1] == 0x51 && data[2] == 0x4D) {
+          // Check Selector Button
+          if (btnAutoSelector.getState() || btnManualSelector.getState()) {
+            if (btnAutoSelector.getState()) {
+              Serial.write(ResponseModeAuto, sizeof(ResponseModeAuto));
+            } else {
+              Serial.write(ResponseModeManual, sizeof(ResponseModeManual));
+            }
+          } else {
+            Serial.write(ResponseModeNone, sizeof(ResponseModeNone));
+          }
         }
-      } else {
-        Serial.write(ResponseModeNone, sizeof(ResponseModeNone));
+
+        if (data[1] == 0x51 && data[2] == 0x4D) {
+          DecodeData(data);
+        }
+        startReceived = false;
+      } else if (dataIndex >= LENGTH) {
+        startReceived = false;  // Reset if the message is longer than expected
       }
     }
-    if (data[0] == 0x02 && data[7] == 0x03) {
-      DecodeData(data);
-    }
-    //--------------------------------------------------------------------------------------
   }
 }
 
 void setup() {
   Serial.begin(115200);
   // Serial.println("Start");
-  // servo.attach(SERVO_PIN);
+  servo.attach(SERVO_PIN);
+  servo.write(0);
+  // Update
+  if (btnAutoSelector.getState() || btnManualSelector.getState()) {
+    if (btnAutoSelector.getState()) {
+      Serial.write(ResponseModeAuto, sizeof(ResponseModeAuto));
+    } else {
+      Serial.write(ResponseModeManual, sizeof(ResponseModeManual));
+    }
+  } else {
+    Serial.write(ResponseModeNone, sizeof(ResponseModeNone));
+  }
 }
 
 void loop() {
@@ -228,9 +253,10 @@ void DecodeData(byte data[]) {
           trnl.off();
         }
         break;
-      // 4
+      // 4 Servo
       case 0x04:
-        
+        uint8_t value = data[6];
+        servo.write(value);
         break;
       // 46
       case 0x2E:
