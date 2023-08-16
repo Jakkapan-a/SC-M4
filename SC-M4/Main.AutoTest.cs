@@ -89,15 +89,19 @@ namespace SC_M4
                             ProcessTypeManual(action, token);
                             break;
                             case Utilities.TypeAction.Servo:
-                            Console.WriteLine($"Action name {action.name}");
+                            //Console.WriteLine($"Action name {action.name}");
+                            ProcessTypeServo(action, token);
                             break;
                         case Utilities.TypeAction.Image:
-                            Console.WriteLine($"Action name {action.name}");
+                            //Console.WriteLine($"Action name {action.name}");
+                            ProcessTypeImage(action, token);
                             break;
                     }
                     Thread.Sleep(action.delay);
                 }
             }
+
+            Console.WriteLine($"Tset Done");
         }
 
         private void ProcessTypeAuto(Actions action,CancellationToken token)
@@ -146,8 +150,16 @@ namespace SC_M4
         }
 
         private void ProcessTypeServo(Actions action, CancellationToken token)
-        {
-
+        {// Set parameter
+           
+            int pin = 4;
+            byte value = ((byte)pin);
+            templateData["Command_io"][2] = 0X49;
+            templateData["Command_io"][3] = 0x50;
+            templateData["Command_io"][4] = value;
+            templateData["Command_io"][6] = (byte)action.servo;
+            // Send parameter
+            serialPortIO.SerialCommand(templateData["Command_io"]);
         }
         private void ProcessTypeImage(Actions action, CancellationToken token)
         {

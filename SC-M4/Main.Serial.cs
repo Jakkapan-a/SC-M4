@@ -83,9 +83,10 @@ namespace SC_M4
                 _dataBuffer.AddRange(bytes);
 
                 Console.Write("Receive : ");
-                foreach (var data in _dataBuffer)
+                foreach (var d in _dataBuffer)
                 {
-                    Console.WriteLine($"[{data} -> {data:X2}]");
+                    // Print to hex
+                    Console.Write(d.ToString("X2") + ", ");
                 }
                 //Console.Write($"[{bytes} -> {bytes:X2}]");
                 Console.WriteLine("---------------------");
@@ -182,11 +183,7 @@ namespace SC_M4
                     break;
             }
 
-            foreach (var d in dataReceived)
-            {
-                // Print to hex
-                Console.Write(d.ToString("X2") + ", ");
-            }
+        
         }
 
         private void DataReceivedCommand(byte[] dataReceived)

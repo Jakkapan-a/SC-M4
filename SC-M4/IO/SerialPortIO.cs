@@ -63,6 +63,14 @@ namespace SC_M4.IO
             // Is the port open?
             if (this.IsOpen)
             {
+                Console.Write("Send : ");
+                foreach (var d in bytes)
+                {
+                    // Print to hex
+                    Console.Write($"{d}->"+d.ToString("X2") + ", ");
+                }
+                //Console.Write($"[{bytes} -> {bytes:X2}]");
+                Console.WriteLine("---------------------");
                 this.Write(bytes, 0, bytes.Length);
             }
         }

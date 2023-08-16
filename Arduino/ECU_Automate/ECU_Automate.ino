@@ -64,6 +64,15 @@ const byte ResponseModeManual[8] = { 0x02, 0x52, 0x4D, 0x00, 0x00, 0x00, 0x42, 0
 const byte CommandStart[8] = { 0x02, 0x43, 0X49, 0x53, 0x00, 0x00, 0x00, 0x03 };
 
 unsigned long lastTimeBtnStart = 0;
+unsigned long lastTimeServoPosition = 0;
+uint8_t servoPosition = 100;
+uint8_t servoPositionOld = 100;
+uint8_t speedServo = 200;
+const uint8_t servoDiscrepancy = 20;
+const uint8_t servoSlow = 40;
+const uint8_t servoFast = 5;
+uint8_t GetSpeed(uint8_t servoPositionOld, uint8_t servoPosition);
+
 int countBtnStart = 0;
 const int LENGTH = 8;
 byte data[LENGTH];
@@ -88,23 +97,20 @@ void serialEvent() {
           if (btnAutoSelector.getState() || btnManualSelector.getState()) {
             if (btnAutoSelector.getState()) {
               Serial.write(ResponseModeAuto, sizeof(ResponseModeAuto));
-              // SerialCommand(ResponseModeAuto);
             } else {
               Serial.write(ResponseModeManual, sizeof(ResponseModeManual));
-              // SerialCommand(ResponseModeManual);
             }
           } else {
             Serial.write(ResponseModeNone, sizeof(ResponseModeNone));
-            // SerialCommand(ResponseModeNone);
           }
         }
 
-        if (data[1] == 0x51 && data[2] == 0x4D) {
+        if (data[1] == 0x43 && data[2] == 0x49) {
+          // Serial.write(14);
           DecodeData(data);
         }
         startReceived = false;
-      } 
-      else if (dataIndex >= LENGTH) {
+      } else if (dataIndex >= LENGTH) {
         startReceived = false;  // Reset if the message is longer than expected
       }
     }
@@ -113,9 +119,9 @@ void serialEvent() {
 
 void setup() {
   Serial.begin(115200);
-  // Serial.println("Start");
   servo.attach(SERVO_PIN);
-  servo.write(120);
+  // servo.write(servoPosition);
+  //  solenoid.on();
 }
 
 void loop() {
@@ -123,26 +129,39 @@ void loop() {
   btnManualSelector.update();
   btnStart.update();
   btnStartOnPush();
+  ServoControl();
+}
+
+void ServoControl() {
+  // -------------------- Servo --------------------
+  if (servoPosition != servoPositionOld) {
+    if (millis() - lastTimeServoPosition > GetSpeed(servoPositionOld, servoPosition)) {
+      if (servoPosition > servoPositionOld) {
+        servoPositionOld++;
+      } else {
+        servoPositionOld--;
+      }
+      servo.write(servoPositionOld);
+      lastTimeServoPosition = millis();
+    }
+  }
+  // -------------------- Servo --------------------
 }
 
 
 void btnSelectorAutoChanged(bool pressed) {
   if (pressed) {
     Serial.write(UpdateModeAuto, sizeof(UpdateModeAuto));
-    // SerialCommand(UpdateModeAuto);
   } else {
     Serial.write(UpdateModeNone, sizeof(UpdateModeNone));
-    // SerialCommand(UpdateModeNone);
   }
 }
 
 void btnSelectorManualChanged(bool pressed) {
   if (pressed) {
     Serial.write(UpdateModeManual, sizeof(UpdateModeManual));
-    // SerialCommand(UpdateModeManual);
   } else {
     Serial.write(UpdateModeNone, sizeof(UpdateModeNone));
-    // SerialCommand(UpdateModeNone);
   }
 }
 
@@ -161,15 +180,11 @@ void btnStartOnPush(void) {
   if (millis() - lastTimeBtnStart > 500 && IsSetStartOnPush) {
     if (countBtnStart == 1) {
       Serial.write(CommandStart, sizeof(CommandStart));
-      // SerialCommand(CommandStart);
-      // Serial.println("Start " + String(countBtnStart));
     } else {
       byte data[8];
       memcpy(data, CommandStart, sizeof(CommandStart));  // This line copies the data from CommandStart to data array
       data[6] = (byte)countBtnStart;
       Serial.write(data, sizeof(data));
-      // SerialCommand(data);
-      // Serial.println("Stop " + String(countBtnStart));
     }
     countBtnStart = 0;
     IsSetStartOnPush = false;
@@ -177,107 +192,176 @@ void btnStartOnPush(void) {
   }
 }
 
-void SerialCommand(byte command[8]) {
-  Serial.write(command, sizeof(command));
+uint8_t GetSpeed(uint8_t old_input, uint8_t new_input) {
+  uint8_t speed = servoSlow;
+  if (old_input > new_input + servoDiscrepancy) {
+    speed = servoFast;
+  } else if (old_input < new_input - servoDiscrepancy) {
+    speed = servoFast;
+  } else {
+    speed = servoSlow;
+  }
+  return speed;
 }
 void DecodeData(byte data[]) {
   // Check Command
-  if (data[1] = 0x43 && data[2] == 0x49 && data[3] == 0x50) {
-    // IO TYPE COMMAND
-    switch (data[4]) {
-      // 44
-      case 0x2C:
-        if (data[6] == 0x01) {
-          acc.on();
-        } else if (data[6] == 0x00) {
-          acc.off();
-        }
-        break;
-      // 42
-      case 0x2A:
-        if (data[6] == 0x01) {
-          bat.on();
-        } else if (data[6] == 0x00) {
-          bat.off();
-        }
-        break;
-      // 38
-      case 0x26:
-        if (data[6] == 0x01) {
-          pik.on();
-        } else if (data[6] == 0x00) {
-          pik.off();
-        }
-        break;
-      // 40
-      case 0x28:
-        if (data[6] == 0x01) {
-          bright.on();
-        } else if (data[6] == 0x00) {
-          bright.off();
-        }
-        break;
-      // 48
-      case 0x30:
-        if (data[6] == 0x01) {
-          motor.on();
-        } else if (data[6] == 0x00) {
-          motor.off();
-        }
-        break;
-      // 34
-      case 0x22:
-        if (data[6] == 0x01) {
-          spd.on();
-        } else if (data[6] == 0x00) {
-          spd.off();
-        }
-        break;
-      // 36
-      case 0x24:
-        if (data[6] == 0x01) {
-          rev.on();
-        } else if (data[6] == 0x00) {
-          rev.off();
-        }
-        break;
-      // 32
-      case 0x20:
-        if (data[6] == 0x01) {
-          trnr.on();
-        } else if (data[6] == 0x00) {
-          trnr.off();
-        }
-        break;
-      // 30
-      case 0x1E:
-        if (data[6] == 0x01) {
-          trnl.on();
-        } else if (data[6] == 0x00) {
-          trnl.off();
-        }
-        break;
-      // 4 Servo
-      case 0x04:
-        uint8_t value = data[6];
-        servo.write(value);
-        break;
-      // 46
-      case 0x2E:
-        if (data[6] == 0x01) {
-          solenoid.on();
-        } else if (data[6] == 0x00) {
-          solenoid.off();
-        }
-        break;
-      // 50
-      case 0x32:
-        if (data[6] == 0x01) {
-          mes.on();
-        } else if (data[6] == 0x00) {
-          mes.off();
-        }
-        break;
+  if (data[1] == 0x43 && data[2] == 0x49 && data[3] == 0x50) {
+    
+    byte command = data[4];
+    byte action = data[6];
+
+    if (command == 0x2C) { // 44
+      if (action == 0x01) acc.on();
+      else if (action == 0x00) acc.off();
+    }
+    else if (command == 0x2A) { // 42
+      if (action == 0x01) bat.on();
+      else if (action == 0x00) bat.off();
+    }
+    else if (command == 0x26) { // 38
+      if (action == 0x01) pik.on();
+      else if (action == 0x00) pik.off();
+    }
+    else if (command == 0x28) { // 40
+      if (action == 0x01) bright.on();
+      else if (action == 0x00) bright.off();
+    }
+    else if (command == 0x30) { // 48
+      if (action == 0x01) motor.on();
+      else if (action == 0x00) motor.off();
+    }
+    else if (command == 0x22) { // 34
+      if (action == 0x01) spd.on();
+      else if (action == 0x00) spd.off();
+    }
+    else if (command == 0x24) { // 36
+      if (action == 0x01) rev.on();
+      else if (action == 0x00) rev.off();
+    }
+    else if (command == 0x20) { // 32
+      if (action == 0x01) trnr.on();
+      else if (action == 0x00) trnr.off();
+    }
+    else if (command == 0x1E) { // 30
+      if (action == 0x01) trnl.on();
+      else if (action == 0x00) trnl.off();
+    }
+    else if (command == 0x04) { // 4 Servo
+      uint8_t value = action;
+      if (value > 180) servoPosition = 180;
+      else if (value < 0) servoPosition = 0;
+      else servoPosition = value;
+    }
+    else if (command == 0x2E) { // 46
+      if (action == 0x01) solenoid.on();
+      else if (action == 0x00) solenoid.off();
+    }
+    else if (command == 0x32) { // 50
+      if (action == 0x01) mes.on();
+      else if (action == 0x00) mes.off();
+    }
+    else {
+      Serial.write(command);
     }
   }
 }
+
+
+// void DecodeData(byte data[]) {
+//   // Check Command
+//   if (data[1] = 0x43 && data[2] == 0x49 && data[3] == 0x50) {                                                       
+//     switch (data[4]) {
+//       case 0x2C:  // 44
+//         if (data[6] == 0x01) {
+//           acc.on();
+//         } else if (data[6] == 0x00) {
+//           acc.off();
+//         }
+//         break;
+//       case 0x2A:  // 42
+//         if (data[6] == 0x01) {
+//           bat.on();
+//         } else if (data[6] == 0x00) {
+//           bat.off();
+//         }
+//         break;
+//       case 0x26:  // 38
+//         if (data[6] == 0x01) {
+//           pik.on();
+//         } else if (data[6] == 0x00) {
+//           pik.off();
+//         }
+//         break;
+//       case 0x28:  // 40
+//         if (data[6] == 0x01) {
+//           bright.on();
+//         } else if (data[6] == 0x00) {
+//           bright.off();
+//         }
+//         break;
+//       case 0x30:  // 48
+//         if (data[6] == 0x01) {
+//           motor.on();
+//         } else if (data[6] == 0x00) {
+//           motor.off();
+//         }
+//         break;
+//       case 0x22:  // 34
+//         if (data[6] == 0x01) {
+//           spd.on();
+//         } else if (data[6] == 0x00) {
+//           spd.off();
+//         }
+//         break;
+//       case 0x24:  // 36
+//         if (data[6] == 0x01) {
+//           rev.on();
+//         } else if (data[6] == 0x00) {
+//           rev.off();
+//         }
+//         break;
+//       case 0x20:  // 32
+//         if (data[6] == 0x01) {
+//           trnr.on();
+//         } else if (data[6] == 0x00) {
+//           trnr.off();
+//         }
+//         break;
+//       case 0x1E:  // 30
+//         if (data[6] == 0x01) {
+//           trnl.on();
+//         } else if (data[6] == 0x00) {
+//           trnl.off();
+//         }
+//         break;
+//       case 0x04:  // 4 Servo
+//         uint8_t value = data[6];
+//         if (value > 180) {
+//           servoPosition = 180;
+//         } else if (value < 0) {
+//           servoPosition = 0;
+//         } else {
+//           servoPosition = value;
+//         }
+//         break;
+//       case 0x2E:  // 46
+//         Serial.write(data[4]);
+//         if (data[6] == 0x01) {
+//           solenoid.on();
+//         } else if (data[6] == 0x00) {
+//           solenoid.off();
+//         }
+//         break;
+//       case 0x32:  // 50
+//         if (data[6] == 0x01) {
+//           mes.on();
+//         } else if (data[6] == 0x00) {
+//           mes.off();
+//         }
+//         break;
+//       default:
+//         Serial.write(data[4]);
+//         break;
+//     }
+//   }
+// }
