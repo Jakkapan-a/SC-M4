@@ -38,7 +38,6 @@ namespace SC_M4.Forms
                 SetActionControls();
                 btnSave.Text = "Update";
             }
-
         }
         private void DisableAllControls()
         {
@@ -69,6 +68,8 @@ namespace SC_M4.Forms
                     Camera_OnSave(action.image_name);
                     break;
             }
+
+            nDelay.Value = action.delay;
         }
 
 
@@ -498,15 +499,11 @@ namespace SC_M4.Forms
         {
             if (dgvIO.SelectedRows.Count == 0)
             {
-                // MessageBox.Show("Please choose IO", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 throw new Exception("Please choose IO");
-                // return null;
             }
             if (!rdOn.Checked && !rdOff.Checked)
             {
-                // MessageBox.Show("Please choose state", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 throw new Exception("Please choose state");
-                // return null;
             }
             int id = int.Parse(dgvIO.SelectedRows[0].Cells["id"].Value.ToString());
             actions.action_io_id = int.Parse(dgvIO.SelectedRows[0].Cells["id"].Value.ToString());
