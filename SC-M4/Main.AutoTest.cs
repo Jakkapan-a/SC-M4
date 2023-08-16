@@ -117,12 +117,12 @@ namespace SC_M4
             templateData["Command_io"][4] = value;
             templateData["Command_io"][6] = 0x01;
             // Send parameter
-            SerialCommand(templateData["Command_io"]);
+            serialPortIO.SerialCommand(templateData["Command_io"]);
             Thread.Sleep(action.auto_delay);
             // Set parameter
             templateData["Command_io"][6] = 0x00;
             // Send parameter
-            SerialCommand(templateData["Command_io"]);
+            serialPortIO.SerialCommand(templateData["Command_io"]);
         }
 
 
@@ -142,7 +142,7 @@ namespace SC_M4
             templateData["Command_io"][4] = value;
             templateData["Command_io"][6] = action.state == 1 ? (byte)0x01 : (byte)0x00; ;
             // Send parameter
-            SerialCommand(templateData["Command_io"]);
+            serialPortIO.SerialCommand(templateData["Command_io"]);
         }
 
         private void ProcessTypeServo(Actions action, CancellationToken token)

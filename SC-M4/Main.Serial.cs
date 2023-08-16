@@ -1,4 +1,5 @@
-﻿using SC_M4.Utilities;
+﻿using SC_M4.IO;
+using SC_M4.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,6 +8,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Windows.Markup;
 
 namespace SC_M4
 {
@@ -14,8 +16,11 @@ namespace SC_M4
     {
         private TypeAction typeSelected = TypeAction.Manual;
         private Dictionary<string, byte[]> templateData;
+        private SerialPortIO serialPortIO;
         private void InitializeSerial()
         {
+            serialPortIO = new SerialPortIO();
+            serialPortIO.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort_DataReceived);
             // Default byte data
             templateData = new Dictionary<string, byte[]>();
             templateData.Add("Query_Mode", new byte[8] { 0x02, 0x51, 0x4D, 0x00, 0x00, 0x00, 0x00, 0x03 });
@@ -34,34 +39,23 @@ namespace SC_M4
         }
         private void ConfigureSerialPort(string portName, int baud)
         {
-            this.serialPort.PortName = portName;
-            this.serialPort.BaudRate = baud;
+            this.serialPortIO.PortName = portName;
+            this.serialPortIO.BaudRate = baud;
         }
-
-        public void SerialCommand(string command)
-        {
-            SerialCommand(Encoding.ASCII.GetBytes(">" + command + "<#"));
-            LogWriter.SaveLog("Serial send : " + command);
-            toolStripStatusSerialData.Text = "DATA :" + command;
-        }
-
-        public void SerialCommand(byte[] bytes) => WriteToSerialPort(bytes);
-
-        public void SerialCommand(List<byte> bytes) => WriteToSerialPort(bytes.ToArray());
 
         private void CloseSerialPortIfExists()
         {
-            if (this.serialPort != null && this.serialPort.IsOpen)
+            if (this.serialPortIO != null && this.serialPortIO.IsOpen)
             {
-                this.serialPort.Close();
+                this.serialPortIO.Close();
             }
         }
         private void AttemptSerialConnection()
         {
             try
             {
-                this.serialPort.Open();
-                SerialCommand(templateData["Query_Mode"]);
+                this.serialPortIO.Open();
+                serialPortIO.SerialCommand(templateData["Query_Mode"]);
                 UpdateConnectionStatus("Serial Connected", Color.Green);
             }
             catch (Exception ex)
@@ -77,26 +71,33 @@ namespace SC_M4
             this.toolStripStatusConnectSerialPort.ForeColor = color;
         }
 
-
-        private void WriteToSerialPort(byte[] bytes)
-        {
-            if (this.serialPort.IsOpen)
-            {
-                this.serialPort.Write(bytes, 0, bytes.Length);
-            }
-        }
         private delegate void UpdateDataReceived(byte[] data);
+        private List<byte> _dataBuffer = new List<byte>();
 
         private void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             try
             {
+                byte[] bytes = new byte[this.serialPortIO.BytesToRead];
+                this.serialPortIO.Read(bytes, 0, bytes.Length);
+                _dataBuffer.AddRange(bytes);
+
+                Console.Write("Receive : ");
+                foreach (var data in _dataBuffer)
+                {
+                    Console.WriteLine($"[{data} -> {data:X2}]");
+                }
+                //Console.Write($"[{bytes} -> {bytes:X2}]");
+                Console.WriteLine("---------------------");
+
+                ProcessDataBuffer();
+
                 // Read data from serial port (byte[])
-                byte[] bytes = new byte[this.serialPort.BytesToRead];
-                this.serialPort.Read(bytes, 0, bytes.Length);
+                // byte[] bytes = new byte[this.serialPortIO.BytesToRead];
+                // this.serialPortIO.Read(bytes, 0, bytes.Length);
                 // Convert byte[] to string
 
-                this.Invoke(new UpdateDataReceived(DataReceived), bytes);
+                //this.Invoke(new UpdateDataReceived(DataReceived), bytes);
             }
             catch (Exception ex)
             {
@@ -105,6 +106,34 @@ namespace SC_M4
             }
         }
 
+        private void ProcessDataBuffer()
+        {
+            // Loop until we no longer have both STX and EOT in the buffer
+            while (_dataBuffer.Contains((byte)0x02) && _dataBuffer.Contains((byte)0x03))
+            {
+                int indexSTX = _dataBuffer.IndexOf((byte)0x02);
+                int indexEOT = _dataBuffer.IndexOf((byte)0x03);
+
+                // Check index of STX and EOT
+                if (indexSTX < indexEOT)
+                {
+                    // Extract message
+                    var message = _dataBuffer.GetRange(indexSTX, indexEOT - indexSTX + 1).ToArray();
+                    //DecodeDataReceived(message);
+                  
+                    this.Invoke(new UpdateDataReceived(DataReceived), message);
+                    // Remove processed data from buffer
+                    _dataBuffer.RemoveRange(0, indexEOT + 1);
+                }
+                else
+                {
+                    // Remove corrupted data (if EOT appears before STX)
+                    _dataBuffer.RemoveRange(0, indexSTX + 1);
+                }
+            }
+        }
+
+
         private void DataReceived(byte[] data)
         {
             if (InvokeRequired)
@@ -112,6 +141,7 @@ namespace SC_M4
                 Invoke(new UpdateDataReceived(DataReceived), data);
                 return;
             }
+         
             // Find data is STX and EOT 
             if (data.Any<byte>(d => d == 0x02) && data.Any<byte>(d => d == 0x03))
             {

@@ -96,7 +96,7 @@
             this.toolStripStatusSerialData = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelError = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerMain = new System.Windows.Forms.Timer(this.components);
-            this.serialPort = new System.IO.Ports.SerialPort(this.components);
+            this.commandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerHomeMain)).BeginInit();
@@ -156,7 +156,8 @@
             this.keyCAM1ToolStripMenuItem,
             this.keyCAM2ToolStripMenuItem,
             this.changeNameToolStripMenuItem,
-            this.sTEPTESTToolStripMenuItem});
+            this.sTEPTESTToolStripMenuItem,
+            this.commandToolStripMenuItem});
             this.settingToolStripMenuItem.Name = "settingToolStripMenuItem";
             this.settingToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
             this.settingToolStripMenuItem.Text = "Setting";
@@ -851,9 +852,12 @@
             this.timerMain.Interval = 1000;
             this.timerMain.Tick += new System.EventHandler(this.timerMain_Tick);
             // 
-            // serialPort
+            // commandToolStripMenuItem
             // 
-            this.serialPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort_DataReceived);
+            this.commandToolStripMenuItem.Name = "commandToolStripMenuItem";
+            this.commandToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.commandToolStripMenuItem.Text = "Command";
+            this.commandToolStripMenuItem.Click += new System.EventHandler(this.commandToolStripMenuItem_Click);
             // 
             // Main
             // 
@@ -943,7 +947,6 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusConnectSerialPort;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusSerialData;
         private System.Windows.Forms.Timer timerMain;
-        private System.IO.Ports.SerialPort serialPort;
         private System.Windows.Forms.ToolStripMenuItem changeNameToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelError;
         private System.Windows.Forms.ToolStripMenuItem cameraControlToolStripMenuItem;
@@ -979,6 +982,7 @@
         private System.Windows.Forms.Button btConnect;
         private System.Windows.Forms.ComboBox cbDriveCam02;
         private System.Windows.Forms.ComboBox comboBoxBaud;
+        private System.Windows.Forms.ToolStripMenuItem commandToolStripMenuItem;
     }
 }
 

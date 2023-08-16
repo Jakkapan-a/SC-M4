@@ -99,7 +99,8 @@ namespace SC_M4
             LogWriter = new LogFile();
             LogWriter.path = Properties.Resources.path_log;
 
-            Task.Run(()=>{
+            Task.Run(() =>
+            {
                 //Creae Database
                 Modules.Models.CreateTable();
                 Modules.Actions.CreateTable();
@@ -149,7 +150,7 @@ namespace SC_M4
 
             loadRect(0);
             loadRect(1);
-          
+
             timerMain.Start();
             deletedFileTemp();
             loadTableHistory();
@@ -241,6 +242,8 @@ namespace SC_M4
         private void btRefresh_Click(object sender, EventArgs e)
         {
             var videoDevices = new List<DsDevice>(DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice));
+            int oldSelectIndex1 = cbDriveCam01.SelectedIndex;
+            int oldSelectIndex2 = cbDriveCam02.SelectedIndex;
             cbDriveCam01.Items.Clear();
             cbDriveCam02.Items.Clear();
             foreach (DsDevice device in videoDevices)
@@ -249,28 +252,50 @@ namespace SC_M4
                 cbDriveCam02.Items.Add(device.Name);
             }
 
+            if (cbDriveCam01.Items.Count > 0 && oldSelectIndex1 >0 &&  oldSelectIndex1 < cbDriveCam01.Items.Count)
+            {
+                cbDriveCam01.SelectedIndex = oldSelectIndex1;
+            }
+            else
             if (cbDriveCam01.Items.Count > 0)
             {
                 cbDriveCam01.SelectedIndex = 0;
+            }
+
+            if (cbDriveCam02.Items.Count > 0 && oldSelectIndex2 > 0 && oldSelectIndex2 < cbDriveCam02.Items.Count)
+            {
+                cbDriveCam02.SelectedIndex = oldSelectIndex2;
+            }
+            else
+            if (cbDriveCam02.Items.Count > 0)
+            {
                 cbDriveCam02.SelectedIndex = 0;
             }
 
+            int oldSelectBand = comboBoxBaud.SelectedIndex;
             comboBoxBaud.Items.Clear();
             comboBoxBaud.Items.AddRange(this.baudList);
+            if (comboBoxBaud.Items.Count > 0 && oldSelectBand >0 && oldSelectBand < comboBoxBaud.Items.Count)
+            {
+                comboBoxBaud.SelectedIndex = oldSelectBand;
+            }
+            else
             if (comboBoxBaud.Items.Count > 0)
+            {
                 comboBoxBaud.SelectedIndex = comboBoxBaud.Items.Count - 1;
+            }
 
+            int oldSelectCOMPort = comboBoxBaud.SelectedIndex;
             comboBoxCOMPort.Items.Clear();
             comboBoxCOMPort.Items.AddRange(SerialPort.GetPortNames());
-            if (comboBoxCOMPort.Items.Count > 0)
-                comboBoxCOMPort.SelectedIndex = comboBoxCOMPort.Items.Count - 1;
-
-
-            if (cameraControl != null)
+            if (comboBoxCOMPort.Items.Count > 0 && oldSelectCOMPort >0 && oldSelectCOMPort < comboBoxCOMPort.Items.Count)
             {
-                cameraControl = null;
+                comboBoxCOMPort.SelectedIndex = oldSelectCOMPort;
             }
-            cameraControl = new TClass.TControl(cbDriveCam02.SelectedIndex);
+            else if (comboBoxBaud.Items.Count > 0)
+            {
+                comboBoxCOMPort.SelectedIndex = 0;
+            }
         }
 
 
@@ -375,6 +400,13 @@ namespace SC_M4
             scrollablePictureBoxCamera02.Image?.Dispose();
             scrollablePictureBoxCamera01.Image = null;
             scrollablePictureBoxCamera02.Image = null;
+
+            if (cameraControl != null)
+            {
+                cameraControl = null;
+            }
+            cameraControl = new TClass.TControl(cbDriveCam02.SelectedIndex);
+
             if (!checkBoxAutoFocus.Checked)
             {
                 cameraControl.set(driveindex_02);
@@ -494,8 +526,7 @@ namespace SC_M4
             if (capture_2._isRunning)
                 capture_2.Stop();
 
-            if (serialPort.IsOpen)
-                serialPort.Close();
+            CloseSerialPortIfExists();
 
             //timerOCR.Stop();
 
@@ -529,192 +560,6 @@ namespace SC_M4
             stopwatchManualTest.Stop();
         }
 
-        /*  private async void btStartStop_Click(object sender, EventArgs e)
-          {
-
-              if (taskCam1 != null && taskCam1.Status == TaskStatus.Running)
-              {
-                  Console.WriteLine("Task 1 is running");
-                  return;
-              }
-
-              if (taskCam2 != null && taskCam2.Status == TaskStatus.Running)
-              {
-                  Console.WriteLine("Task 2 is running");
-                  return;
-              }
-              this.isStart = !this.isStart;
-              try
-              {
-
-                  if (this.isStart)
-                  {
-
-                      if (txtEmployee.Text == string.Empty)
-                      {
-                          this.ActiveControl = txtEmployee;
-                          txtEmployee.Focus();
-                          lbTitle.Text = "Please input employee ID"; //
-                          throw new Exception("Please input employee ID");
-                      }
-
-                      if (cbDriveCam01.SelectedIndex == cbDriveCam02.SelectedIndex)
-                      {
-                          lbTitle.Text = "Please select camera drive!";
-                          throw new Exception("Please select camera drive!");
-                      }
-
-                      if (this.cbDriveCam01.SelectedIndex == -1 || this.cbDriveCam02.SelectedIndex == -1)
-                      {
-                          throw new Exception(Properties.Resources.msg_select_camera);
-                      }
-                      if (txtEmployee.Text == string.Empty)
-                      {
-                          lbTitle.Text = "Please input employee ID"; // 
-                          this.ActiveControl = txtEmployee;
-                          this.txtEmployee.Focus();
-                          throw new Exception("Please input employee ID");
-                      }
-                      if (_colorName != null)
-                      {
-                          _colorName = null;
-                      }
-                      if (Properties.Settings.Default.isUseColorMaster)
-                      {
-                          _colorName = new ColorName(MasterNTC.GetMasterNTC());
-                      }
-                      else
-                      {
-                          _colorName = new ColorName();
-                      }
-
-                      SerialConnect(comboBoxCOMPort.Text,int.Parse(comboBoxBaud.Text));
-
-                      if (capture_1.IsOpened)
-                          capture_1.Stop();
-                      if (capture_2.IsOpened)
-                          capture_2.Stop();
-
-                      replaceNames1?.Clear();
-                      replaceNames1 = Modules.ReplaceName.GetList(0);
-
-                      replaceNames2?.Clear();
-                      replaceNames2 = Modules.ReplaceName.GetList(1);
-
-
-                      driveindex_01 = cbDriveCam01.SelectedIndex;
-                      driveindex_02 = cbDriveCam02.SelectedIndex;
-
-                      lbTitle.Text = "Camera opening...";
-
-                      btConnect.Text = "Opening...";
-                      pictureBoxCamera01.Image?.Dispose();
-                      pictureBoxCamera02.Image?.Dispose();
-                      pictureBoxCamera01.Image = Properties.Resources.Spinner_0_4s_800px;
-                      pictureBoxCamera02.Image = Properties.Resources.Spinner_0_4s_800px;
-
-                      taskCam1 = Task.Run(() => capture_1.Start(driveindex_01));
-
-                      await taskCam1;
-
-                      taskCam2 = Task.Run(() => capture_2.Start(driveindex_02));
-
-                      await taskCam2;
-
-                      btStartStop.Text = "STOP";
-
-                      this.richTextBox1.Text = string.Empty;
-                      this.richTextBox2.Text = string.Empty;
-
-                      scrollablePictureBoxCamera01.Image?.Dispose();
-                      scrollablePictureBoxCamera02.Image?.Dispose();
-                      scrollablePictureBoxCamera01.Image = null;
-                      scrollablePictureBoxCamera02.Image = null;
-                      await Task.Delay(1000);
-                      if (!checkBoxAutoFocus.Checked)
-                      {
-                          cameraControl.set(driveindex_02);
-                          cameraControl.setFocus(Properties.Settings.Default.dFocus);
-                          cameraControl.setZoom(Properties.Settings.Default.dZoom);
-                          cameraControl.setPan(Properties.Settings.Default.dPan);
-                          cameraControl.setTilt(Properties.Settings.Default.dTilt);
-                          cameraControl.setExposure(Properties.Settings.Default.dExposure);
-
-                          nFocus.Value = cameraControl.fValue;
-                          nFocus.Value = 68 > cameraControl.fmax ? cameraControl.fmax : 68;
-                          nFocus.Maximum = cameraControl.fmax;
-                          nFocus.Minimum = cameraControl.fmin;
-                      }
-
-                      btConnect.Text = "Disconnect";
-
-                      //timerOCR.Start();
-
-                      stopwatchManualTest.Restart();
-
-                      isStarted = true;
-                      isStateReset = true;
-                  }
-                  else
-                  {
-                      if (capture_1._isRunning)
-                          capture_1.Stop();
-
-                      if (capture_2._isRunning)
-                          capture_2.Stop();
-
-                      if (serialPort.IsOpen)
-                          serialPort.Close();
-
-                      //timerOCR.Stop();
-
-
-                      btStartStop.Text = "START";
-                      btConnect.Text = "Connect";
-                      pictureBoxCamera01.Image = null;
-                      pictureBoxCamera02.Image = null;
-
-                      this.richTextBox1.Text = string.Empty;
-                      this.richTextBox2.Text = string.Empty;
-
-
-
-                      scrollablePictureBoxCamera01.Image = null;
-                      scrollablePictureBoxCamera02.Image = null;
-                      lbTitle.Text = "Camera close.";
-                      lbTitle.ForeColor = Color.Black;
-                      lbTitle.BackColor = Color.Yellow;
-                      is_Blink_NG = false;
-                      pictureBoxCamera01.Image = null;
-                      pictureBoxCamera02.Image = null;
-                  }
-                  lbTitle.BackColor = Color.Yellow;
-                  lbTitle.ForeColor = Color.Black;
-                  stopwatchManualTest.Stop();
-              }
-              catch (Exception ex)
-              {
-                  LogWriter.SaveLog("Error Start :" + ex.Message);
-                  MessageBox.Show(ex.Message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                  this.isStart = false;
-                  btStartStop.Text = "START";
-                  lbTitle.Text = "Camera close.";
-                  btConnect.Text = "Connect";
-                  if (capture_1._isRunning)
-                      capture_1.Stop();
-
-                  if (capture_2._isRunning)
-                      capture_2.Stop();
-
-                  if (serialPort.IsOpen)
-                      serialPort.Close();
-
-                  // timerOCR.Stop();
-                  stopwatchManualTest.Stop();
-
-              }
-          }
-        */
 
         private History history;
         private bool is_Blink_NG = false;
@@ -805,7 +650,8 @@ namespace SC_M4
         private bool IsChangeSelectedMode = false;
         private void timerMain_Tick(object sender, EventArgs e)
         {
-            if(!IsChangeSelectedMode){
+            if (!IsChangeSelectedMode)
+            {
                 if (is_Blink_NG)
                 {
                     toggle_blink_ng = !toggle_blink_ng;
@@ -1170,7 +1016,7 @@ namespace SC_M4
             Properties.Settings.Default.isAutoFocus = checkBoxAutoFocus.Checked;
             Properties.Settings.Default.Save();
 
-            if (!checkBoxAutoFocus.Checked)
+            if (cameraControl != null && !checkBoxAutoFocus.Checked)
             {
                 cameraControl.setFocus((int)nFocus.Value);
             }
@@ -1211,6 +1057,11 @@ namespace SC_M4
                 return;
             }
             txtModel.Text = name;
+        }
+
+        private void commandToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            serialPortIO.SerialCommand(templateData["Query_Mode"]);
         }
     }
 }

@@ -11,6 +11,7 @@
         "sstream": "cpp",
         "string": "cpp",
         "valarray": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "istream": "cpp"
     }
 }

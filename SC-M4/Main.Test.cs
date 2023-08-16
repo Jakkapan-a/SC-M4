@@ -134,7 +134,6 @@ namespace SC_M4
                     }
 
                     stopwatch.Stop();
-                    Console.WriteLine("Elapsed Time is {0} ms", stopwatch.ElapsedMilliseconds);
                     Invoke(new Action(() =>
                     {
                         toolStripStatusTime.Text = "Load " + stopwatch.ElapsedMilliseconds.ToString() + "ms";
@@ -233,7 +232,7 @@ namespace SC_M4
             }));
 
             is_Blink_NG = status == "NG";
-            SerialCommand(status);
+            serialPortIO.SerialCommand(status);
         }
 
         private ResultType CompareData(string txt_sw, string txt_lb)
@@ -393,7 +392,7 @@ namespace SC_M4
                     lbTitle.BackColor = Color.Red;
                 }));
                 is_Blink_NG = true;
-                SerialCommand("NG");
+                serialPortIO.SerialCommand("NG");
                 result = 1;
             }
             else
@@ -407,7 +406,7 @@ namespace SC_M4
                     //loadTableHistory();
                 }));
                 result = 2;
-                SerialCommand("OK");
+                serialPortIO.SerialCommand("OK");
             }
             history.name = txtEmployee.Text.Trim();
             history.name_lb = txt_lb;

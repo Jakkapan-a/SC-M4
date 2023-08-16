@@ -76,22 +76,26 @@ void serialEvent() {
     if (incomingByte == 0x02) {  // Start byte
       startReceived = true;
       dataIndex = 0;
+      data[dataIndex++] = incomingByte;
     } else if (startReceived) {
       data[dataIndex++] = incomingByte;
       // End byte
-      if (dataIndex == LENGTH - 1 && incomingByte == 0x03) {
+      if (dataIndex >= LENGTH - 1 && incomingByte == 0x03) {
         // Check and process the data
         // Ask for Mode Auto or Manual
-        if (data[0] == 0x02 && data[1] == 0x51 && data[2] == 0x4D) {
+        if (data[1] == 0x51 && data[2] == 0x4D) {
           // Check Selector Button
           if (btnAutoSelector.getState() || btnManualSelector.getState()) {
             if (btnAutoSelector.getState()) {
               Serial.write(ResponseModeAuto, sizeof(ResponseModeAuto));
+              // SerialCommand(ResponseModeAuto);
             } else {
               Serial.write(ResponseModeManual, sizeof(ResponseModeManual));
+              // SerialCommand(ResponseModeManual);
             }
           } else {
             Serial.write(ResponseModeNone, sizeof(ResponseModeNone));
+            // SerialCommand(ResponseModeNone);
           }
         }
 
@@ -99,7 +103,8 @@ void serialEvent() {
           DecodeData(data);
         }
         startReceived = false;
-      } else if (dataIndex >= LENGTH) {
+      } 
+      else if (dataIndex >= LENGTH) {
         startReceived = false;  // Reset if the message is longer than expected
       }
     }
@@ -110,17 +115,7 @@ void setup() {
   Serial.begin(115200);
   // Serial.println("Start");
   servo.attach(SERVO_PIN);
-  servo.write(0);
-  // Update
-  if (btnAutoSelector.getState() || btnManualSelector.getState()) {
-    if (btnAutoSelector.getState()) {
-      Serial.write(ResponseModeAuto, sizeof(ResponseModeAuto));
-    } else {
-      Serial.write(ResponseModeManual, sizeof(ResponseModeManual));
-    }
-  } else {
-    Serial.write(ResponseModeNone, sizeof(ResponseModeNone));
-  }
+  servo.write(120);
 }
 
 void loop() {
@@ -130,19 +125,24 @@ void loop() {
   btnStartOnPush();
 }
 
+
 void btnSelectorAutoChanged(bool pressed) {
   if (pressed) {
     Serial.write(UpdateModeAuto, sizeof(UpdateModeAuto));
+    // SerialCommand(UpdateModeAuto);
   } else {
     Serial.write(UpdateModeNone, sizeof(UpdateModeNone));
+    // SerialCommand(UpdateModeNone);
   }
 }
 
 void btnSelectorManualChanged(bool pressed) {
   if (pressed) {
     Serial.write(UpdateModeManual, sizeof(UpdateModeManual));
+    // SerialCommand(UpdateModeManual);
   } else {
     Serial.write(UpdateModeNone, sizeof(UpdateModeNone));
+    // SerialCommand(UpdateModeNone);
   }
 }
 
@@ -161,21 +161,25 @@ void btnStartOnPush(void) {
   if (millis() - lastTimeBtnStart > 500 && IsSetStartOnPush) {
     if (countBtnStart == 1) {
       Serial.write(CommandStart, sizeof(CommandStart));
-      Serial.println("Start " + String(countBtnStart));
+      // SerialCommand(CommandStart);
+      // Serial.println("Start " + String(countBtnStart));
     } else {
       byte data[8];
       memcpy(data, CommandStart, sizeof(CommandStart));  // This line copies the data from CommandStart to data array
       data[6] = (byte)countBtnStart;
       Serial.write(data, sizeof(data));
-      Serial.println("Stop " + String(countBtnStart));
+      // SerialCommand(data);
+      // Serial.println("Stop " + String(countBtnStart));
     }
-
     countBtnStart = 0;
     IsSetStartOnPush = false;
     lastTimeBtnStart = millis();
   }
 }
 
+void SerialCommand(byte command[8]) {
+  Serial.write(command, sizeof(command));
+}
 void DecodeData(byte data[]) {
   // Check Command
   if (data[1] = 0x43 && data[2] == 0x49 && data[3] == 0x50) {
