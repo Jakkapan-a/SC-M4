@@ -1,9 +1,12 @@
-﻿using SC_M4.Forms;
+﻿using OpenCvSharp;
+using SC_M4.Forms;
 using SC_M4.Modules;
 using SC_M4.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -106,7 +109,7 @@ namespace SC_M4
                     ProcessTypeImage(action, token);
                     break;
                 case Utilities.TypeAction.Compare:
-
+                    processOCR(token);
                     break;
             }
         }
@@ -157,8 +160,8 @@ namespace SC_M4
         }
 
         private void ProcessTypeServo(Actions action, CancellationToken token)
-        {// Set parameter
-           
+        {
+            // Set parameter           
             int pin = 4;
             byte value = ((byte)pin);
             templateData["Command_io"][2] = 0X49;
@@ -170,7 +173,68 @@ namespace SC_M4
         }
         private void ProcessTypeImage(Actions action, CancellationToken token)
         {
+            using (Bitmap image = new Bitmap(bitmapCamera_01.Width, bitmapCamera_01.Height))
+            {
+                using (Graphics g = Graphics.FromImage(bitmapCamera_01))
+                {
+                    g.DrawImage(bitmapCamera_01,0,0, bitmapCamera_01.Width, bitmapCamera_01.Height);
+                }
 
+                // Load master image
+                string path = Path.Combine(Properties.Resources.path_images, action.image_name);
+                if(!File.Exists(path))
+                {
+                    Console.WriteLine($"Image not found");
+                    return;
+                }
+                using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+                {
+                    using(Bitmap master = (Bitmap)Image.FromStream(fs))
+                    {
+                        List<Modules.Rect> rect = Modules.Rect.GetByAction(action.id);
+                        if(rect == null || rect.Count == 0)
+                        {
+                            Console.WriteLine($"Rect not found");
+                            return;
+                        }
+                        
+                        foreach(var r in rect)
+                        {
+
+                            Console.WriteLine($"Rect: {r.x} {r.y} {r.width} {r.height}");
+
+                            
+                            // using (Bitmap template = new Bitmap(r.width, r.height))
+                            // {
+                            //     using (Graphics g = Graphics.FromImage(template))
+                            //     {
+                            //         g.DrawImage(master, new Rectangle(0, 0, r.width, r.height), new Rectangle(r.x, r.y, r.width, r.height), GraphicsUnit.Pixel);
+                            //     }
+
+                            //     if (CompareImages(image, template, 0.9))
+                            //     {
+                            //         Console.WriteLine($"Found image");
+                            //         return;
+                            //     }
+                            // }
+                        }
+                    }
+                }
+
+            }
+        }
+
+        public bool CompareImages(Bitmap imgBitmap, Bitmap templateBitmap, double threshold)
+        {
+            using (Mat img = OpenCvSharp.Extensions.BitmapConverter.ToMat(imgBitmap))
+            using (Mat template = OpenCvSharp.Extensions.BitmapConverter.ToMat(templateBitmap))
+            using (Mat result = new Mat())
+            {
+                Cv2.MatchTemplate(img, template, result, TemplateMatchModes.CCoeffNormed);
+                Cv2.MinMaxLoc(result, out double minVal, out double maxVal, out _, out _);  // ใช้ discards สำหรับตัวแปรที่ไม่จำเป็นต้องใช้
+                // if (maxVal > threshold) return true;
+                return maxVal > threshold;
+            }
         }
 
     }

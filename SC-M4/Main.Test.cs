@@ -39,7 +39,7 @@ namespace SC_M4
 
             try
             {
-                taskProcess = Task.Run(() => processOCR(), cts.Token);
+                taskProcess = Task.Run(() => processOCR(cts.Token), cts.Token);
                 await taskProcess;
             }
             catch (Exception ex)
@@ -51,7 +51,7 @@ namespace SC_M4
 
         private List<ReplaceName> replaceNames1 = new List<ReplaceName>();
         private List<ReplaceName> replaceNames2 = new List<ReplaceName>();
-        private void processOCR()
+        private void processOCR(CancellationToken token)
         {
             try
             {
