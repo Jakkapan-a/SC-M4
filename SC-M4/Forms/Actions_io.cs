@@ -351,9 +351,11 @@ namespace SC_M4.Forms
                     return "Servo " + actions.servo;
                 case TypeAction.Image:
                     return HandleImageType(actions);
+                case TypeAction.Compare:
+                    actions.type = (int)TypeAction.Compare;
+                    return "Compare Master";
                 default:
                     throw new Exception("Please choose type");
-                    return null;
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using SC_M4.Forms;
 using SC_M4.Modules;
+using SC_M4.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -93,20 +94,19 @@ namespace SC_M4
             switch ((Utilities.TypeAction)action.type)
             {
                 case Utilities.TypeAction.Auto:
-                    //Console.WriteLine($"Action name {action.name}");
                     ProcessTypeAuto(action, token);
                     break;
                 case Utilities.TypeAction.Manual:
-                    //Console.WriteLine($"Action name {action.name}");
                     ProcessTypeManual(action, token);
                     break;
                 case Utilities.TypeAction.Servo:
-                    //Console.WriteLine($"Action name {action.name}");
                     ProcessTypeServo(action, token);
                     break;
                 case Utilities.TypeAction.Image:
-                    //Console.WriteLine($"Action name {action.name}");
                     ProcessTypeImage(action, token);
+                    break;
+                case Utilities.TypeAction.Compare:
+
                     break;
             }
         }

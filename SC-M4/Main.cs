@@ -241,63 +241,35 @@ namespace SC_M4
 
         private void btRefresh_Click(object sender, EventArgs e)
         {
-            var videoDevices = new List<DsDevice>(DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice));
-            int oldSelectIndex1 = cbDriveCam01.SelectedIndex;
-            int oldSelectIndex2 = cbDriveCam02.SelectedIndex;
-            cbDriveCam01.Items.Clear();
-            cbDriveCam02.Items.Clear();
-            foreach (DsDevice device in videoDevices)
-            {
-                cbDriveCam01.Items.Add(device.Name);
-                cbDriveCam02.Items.Add(device.Name);
-            }
+            RefreshVideoDevices();
+            RefreshComboBoxWithList(comboBoxBaud, this.baudList, true);
+            RefreshComboBoxWithList(comboBoxCOMPort, SerialPort.GetPortNames());
+        }
+        private void RefreshVideoDevices()
+        {
+            var videoDevices = DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice).Select(device => device.Name).ToList();
 
-            if (cbDriveCam01.Items.Count > 0 && oldSelectIndex1 >0 &&  oldSelectIndex1 < cbDriveCam01.Items.Count)
+            RefreshComboBoxWithList(cbDriveCam01, videoDevices);
+            RefreshComboBoxWithList(cbDriveCam02, videoDevices);
+        }
+        private void RefreshComboBoxWithList(System.Windows.Forms.ComboBox comboBox, IList<string> items, bool selectLast = false)
+        {
+            int oldSelectedIndex = comboBox.SelectedIndex;
+
+            comboBox.Items.Clear();
+            comboBox.Items.AddRange(items.ToArray());
+
+            if (comboBox.Items.Count <= 0) return;
+
+            if (oldSelectedIndex > 0 && oldSelectedIndex < comboBox.Items.Count)
             {
-                cbDriveCam01.SelectedIndex = oldSelectIndex1;
+                comboBox.SelectedIndex = oldSelectedIndex;
             }
             else
-            if (cbDriveCam01.Items.Count > 0)
             {
-                cbDriveCam01.SelectedIndex = 0;
-            }
-
-            if (cbDriveCam02.Items.Count > 0 && oldSelectIndex2 > 0 && oldSelectIndex2 < cbDriveCam02.Items.Count)
-            {
-                cbDriveCam02.SelectedIndex = oldSelectIndex2;
-            }
-            else
-            if (cbDriveCam02.Items.Count > 0)
-            {
-                cbDriveCam02.SelectedIndex = 0;
-            }
-
-            int oldSelectBand = comboBoxBaud.SelectedIndex;
-            comboBoxBaud.Items.Clear();
-            comboBoxBaud.Items.AddRange(this.baudList);
-            if (comboBoxBaud.Items.Count > 0 && oldSelectBand >0 && oldSelectBand < comboBoxBaud.Items.Count)
-            {
-                comboBoxBaud.SelectedIndex = oldSelectBand;
-            }
-            else
-            if (comboBoxBaud.Items.Count > 0)
-            {
-                comboBoxBaud.SelectedIndex = comboBoxBaud.Items.Count - 1;
-            }
-
-            int oldSelectCOMPort = comboBoxCOMPort.SelectedIndex;
-            comboBoxCOMPort.Items.Clear();
-            comboBoxCOMPort.Items.AddRange(SerialPort.GetPortNames());
-            if (comboBoxCOMPort.Items.Count > 0 && oldSelectCOMPort >0 && oldSelectCOMPort < comboBoxCOMPort.Items.Count)
-            {
-                comboBoxCOMPort.SelectedIndex = oldSelectCOMPort;
-            }
-            else if (comboBoxCOMPort.Items.Count > 0)
-            {
-                comboBoxCOMPort.SelectedIndex = 0;
+                comboBox.SelectedIndex = selectLast ? comboBox.Items.Count - 1 : 0;
             }
         }
-
 
 
         public void saveRect(Rectangle rect, int _type)

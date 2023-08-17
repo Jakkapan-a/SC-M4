@@ -21,6 +21,7 @@ namespace SC_M4.Utilities
         Image = 2,
         Servo = 3,
         None = 4,
+        Compare = 5
     }
     public enum PageType
     {
