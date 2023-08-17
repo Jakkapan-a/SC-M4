@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ZXing.Aztec.Internal;
 
 namespace SC_M4
 {
@@ -78,30 +79,36 @@ namespace SC_M4
                 List<Actions> actions = Actions.GetListByItemId(item.id);
                 foreach(var action in actions)
                 {
-                    switch ((Utilities.TypeAction)action.type)
-                    {
-                        case Utilities.TypeAction.Auto:
-                            //Console.WriteLine($"Action name {action.name}");
-                            ProcessTypeAuto(action, token);
-                            break;
-                        case Utilities.TypeAction.Manual:
-                            //Console.WriteLine($"Action name {action.name}");
-                            ProcessTypeManual(action, token);
-                            break;
-                            case Utilities.TypeAction.Servo:
-                            //Console.WriteLine($"Action name {action.name}");
-                            ProcessTypeServo(action, token);
-                            break;
-                        case Utilities.TypeAction.Image:
-                            //Console.WriteLine($"Action name {action.name}");
-                            ProcessTypeImage(action, token);
-                            break;
-                    }
+                    SortingProcess(action, token);
                     Thread.Sleep(action.delay);
                 }
             }
 
             Console.WriteLine($"Tset Done");
+        }
+
+        public void SortingProcess(Actions action, CancellationToken token)
+        {
+
+            switch ((Utilities.TypeAction)action.type)
+            {
+                case Utilities.TypeAction.Auto:
+                    //Console.WriteLine($"Action name {action.name}");
+                    ProcessTypeAuto(action, token);
+                    break;
+                case Utilities.TypeAction.Manual:
+                    //Console.WriteLine($"Action name {action.name}");
+                    ProcessTypeManual(action, token);
+                    break;
+                case Utilities.TypeAction.Servo:
+                    //Console.WriteLine($"Action name {action.name}");
+                    ProcessTypeServo(action, token);
+                    break;
+                case Utilities.TypeAction.Image:
+                    //Console.WriteLine($"Action name {action.name}");
+                    ProcessTypeImage(action, token);
+                    break;
+            }
         }
 
         private void ProcessTypeAuto(Actions action,CancellationToken token)

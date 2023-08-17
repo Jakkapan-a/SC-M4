@@ -82,7 +82,7 @@ namespace SC_M4
                 this.serialPortIO.Read(bytes, 0, bytes.Length);
                 _dataBuffer.AddRange(bytes);
 
-                Console.Write("Receive : ");
+                Console.WriteLine("Receive : ");
                 foreach (var d in _dataBuffer)
                 {
                     // Print to hex

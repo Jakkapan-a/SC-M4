@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.tProgressBarTest = new System.Windows.Forms.ToolStripProgressBar();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.nPIN = new System.Windows.Forms.NumericUpDown();
             this.btnIODelete = new System.Windows.Forms.Button();
@@ -60,12 +61,15 @@
             this.label2 = new System.Windows.Forms.Label();
             this.nAutoDelay = new System.Windows.Forms.NumericUpDown();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rdCompareModel = new System.Windows.Forms.RadioButton();
             this.rdTypeImage = new System.Windows.Forms.RadioButton();
             this.rdTypeServo = new System.Windows.Forms.RadioButton();
             this.rdTypeAuto = new System.Windows.Forms.RadioButton();
             this.rdTypeManual = new System.Windows.Forms.RadioButton();
             this.label1 = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
+            this.btnTest = new System.Windows.Forms.Button();
+            this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -88,11 +92,18 @@
             // 
             // statusStrip1
             // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tProgressBarTest});
             this.statusStrip1.Location = new System.Drawing.Point(0, 521);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(718, 22);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
+            // 
+            // tProgressBarTest
+            // 
+            this.tProgressBarTest.Name = "tProgressBarTest";
+            this.tProgressBarTest.Size = new System.Drawing.Size(100, 16);
             // 
             // splitContainer1
             // 
@@ -100,7 +111,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.splitContainer1.Location = new System.Drawing.Point(12, 48);
+            this.splitContainer1.Location = new System.Drawing.Point(12, 38);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -123,7 +134,7 @@
             this.splitContainer1.Panel2.Controls.Add(this.groupBox3);
             this.splitContainer1.Panel2.Controls.Add(this.groupBox2);
             this.splitContainer1.Panel2.Controls.Add(this.groupBox1);
-            this.splitContainer1.Size = new System.Drawing.Size(694, 438);
+            this.splitContainer1.Size = new System.Drawing.Size(694, 448);
             this.splitContainer1.SplitterDistance = 240;
             this.splitContainer1.TabIndex = 2;
             // 
@@ -145,7 +156,7 @@
             this.btnIODelete.BackgroundImage = global::SC_M4.Properties.Resources.delete_32;
             this.btnIODelete.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnIODelete.Enabled = false;
-            this.btnIODelete.Location = new System.Drawing.Point(160, 374);
+            this.btnIODelete.Location = new System.Drawing.Point(160, 384);
             this.btnIODelete.Name = "btnIODelete";
             this.btnIODelete.Size = new System.Drawing.Size(31, 27);
             this.btnIODelete.TabIndex = 4;
@@ -157,7 +168,7 @@
             this.btnIOEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnIOEdit.BackgroundImage = global::SC_M4.Properties.Resources.edit_property_32;
             this.btnIOEdit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnIOEdit.Location = new System.Drawing.Point(197, 374);
+            this.btnIOEdit.Location = new System.Drawing.Point(197, 384);
             this.btnIOEdit.Name = "btnIOEdit";
             this.btnIOEdit.Size = new System.Drawing.Size(31, 27);
             this.btnIOEdit.TabIndex = 4;
@@ -168,7 +179,7 @@
             // 
             this.btnIOSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnIOSave.Enabled = false;
-            this.btnIOSave.Location = new System.Drawing.Point(160, 407);
+            this.btnIOSave.Location = new System.Drawing.Point(160, 417);
             this.btnIOSave.Name = "btnIOSave";
             this.btnIOSave.Size = new System.Drawing.Size(75, 23);
             this.btnIOSave.TabIndex = 4;
@@ -180,7 +191,7 @@
             // 
             this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(7, 410);
+            this.label7.Location = new System.Drawing.Point(7, 420);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(31, 13);
             this.label7.TabIndex = 1;
@@ -190,7 +201,7 @@
             // 
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(3, 384);
+            this.label6.Location = new System.Drawing.Point(3, 394);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(41, 13);
             this.label6.TabIndex = 1;
@@ -200,7 +211,7 @@
             // 
             this.txtName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtName.Location = new System.Drawing.Point(45, 381);
+            this.txtName.Location = new System.Drawing.Point(45, 391);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(99, 20);
             this.txtName.TabIndex = 1;
@@ -218,7 +229,7 @@
             this.dgvIO.ReadOnly = true;
             this.dgvIO.RowHeadersVisible = false;
             this.dgvIO.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvIO.Size = new System.Drawing.Size(231, 365);
+            this.dgvIO.Size = new System.Drawing.Size(231, 375);
             this.dgvIO.TabIndex = 0;
             this.dgvIO.SelectionChanged += new System.EventHandler(this.dgvIO_SelectionChanged);
             // 
@@ -469,6 +480,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.rdCompareModel);
             this.groupBox1.Controls.Add(this.rdTypeImage);
             this.groupBox1.Controls.Add(this.rdTypeServo);
             this.groupBox1.Controls.Add(this.rdTypeAuto);
@@ -479,6 +491,17 @@
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Type";
+            // 
+            // rdCompareModel
+            // 
+            this.rdCompareModel.AutoSize = true;
+            this.rdCompareModel.Location = new System.Drawing.Point(163, 19);
+            this.rdCompareModel.Name = "rdCompareModel";
+            this.rdCompareModel.Size = new System.Drawing.Size(99, 17);
+            this.rdCompareModel.TabIndex = 1;
+            this.rdCompareModel.TabStop = true;
+            this.rdCompareModel.Text = "Compare Model";
+            this.rdCompareModel.UseVisualStyleBackColor = true;
             // 
             // rdTypeImage
             // 
@@ -532,7 +555,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
-            this.label1.Location = new System.Drawing.Point(12, 25);
+            this.label1.Location = new System.Drawing.Point(15, 12);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(34, 20);
             this.label1.TabIndex = 3;
@@ -549,11 +572,23 @@
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
+            // btnTest
+            // 
+            this.btnTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnTest.Location = new System.Drawing.Point(631, 9);
+            this.btnTest.Name = "btnTest";
+            this.btnTest.Size = new System.Drawing.Size(75, 23);
+            this.btnTest.TabIndex = 5;
+            this.btnTest.Text = "Test";
+            this.btnTest.UseVisualStyleBackColor = true;
+            this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
+            // 
             // Actions_io
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(718, 543);
+            this.Controls.Add(this.btnTest);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.splitContainer1);
@@ -564,6 +599,8 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Actions_io";
             this.Load += new System.EventHandler(this.Actions_io_Load);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -634,5 +671,8 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.NumericUpDown nThreshold;
         private System.Windows.Forms.NumericUpDown nPIN;
+        private System.Windows.Forms.Button btnTest;
+        private System.Windows.Forms.RadioButton rdCompareModel;
+        private System.Windows.Forms.ToolStripProgressBar tProgressBarTest;
     }
 }

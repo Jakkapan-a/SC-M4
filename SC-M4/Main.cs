@@ -285,14 +285,14 @@ namespace SC_M4
                 comboBoxBaud.SelectedIndex = comboBoxBaud.Items.Count - 1;
             }
 
-            int oldSelectCOMPort = comboBoxBaud.SelectedIndex;
+            int oldSelectCOMPort = comboBoxCOMPort.SelectedIndex;
             comboBoxCOMPort.Items.Clear();
             comboBoxCOMPort.Items.AddRange(SerialPort.GetPortNames());
             if (comboBoxCOMPort.Items.Count > 0 && oldSelectCOMPort >0 && oldSelectCOMPort < comboBoxCOMPort.Items.Count)
             {
                 comboBoxCOMPort.SelectedIndex = oldSelectCOMPort;
             }
-            else if (comboBoxBaud.Items.Count > 0)
+            else if (comboBoxCOMPort.Items.Count > 0)
             {
                 comboBoxCOMPort.SelectedIndex = 0;
             }
@@ -1033,13 +1033,12 @@ namespace SC_M4
         private void sTEPTESTToolStripMenuItem_Click(object sender, EventArgs e)
         {
             itemList?.Close();
-            itemList = new ItemList();
+            itemList = new ItemList(this);
             itemList.Show();
         }
         private SearchLB searchModel;
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            //SerialCommand(templateData["Query_Mode"]);
             searchModel?.Close();
             searchModel = new SearchLB(SearchType.Models);
             searchModel.OnSelect += SearchModel_OnSelect;

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SC_M4.Utilities;
@@ -18,12 +19,14 @@ namespace SC_M4.Forms
         private TypeState typeState = TypeState.Create;
         public delegate void OnSaveHandler();
         public event OnSaveHandler OnSave;
-        public Actions_io(int item_id, TypeState typeState = TypeState.Create)
+        private Main main;
+        public Actions_io(int item_id, TypeState typeState = TypeState.Create, Main main = null)
         {
             InitializeComponent();
             this.id = item_id;
             this.typeState = typeState;
             RenderDGV_IO();
+            this.main = main;
         }
 
         private Modules.Actions action;
@@ -286,7 +289,7 @@ namespace SC_M4.Forms
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-          
+
 
             try
             {
@@ -407,7 +410,7 @@ namespace SC_M4.Forms
         private Forms.RectangleImage rectangleImage;
         private void btnRect_Click(object sender, EventArgs e)
         {
-            if(pictureBox1.Image == null)
+            if (pictureBox1.Image == null)
             {
                 MessageBox.Show("Please choose image", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -416,6 +419,44 @@ namespace SC_M4.Forms
             rectangleImage?.Close();
             rectangleImage = new RectangleImage(action.id);
             rectangleImage.Show();
+        }
+
+
+        private void btnTest_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!rdTypeManual.Checked && !rdTypeAuto.Checked && !rdTypeImage.Checked && !rdTypeServo.Checked)
+                {
+                    MessageBox.Show("Please choose type", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                Modules.Actions actions = new Modules.Actions();
+                string nameDetails = GetNameDetails(actions);
+                if (nameDetails == null) return;
+
+                actions.item_id = id; // Assuming 'id' is defined elsewhere in your class
+                actions.name = nameDetails;
+                actions.delay = (int)nDelay.Value;
+
+                if (main != null)
+                {
+                    tProgressBarTest.Visible = true;
+                    tProgressBarTest.Value = 0;
+                    CancellationTokenSource cts_test = new CancellationTokenSource();
+                    main.SortingProcess(action, cts_test.Token);
+                    //Thread.Sleep(200);
+                    tProgressBarTest.Value = 100;
+                    tProgressBarTest.Visible = false;
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 

@@ -14,15 +14,15 @@ namespace SC_M4.Forms
 {
     public partial class ItemList : Form
     {
-        public ItemList()
+        private Main main;
+        public ItemList(Main main)
         {
             InitializeComponent();
+            this.main = main;
         }
 
         private void ItemList_Load(object sender, EventArgs e)
         {
-          
-
             RenderCBModels();
             // RenderDGVItem();
         }
@@ -403,7 +403,7 @@ namespace SC_M4.Forms
                 int id = (int)dgvItems.SelectedRows[0].Cells["id"].Value;
 
                 actions_io?.Close();
-                actions_io = new Actions_io(id);
+                actions_io = new Actions_io(id,TypeState.Create,this.main);
                 actions_io.FormClosed += Actions_io_FormClosed;
                 actions_io.Show();
             }
@@ -472,7 +472,7 @@ namespace SC_M4.Forms
         {
             actions_io?.Close();
             int io_id = (int)dgvIO.SelectedRows[0].Cells["id"].Value;
-            actions_io = new Actions_io(io_id, TypeState.Update);
+            actions_io = new Actions_io(io_id, TypeState.Update,this.main);
             actions_io.FormClosed += Actions_io_FormClosed;
             actions_io.Show();
         }

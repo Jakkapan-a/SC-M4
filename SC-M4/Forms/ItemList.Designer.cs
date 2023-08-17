@@ -275,6 +275,7 @@
             this.dgvIO.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvIO.Size = new System.Drawing.Size(509, 325);
             this.dgvIO.TabIndex = 0;
+            this.dgvIO.DoubleClick += new System.EventHandler(this.btnIOEdit_Click);
             // 
             // label3
             // 
