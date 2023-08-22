@@ -121,7 +121,7 @@ namespace SC_M4
                     // Extract message
                     var message = _dataBuffer.GetRange(indexSTX, indexEOT - indexSTX + 1).ToArray();
                     //DecodeDataReceived(message);
-                  
+
                     this.Invoke(new UpdateDataReceived(DataReceived), message);
                     // Remove processed data from buffer
                     _dataBuffer.RemoveRange(0, indexEOT + 1);
@@ -142,7 +142,7 @@ namespace SC_M4
                 Invoke(new UpdateDataReceived(DataReceived), data);
                 return;
             }
-         
+
             // Find data is STX and EOT 
             if (data.Any<byte>(d => d == 0x02) && data.Any<byte>(d => d == 0x03))
             {
@@ -158,13 +158,13 @@ namespace SC_M4
                         // Get data between STX and EOT
                         byte[] dataReceived = new byte[indexEOT - indexSTX + 1];
                         Array.Copy(data, indexSTX, dataReceived, 0, dataReceived.Length);
-                        DecodeDataReceived(dataReceived);
+                        DecodeDataReceivedTile(dataReceived);
                     }
                 }
             }
         }
 
-        private void DecodeDataReceived(byte[] dataReceived)
+        private void DecodeDataReceivedTile(byte[] dataReceived)
         {
             // Tile data received
             switch (dataReceived[1])
@@ -183,64 +183,93 @@ namespace SC_M4
                     break;
             }
 
-        
+
         }
 
         private void DataReceivedCommand(byte[] dataReceived)
         {
-            switch(dataReceived[2]){
+            switch (dataReceived[2])
+            {
                 case 0x49:
-                    if(dataReceived[3] == 0x53 && dataReceived[6] == 0x00){
+                    if (dataReceived[3] == 0x53 && dataReceived[6] == 0x00)
+                    {
                         Console.WriteLine("Command : IS - IO START");
-                        
+
                         StartAutoTest();
-                    }else if(dataReceived[3] == 0x53 && dataReceived[6] != 0x00){
+                    }
+                    else if (dataReceived[3] == 0x53 && dataReceived[6] != 0x00)
+                    {
                         Console.WriteLine("Command : IS - IO STOP, " + dataReceived[6].ToString("X2"));
                         StopAutoTest();
                     }
-                break;
+                    break;
             }
         }
-
+        // Subtitle
         private void DataReceivedResponse(byte[] dataReceived)
         {
             IsChangeSelectedMode = true;
-            // Check data is Mode 0x52 or 0x55 is Response and Update Mode
-            if (dataReceived[2] == 0x4D)
+            switch (dataReceived[2])
             {
-                // Check data is Mode Auto 
-                if (dataReceived[6] == 0x40)
-                {
-                    typeSelected = TypeAction.None;
-                    stopwatchManualTest.Stop();
-                    lbTitle.BackColor = Color.Gray;
-                }
-                else if (dataReceived[6] == 0x41)
-                {
-                    typeSelected = TypeAction.Auto;
-                    stopwatchManualTest.Stop();
-                    lbTitle.BackColor = Color.Orange;
-                }
-                // Check data is Mode Manual
-                else if (dataReceived[6] == 0x42)
-                {
-                    if (stopwatchManualTest == null)
-                    {
-                        stopwatchManualTest = new Stopwatch();
-                        stopwatchManualTest.Start();
-                    }
-                    lbTitle.BackColor = Color.Yellow;
-
-                    stopwatchManualTest.Restart();
-
-                    typeSelected = TypeAction.Manual;
-                }
-                // Set title 
-                lbTitle.Text = "Mode : " + (typeSelected == TypeAction.Auto ? "Auto" : typeSelected == TypeAction.Manual ? "Manual" : "None");
-                Console.WriteLine(" Mode : " + (typeSelected == TypeAction.Auto ? "Auto" : typeSelected == TypeAction.Manual ? "Manual" : "None"));
-                txtDebug.Text += " Mode : " + (typeSelected == TypeAction.Auto ? "Auto" : typeSelected == TypeAction.Manual ? "Manual" : "None") + "\r\n";
+                case 0x4D:
+                    ModeSelector(dataReceived);
+                    break;
+                case 0x53:
+                    ModeReset(dataReceived);
+                    break;
             }
+        }
 
+        private void ModeSelector(byte[] dataReceived)
+        {
+            // Check data is Mode Auto 
+            if (dataReceived[6] == 0x40)
+            {
+                typeSelected = TypeAction.None;
+                stopwatchManualTest.Stop();
+                lbTitle.BackColor = Color.Gray;
+            }
+            else if (dataReceived[6] == 0x41)
+            {
+                typeSelected = TypeAction.Auto;
+                stopwatchManualTest.Stop();
+                lbTitle.BackColor = Color.Orange;
+            }
+            // Check data is Mode Manual
+            else if (dataReceived[6] == 0x42)
+            {
+                if (stopwatchManualTest == null)
+                {
+                    stopwatchManualTest = new Stopwatch();
+                    stopwatchManualTest.Start();
+                }
+                lbTitle.BackColor = Color.Yellow;
+
+                stopwatchManualTest.Restart();
+
+                typeSelected = TypeAction.Manual;
+            }
+            // Set title 
+            lbTitle.Text = "Mode : " + (typeSelected == TypeAction.Auto ? "Auto" : typeSelected == TypeAction.Manual ? "Manual" : "None");
+            Console.WriteLine(" Mode : " + (typeSelected == TypeAction.Auto ? "Auto" : typeSelected == TypeAction.Manual ? "Manual" : "None"));
+            txtDebug.Text += " Mode : " + (typeSelected == TypeAction.Auto ? "Auto" : typeSelected == TypeAction.Manual ? "Manual" : "None") + "\r\n";
+        }
+
+        private void ModeReset(byte[] dataReceived)
+        {
+            if(dataReceived[3] == 0x52)
+            {
+                isStateReset = true;
+                is_Blink_NG = false;
+                if (capture_1.IsOpened && capture_1.IsOpened)
+                {
+                    lbTitle.Text = "Start...."; // Wiat for detect....
+                }
+                lbTitle.ForeColor = Color.Black;
+                lbTitle.BackColor = Color.Yellow;
+                richTextBox1.Text = "";
+                richTextBox2.Text = "";
+            }
         }
         #endregion
     }

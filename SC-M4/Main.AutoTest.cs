@@ -200,7 +200,6 @@ namespace SC_M4
                         
                         foreach(var r in rect)
                         {
-
                             Console.WriteLine($"Rect: {r.x} {r.y} {r.width} {r.height}");
 
                             

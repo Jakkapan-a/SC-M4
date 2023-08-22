@@ -3,6 +3,7 @@
 #include <Servo.h>
 #define BUTTON_SELECTOR_AUTO_PIN 8
 
+void ASK_ECU_VER(void);
 // ------------------ Input ------------------
 void btnSelectorAutoChanged(bool pressed);
 TcBUTTON btnAutoSelector(BUTTON_SELECTOR_AUTO_PIN, btnSelectorAutoChanged, NULL, NULL, TcBUTTON::ButtonMode::PULLUP, true);
@@ -15,6 +16,20 @@ TcBUTTON btnManualSelector(BUTTON_SELECTOR_MANUAL_PIN, btnSelectorManualChanged,
 void btnStartPressed(void);
 void btnStartReleased(void);
 TcBUTTON btnStart(BUTTON_START_PIN, btnStartPressed, btnStartReleased);
+
+#define BUTTON_RESET_PIN 10
+void btnResetChanged(bool pressed);
+TcBUTTON btnReset(BUTTON_RESET_PIN, btnResetChanged, NULL, NULL, TcBUTTON::ButtonMode::PULLUP, true);  // RESET SW VER
+
+#define BUTTON_ASK_SOFTWARE_VER_PIN 22
+void btnAskSoftwareVerPressed(void);
+void btnAskSoftwareVerReleased(void);
+TcBUTTON btnAskSoftwareVer(BUTTON_ASK_SOFTWARE_VER_PIN, btnAskSoftwareVerPressed, btnAskSoftwareVerReleased);
+
+#define BUTTON_TOUCH_VIEW_PIN 24
+void btnTouchViewPressed(void);
+void btnTouchViewReleased(void);
+TcBUTTON btnTouchView(BUTTON_TOUCH_VIEW_PIN, btnTouchViewPressed, btnTouchViewReleased);
 
 #define SERVO_PIN 4
 Servo servo;
@@ -51,17 +66,21 @@ TcPINOUT solenoid(SOLENOID_PIN);
 #define MES_PIN 50
 TcPINOUT mes(MES_PIN);
 
-#define SERVO_PIN 4
 // ------------------- Variable -------------------
 const byte UpdateModeNone[8] = { 0x02, 0x55, 0x4D, 0x00, 0x00, 0x00, 0x40, 0x03 };
 const byte UpdateModeAuto[8] = { 0x02, 0x55, 0x4D, 0x00, 0x00, 0x00, 0x41, 0x03 };
 const byte UpdateModeManual[8] = { 0x02, 0x55, 0x4D, 0x00, 0x00, 0x00, 0x42, 0x03 };
+const byte UpdateStatusReset[8] = { 0x02, 0x55, 0x53, 0x52, 0x00, 0x00, 0x00, 0x03 };
 
 const byte ResponseModeNone[8] = { 0x02, 0x52, 0x4D, 0x00, 0x00, 0x00, 0x40, 0x03 };
 const byte ResponseModeAuto[8] = { 0x02, 0x52, 0x4D, 0x00, 0x00, 0x00, 0x41, 0x03 };
 const byte ResponseModeManual[8] = { 0x02, 0x52, 0x4D, 0x00, 0x00, 0x00, 0x42, 0x03 };
 
 const byte CommandStart[8] = { 0x02, 0x43, 0X49, 0x53, 0x00, 0x00, 0x00, 0x03 };
+// 10 04 84 04 C7 00 19 5A 03
+
+byte TPMS_temps[9];
+uint8_t view_mode_flag = 0;
 
 unsigned long lastTimeBtnStart = 0;
 unsigned long lastTimeServoPosition = 0;
@@ -116,11 +135,14 @@ void serialEvent() {
     }
   }
 }
-
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
+  Serial3.begin(9600);
+
+
   servo.attach(SERVO_PIN);
-  // servo.write(servoPosition);
+  servo.write(servoPosition);
+  // ASK_ECU_VER();
   //  solenoid.on();
 }
 
@@ -128,10 +150,58 @@ void loop() {
   btnAutoSelector.update();
   btnManualSelector.update();
   btnStart.update();
+  btnReset.update();
+  btnAskSoftwareVer.update();
+  btnTouchView.update();
   btnStartOnPush();
   ServoControl();
 }
+void serial3Event() {
+  while (Serial3.available()) {
+    byte incomingByte = Serial3.read();
+    // Serial.print(incomingByte,HEX);
+  }
+}
+void ASK_ECU_VER(void) {
+  uint8_t MCU_TO_Device_Data[9];
+  // 10 04 84 04 C7 00 19 5A 03
+  MCU_TO_Device_Data[0] = 0x10;
+  MCU_TO_Device_Data[1] = 0x04;
+  MCU_TO_Device_Data[2] = 0x84;
+  MCU_TO_Device_Data[3] = 0x04;
+  MCU_TO_Device_Data[4] = 0xC7;
+  MCU_TO_Device_Data[5] = 0x00;
+  MCU_TO_Device_Data[6] = 0x19;
+  MCU_TO_Device_Data[7] = 0x5A;
+  MCU_TO_Device_Data[8] = 0x03;
+  Serial3.write(MCU_TO_Device_Data, sizeof(MCU_TO_Device_Data));
+  delay(100);
 
+  // 10 04 84 04 C5 00 22 63 03
+  MCU_TO_Device_Data[0] = 0x10;
+  MCU_TO_Device_Data[1] = 0x04;
+  MCU_TO_Device_Data[2] = 0x84;
+  MCU_TO_Device_Data[3] = 0x04;
+  MCU_TO_Device_Data[4] = 0xC5;
+  MCU_TO_Device_Data[5] = 0x00;
+  MCU_TO_Device_Data[6] = 0x22;
+  MCU_TO_Device_Data[7] = 0x63;
+  MCU_TO_Device_Data[8] = 0x03;
+  Serial3.write(MCU_TO_Device_Data, sizeof(MCU_TO_Device_Data));
+  delay(100);
+
+  // 10 04 84 04 CE 00 2A 60 03
+  MCU_TO_Device_Data[0] = 0x10;
+  MCU_TO_Device_Data[1] = 0x04;
+  MCU_TO_Device_Data[2] = 0x84;
+  MCU_TO_Device_Data[3] = 0x04;
+  MCU_TO_Device_Data[4] = 0xCE;
+  MCU_TO_Device_Data[5] = 0x00;
+  MCU_TO_Device_Data[6] = 0x2A;
+  MCU_TO_Device_Data[7] = 0x60;
+  MCU_TO_Device_Data[8] = 0x03;
+  Serial3.write(MCU_TO_Device_Data, sizeof(MCU_TO_Device_Data));
+}
 void ServoControl() {
   // -------------------- Servo --------------------
   if (servoPosition != servoPositionOld) {
@@ -142,11 +212,14 @@ void ServoControl() {
         servoPositionOld--;
       }
       servo.write(servoPositionOld);
+      // Serial.print("Servo POS:");
+      // Serial.println(servoPositionOld);
       lastTimeServoPosition = millis();
     }
   }
   // -------------------- Servo --------------------
 }
+
 
 
 void btnSelectorAutoChanged(bool pressed) {
@@ -192,6 +265,87 @@ void btnStartOnPush(void) {
   }
 }
 
+void btnResetChanged(bool pressed) {
+  if(!pressed){
+    return;
+  }
+  Serial.println("reset");
+  // if (pressed) {
+  //   byte data[8];
+  //   memcpy(data, UpdateStatusReset, sizeof(UpdateStatusReset));
+  //   data[6] = 0x01;
+  //   Serial.write(data, sizeof(data));
+  // }else{
+  //   Serial.write(UpdateModeNone, sizeof(UpdateModeNone));}
+
+  //  ASK_ECU_VER();
+ 
+}
+
+void Touch_View_Func(uint8_t view_flag)  //   點選視角
+{
+
+  if (view_flag == 3) {
+    TPMS_temps[0] = 0x10;
+    TPMS_temps[1] = 0x04;
+    TPMS_temps[2] = 0x84;
+    TPMS_temps[3] = 0x00;
+    TPMS_temps[4] = 0x57;
+    TPMS_temps[5] = 0x02;
+    TPMS_temps[6] = 0x85;
+    TPMS_temps[7] = 0x50;
+    TPMS_temps[8] = 0x03;
+  } else if (view_flag == 0) {
+    //10 04 84 00 E5 02 86 E1 03
+    TPMS_temps[0] = 0x10;
+    TPMS_temps[1] = 0x04;
+    TPMS_temps[2] = 0x84;
+    TPMS_temps[3] = 0x00;
+    TPMS_temps[4] = 0xE5;
+    TPMS_temps[5] = 0x02;
+    TPMS_temps[6] = 0x86;
+    TPMS_temps[7] = 0xE1;
+    TPMS_temps[8] = 0x03;
+  } else if (view_flag == 1) {
+    TPMS_temps[0] = 0x10;
+    TPMS_temps[1] = 0x04;
+    TPMS_temps[2] = 0x84;
+    TPMS_temps[3] = 0x01;
+    TPMS_temps[4] = 0x80;
+    TPMS_temps[5] = 0x02;
+    TPMS_temps[6] = 0x90;
+    TPMS_temps[7] = 0x93;
+    TPMS_temps[8] = 0x03;
+  } else if (view_flag == 2) {
+    TPMS_temps[0] = 0x10;
+    TPMS_temps[1] = 0x04;
+    TPMS_temps[2] = 0x84;
+    TPMS_temps[3] = 0x02;
+    TPMS_temps[4] = 0x19;
+    TPMS_temps[5] = 0x02;
+    TPMS_temps[6] = 0x92;
+    TPMS_temps[7] = 0x0B;
+    TPMS_temps[8] = 0x03;
+  }
+  // HUD_TXs_Function(9, TPMS_temps);
+  Serial3.write(TPMS_temps, sizeof(TPMS_temps));
+}
+
+void btnAskSoftwareVerPressed(void) {
+}
+void btnAskSoftwareVerReleased(void) {
+  ASK_ECU_VER();
+}
+
+void btnTouchViewPressed(void) {
+}
+void btnTouchViewReleased(void) {
+  Touch_View_Func(view_mode_flag);
+  view_mode_flag++;
+  if (view_mode_flag == 4) {
+    view_mode_flag = 0;
+  }
+}
 uint8_t GetSpeed(uint8_t old_input, uint8_t new_input) {
   uint8_t speed = servoSlow;
   if (old_input > new_input + servoDiscrepancy) {
@@ -206,162 +360,50 @@ uint8_t GetSpeed(uint8_t old_input, uint8_t new_input) {
 void DecodeData(byte data[]) {
   // Check Command
   if (data[1] == 0x43 && data[2] == 0x49 && data[3] == 0x50) {
-    
+
     byte command = data[4];
     byte action = data[6];
 
-    if (command == 0x2C) { // 44
+    if (command == 0x2C) {  // 44
       if (action == 0x01) acc.on();
       else if (action == 0x00) acc.off();
-    }
-    else if (command == 0x2A) { // 42
+    } else if (command == 0x2A) {  // 42
       if (action == 0x01) bat.on();
       else if (action == 0x00) bat.off();
-    }
-    else if (command == 0x26) { // 38
+    } else if (command == 0x26) {  // 38
       if (action == 0x01) pik.on();
       else if (action == 0x00) pik.off();
-    }
-    else if (command == 0x28) { // 40
+    } else if (command == 0x28) {  // 40
       if (action == 0x01) bright.on();
       else if (action == 0x00) bright.off();
-    }
-    else if (command == 0x30) { // 48
+    } else if (command == 0x30) {  // 48
       if (action == 0x01) motor.on();
       else if (action == 0x00) motor.off();
-    }
-    else if (command == 0x22) { // 34
+    } else if (command == 0x22) {  // 34
       if (action == 0x01) spd.on();
       else if (action == 0x00) spd.off();
-    }
-    else if (command == 0x24) { // 36
+    } else if (command == 0x24) {  // 36
       if (action == 0x01) rev.on();
       else if (action == 0x00) rev.off();
-    }
-    else if (command == 0x20) { // 32
+    } else if (command == 0x20) {  // 32
       if (action == 0x01) trnr.on();
       else if (action == 0x00) trnr.off();
-    }
-    else if (command == 0x1E) { // 30
+    } else if (command == 0x1E) {  // 30
       if (action == 0x01) trnl.on();
       else if (action == 0x00) trnl.off();
-    }
-    else if (command == 0x04) { // 4 Servo
+    } else if (command == 0x04) {  // 4 Servo
       uint8_t value = action;
       if (value > 180) servoPosition = 180;
       else if (value < 0) servoPosition = 0;
       else servoPosition = value;
-    }
-    else if (command == 0x2E) { // 46
+    } else if (command == 0x2E) {  // 46
       if (action == 0x01) solenoid.on();
       else if (action == 0x00) solenoid.off();
-    }
-    else if (command == 0x32) { // 50
+    } else if (command == 0x32) {  // 50
       if (action == 0x01) mes.on();
       else if (action == 0x00) mes.off();
-    }
-    else {
+    } else {
       Serial.write(command);
     }
   }
 }
-
-
-// void DecodeData(byte data[]) {
-//   // Check Command
-//   if (data[1] = 0x43 && data[2] == 0x49 && data[3] == 0x50) {                                                       
-//     switch (data[4]) {
-//       case 0x2C:  // 44
-//         if (data[6] == 0x01) {
-//           acc.on();
-//         } else if (data[6] == 0x00) {
-//           acc.off();
-//         }
-//         break;
-//       case 0x2A:  // 42
-//         if (data[6] == 0x01) {
-//           bat.on();
-//         } else if (data[6] == 0x00) {
-//           bat.off();
-//         }
-//         break;
-//       case 0x26:  // 38
-//         if (data[6] == 0x01) {
-//           pik.on();
-//         } else if (data[6] == 0x00) {
-//           pik.off();
-//         }
-//         break;
-//       case 0x28:  // 40
-//         if (data[6] == 0x01) {
-//           bright.on();
-//         } else if (data[6] == 0x00) {
-//           bright.off();
-//         }
-//         break;
-//       case 0x30:  // 48
-//         if (data[6] == 0x01) {
-//           motor.on();
-//         } else if (data[6] == 0x00) {
-//           motor.off();
-//         }
-//         break;
-//       case 0x22:  // 34
-//         if (data[6] == 0x01) {
-//           spd.on();
-//         } else if (data[6] == 0x00) {
-//           spd.off();
-//         }
-//         break;
-//       case 0x24:  // 36
-//         if (data[6] == 0x01) {
-//           rev.on();
-//         } else if (data[6] == 0x00) {
-//           rev.off();
-//         }
-//         break;
-//       case 0x20:  // 32
-//         if (data[6] == 0x01) {
-//           trnr.on();
-//         } else if (data[6] == 0x00) {
-//           trnr.off();
-//         }
-//         break;
-//       case 0x1E:  // 30
-//         if (data[6] == 0x01) {
-//           trnl.on();
-//         } else if (data[6] == 0x00) {
-//           trnl.off();
-//         }
-//         break;
-//       case 0x04:  // 4 Servo
-//         uint8_t value = data[6];
-//         if (value > 180) {
-//           servoPosition = 180;
-//         } else if (value < 0) {
-//           servoPosition = 0;
-//         } else {
-//           servoPosition = value;
-//         }
-//         break;
-//       case 0x2E:  // 46
-//         Serial.write(data[4]);
-//         if (data[6] == 0x01) {
-//           solenoid.on();
-//         } else if (data[6] == 0x00) {
-//           solenoid.off();
-//         }
-//         break;
-//       case 0x32:  // 50
-//         if (data[6] == 0x01) {
-//           mes.on();
-//         } else if (data[6] == 0x00) {
-//           mes.off();
-//         }
-//         break;
-//       default:
-//         Serial.write(data[4]);
-//         break;
-//     }
-//   }
-// }
