@@ -460,6 +460,26 @@ namespace SC_M4.Forms
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private SC_M4.Forms.Login login;
+        private void btnLogin_Click(object sender, EventArgs e)
+        {
+            login?.Close();
+            login = new SC_M4.Forms.Login();
+            login.Show();
+            login.OnLogin += Login_OnLogin;
+
+        }
+
+        private void Login_OnLogin(object sender, EventArgs e)
+        {
+            bool _login = (bool)sender;
+            if (_login)
+            {
+                btnIODelete.Enabled = true;
+                btnIOSave.Enabled = true;
+                btnLogin.Visible = false;
+            }
+        }
     }
 
 }

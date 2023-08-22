@@ -69,6 +69,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnTest = new System.Windows.Forms.Button();
+            this.btnLogin = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -497,10 +498,10 @@
             this.rdCompareModel.AutoSize = true;
             this.rdCompareModel.Location = new System.Drawing.Point(163, 19);
             this.rdCompareModel.Name = "rdCompareModel";
-            this.rdCompareModel.Size = new System.Drawing.Size(99, 17);
+            this.rdCompareModel.Size = new System.Drawing.Size(104, 17);
             this.rdCompareModel.TabIndex = 1;
             this.rdCompareModel.TabStop = true;
-            this.rdCompareModel.Text = "Compare Model";
+            this.rdCompareModel.Text = "Software version";
             this.rdCompareModel.UseVisualStyleBackColor = true;
             // 
             // rdTypeImage
@@ -583,6 +584,17 @@
             this.btnTest.UseVisualStyleBackColor = true;
             this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
             // 
+            // btnLogin
+            // 
+            this.btnLogin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnLogin.Location = new System.Drawing.Point(12, 492);
+            this.btnLogin.Name = "btnLogin";
+            this.btnLogin.Size = new System.Drawing.Size(75, 23);
+            this.btnLogin.TabIndex = 4;
+            this.btnLogin.Text = "Login";
+            this.btnLogin.UseVisualStyleBackColor = true;
+            this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
+            // 
             // Actions_io
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -591,6 +603,7 @@
             this.Controls.Add(this.btnTest);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.btnLogin);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);
             this.MaximumSize = new System.Drawing.Size(734, 582);
@@ -674,5 +687,6 @@
         private System.Windows.Forms.Button btnTest;
         private System.Windows.Forms.RadioButton rdCompareModel;
         private System.Windows.Forms.ToolStripProgressBar tProgressBarTest;
+        private System.Windows.Forms.Button btnLogin;
     }
 }

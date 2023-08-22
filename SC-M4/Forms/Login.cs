@@ -13,6 +13,13 @@ namespace SC_M4.Forms
     public partial class Login : Form
     {
         private NameList nameList;
+        public event EventHandler<EventArgs> OnLogin;
+        public bool _login = false;
+        public Login()
+        {
+            InitializeComponent();
+        }
+
         public Login(NameList name)
         {
             InitializeComponent();
@@ -23,16 +30,17 @@ namespace SC_M4.Forms
         {
             this.ActiveControl = txtPassword;
             txtPassword.Focus();
-
-            if (nameList == null)
-                this.Close();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (txtPassword.Text == "0987")
+            if (txtPassword.Text == "0987" && nameList != null)
             {
                 nameList._login = true;
+            }else if(txtPassword.Text == "0987")
+            {
+                _login = true;
+                OnLogin?.Invoke(_login, EventArgs.Empty);
             }
             this.Close();
         }

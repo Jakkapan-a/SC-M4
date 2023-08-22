@@ -68,9 +68,9 @@
             // 
             // statusStrip1
             // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 428);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 477);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(800, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(880, 22);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -103,8 +103,8 @@
             this.splitContainer1.Panel2.Controls.Add(this.btnIONew);
             this.splitContainer1.Panel2.Controls.Add(this.dgvIO);
             this.splitContainer1.Panel2.Controls.Add(this.label3);
-            this.splitContainer1.Size = new System.Drawing.Size(776, 393);
-            this.splitContainer1.SplitterDistance = 257;
+            this.splitContainer1.Size = new System.Drawing.Size(856, 442);
+            this.splitContainer1.SplitterDistance = 283;
             this.splitContainer1.TabIndex = 2;
             // 
             // btnItemUp
@@ -112,7 +112,7 @@
             this.btnItemUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnItemUp.BackgroundImage = global::SC_M4.Properties.Resources.up_32;
             this.btnItemUp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnItemUp.Location = new System.Drawing.Point(3, 334);
+            this.btnItemUp.Location = new System.Drawing.Point(3, 383);
             this.btnItemUp.Name = "btnItemUp";
             this.btnItemUp.Size = new System.Drawing.Size(29, 23);
             this.btnItemUp.TabIndex = 2;
@@ -124,7 +124,7 @@
             this.btnItemDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnItemDown.BackgroundImage = global::SC_M4.Properties.Resources.down_32;
             this.btnItemDown.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnItemDown.Location = new System.Drawing.Point(38, 334);
+            this.btnItemDown.Location = new System.Drawing.Point(38, 383);
             this.btnItemDown.Name = "btnItemDown";
             this.btnItemDown.Size = new System.Drawing.Size(29, 23);
             this.btnItemDown.TabIndex = 2;
@@ -136,7 +136,7 @@
             this.btnItemDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnItemDelete.BackgroundImage = global::SC_M4.Properties.Resources.delete_32;
             this.btnItemDelete.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnItemDelete.Location = new System.Drawing.Point(177, 334);
+            this.btnItemDelete.Location = new System.Drawing.Point(203, 383);
             this.btnItemDelete.Name = "btnItemDelete";
             this.btnItemDelete.Size = new System.Drawing.Size(29, 23);
             this.btnItemDelete.TabIndex = 2;
@@ -148,7 +148,7 @@
             this.btnItemEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnItemEdit.BackgroundImage = global::SC_M4.Properties.Resources.edit_property_32;
             this.btnItemEdit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnItemEdit.Location = new System.Drawing.Point(223, 334);
+            this.btnItemEdit.Location = new System.Drawing.Point(249, 383);
             this.btnItemEdit.Name = "btnItemEdit";
             this.btnItemEdit.Size = new System.Drawing.Size(29, 23);
             this.btnItemEdit.TabIndex = 2;
@@ -158,7 +158,7 @@
             // btnItemSave
             // 
             this.btnItemSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnItemSave.Location = new System.Drawing.Point(177, 360);
+            this.btnItemSave.Location = new System.Drawing.Point(203, 409);
             this.btnItemSave.Name = "btnItemSave";
             this.btnItemSave.Size = new System.Drawing.Size(75, 23);
             this.btnItemSave.TabIndex = 2;
@@ -170,9 +170,9 @@
             // 
             this.txtName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtName.Location = new System.Drawing.Point(6, 363);
+            this.txtName.Location = new System.Drawing.Point(6, 412);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(165, 20);
+            this.txtName.Size = new System.Drawing.Size(191, 20);
             this.txtName.TabIndex = 1;
             this.txtName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtName_KeyDown);
             // 
@@ -189,7 +189,7 @@
             this.dgvItems.ReadOnly = true;
             this.dgvItems.RowHeadersVisible = false;
             this.dgvItems.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvItems.Size = new System.Drawing.Size(250, 299);
+            this.dgvItems.Size = new System.Drawing.Size(276, 348);
             this.dgvItems.TabIndex = 0;
             this.dgvItems.SelectionChanged += new System.EventHandler(this.dgvItems_SelectionChanged);
             // 
@@ -208,7 +208,7 @@
             this.btnIODown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnIODown.BackgroundImage = global::SC_M4.Properties.Resources.down_32;
             this.btnIODown.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnIODown.Location = new System.Drawing.Point(39, 360);
+            this.btnIODown.Location = new System.Drawing.Point(39, 409);
             this.btnIODown.Name = "btnIODown";
             this.btnIODown.Size = new System.Drawing.Size(28, 23);
             this.btnIODown.TabIndex = 2;
@@ -220,7 +220,7 @@
             this.btnIOUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnIOUp.BackgroundImage = global::SC_M4.Properties.Resources.up_32;
             this.btnIOUp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnIOUp.Location = new System.Drawing.Point(6, 360);
+            this.btnIOUp.Location = new System.Drawing.Point(6, 409);
             this.btnIOUp.Name = "btnIOUp";
             this.btnIOUp.Size = new System.Drawing.Size(27, 23);
             this.btnIOUp.TabIndex = 2;
@@ -230,7 +230,7 @@
             // btnIODelete
             // 
             this.btnIODelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnIODelete.Location = new System.Drawing.Point(273, 363);
+            this.btnIODelete.Location = new System.Drawing.Point(327, 412);
             this.btnIODelete.Name = "btnIODelete";
             this.btnIODelete.Size = new System.Drawing.Size(75, 23);
             this.btnIODelete.TabIndex = 2;
@@ -241,7 +241,7 @@
             // btnIOEdit
             // 
             this.btnIOEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnIOEdit.Location = new System.Drawing.Point(354, 361);
+            this.btnIOEdit.Location = new System.Drawing.Point(408, 410);
             this.btnIOEdit.Name = "btnIOEdit";
             this.btnIOEdit.Size = new System.Drawing.Size(75, 23);
             this.btnIOEdit.TabIndex = 2;
@@ -252,7 +252,7 @@
             // btnIONew
             // 
             this.btnIONew.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnIONew.Location = new System.Drawing.Point(437, 360);
+            this.btnIONew.Location = new System.Drawing.Point(491, 409);
             this.btnIONew.Name = "btnIONew";
             this.btnIONew.Size = new System.Drawing.Size(75, 23);
             this.btnIONew.TabIndex = 2;
@@ -273,7 +273,7 @@
             this.dgvIO.ReadOnly = true;
             this.dgvIO.RowHeadersVisible = false;
             this.dgvIO.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvIO.Size = new System.Drawing.Size(509, 325);
+            this.dgvIO.Size = new System.Drawing.Size(563, 374);
             this.dgvIO.TabIndex = 0;
             this.dgvIO.DoubleClick += new System.EventHandler(this.btnIOEdit_Click);
             // 
@@ -291,7 +291,7 @@
             // 
             this.cbModels.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cbModels.FormattingEnabled = true;
-            this.cbModels.Location = new System.Drawing.Point(584, 6);
+            this.cbModels.Location = new System.Drawing.Point(664, 6);
             this.cbModels.Name = "cbModels";
             this.cbModels.Size = new System.Drawing.Size(121, 21);
             this.cbModels.TabIndex = 3;
@@ -300,7 +300,7 @@
             // btnManage
             // 
             this.btnManage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnManage.Location = new System.Drawing.Point(711, 4);
+            this.btnManage.Location = new System.Drawing.Point(791, 4);
             this.btnManage.Name = "btnManage";
             this.btnManage.Size = new System.Drawing.Size(75, 23);
             this.btnManage.TabIndex = 2;
@@ -312,7 +312,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(880, 499);
             this.Controls.Add(this.cbModels);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.btnManage);

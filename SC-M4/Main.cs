@@ -1015,6 +1015,7 @@ namespace SC_M4
             searchModel = new SearchLB(SearchType.Models);
             searchModel.OnSelect += SearchModel_OnSelect;
             searchModel.Show();
+
         }
 
         private void SearchModel_OnSelect(string name)
@@ -1030,9 +1031,9 @@ namespace SC_M4
             txtModel.Text = name;
         }
 
-        private void commandToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            serialPortIO.SerialCommand(templateData["Query_Mode"]);
-        }
+        //private void commandToolStripMenuItem_Click(object sender, EventArgs e)
+        //{
+        //    serialPortIO.SerialCommand(templateData["Query_Mode"]);
+        //}
     }
 }

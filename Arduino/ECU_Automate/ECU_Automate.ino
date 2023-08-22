@@ -21,12 +21,12 @@ TcBUTTON btnStart(BUTTON_START_PIN, btnStartPressed, btnStartReleased);
 void btnResetChanged(bool pressed);
 TcBUTTON btnReset(BUTTON_RESET_PIN, btnResetChanged, NULL, NULL, TcBUTTON::ButtonMode::PULLUP, true);  // RESET SW VER
 
-#define BUTTON_ASK_SOFTWARE_VER_PIN 22
+#define BUTTON_ASK_SOFTWARE_VER_PIN 24
 void btnAskSoftwareVerPressed(void);
 void btnAskSoftwareVerReleased(void);
 TcBUTTON btnAskSoftwareVer(BUTTON_ASK_SOFTWARE_VER_PIN, btnAskSoftwareVerPressed, btnAskSoftwareVerReleased);
 
-#define BUTTON_TOUCH_VIEW_PIN 24
+#define BUTTON_TOUCH_VIEW_PIN 26
 void btnTouchViewPressed(void);
 void btnTouchViewReleased(void);
 TcBUTTON btnTouchView(BUTTON_TOUCH_VIEW_PIN, btnTouchViewPressed, btnTouchViewReleased);
@@ -125,7 +125,6 @@ void serialEvent() {
         }
 
         if (data[1] == 0x43 && data[2] == 0x49) {
-          // Serial.write(14);
           DecodeData(data);
         }
         startReceived = false;
@@ -142,8 +141,6 @@ void setup() {
 
   servo.attach(SERVO_PIN);
   servo.write(servoPosition);
-  // ASK_ECU_VER();
-  //  solenoid.on();
 }
 
 void loop() {
@@ -282,7 +279,7 @@ void btnResetChanged(bool pressed) {
  
 }
 
-void Touch_View_Func(uint8_t view_flag)  //   點選視角
+void Touch_View_Func(uint8_t view_flag) 
 {
 
   if (view_flag == 3) {
@@ -327,7 +324,6 @@ void Touch_View_Func(uint8_t view_flag)  //   點選視角
     TPMS_temps[7] = 0x0B;
     TPMS_temps[8] = 0x03;
   }
-  // HUD_TXs_Function(9, TPMS_temps);
   Serial3.write(TPMS_temps, sizeof(TPMS_temps));
 }
 
@@ -357,6 +353,7 @@ uint8_t GetSpeed(uint8_t old_input, uint8_t new_input) {
   }
   return speed;
 }
+
 void DecodeData(byte data[]) {
   // Check Command
   if (data[1] == 0x43 && data[2] == 0x49 && data[3] == 0x50) {
@@ -402,7 +399,23 @@ void DecodeData(byte data[]) {
     } else if (command == 0x32) {  // 50
       if (action == 0x01) mes.on();
       else if (action == 0x00) mes.off();
-    } else {
+    } else if(command == 0x18){   // 24
+      if(action == 0x01) {
+        // More... code
+      }
+      else if(action == 0x00){
+        btnAskSoftwareVerReleased();
+      }
+    }else if(command == 0x1A){    // 26
+      if(action == 0x01){
+        // More... code
+      } else if(action == 0x00){
+        btnTouchViewReleased();
+      }
+    }
+
+    else
+     {
       Serial.write(command);
     }
   }
