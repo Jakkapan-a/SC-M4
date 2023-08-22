@@ -1,4 +1,6 @@
-﻿namespace SC_M4
+﻿using System;
+
+namespace SC_M4
 {
     partial class Main
     {
@@ -857,7 +859,6 @@
             this.commandToolStripMenuItem.Name = "commandToolStripMenuItem";
             this.commandToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.commandToolStripMenuItem.Text = "Command";
-            this.commandToolStripMenuItem.Click += new System.EventHandler(this.commandToolStripMenuItem_Click);
             // 
             // Main
             // 
@@ -913,6 +914,7 @@
             this.PerformLayout();
 
         }
+
 
         #endregion
 

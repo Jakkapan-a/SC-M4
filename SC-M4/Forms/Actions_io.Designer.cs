@@ -70,6 +70,9 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.btnTest = new System.Windows.Forms.Button();
             this.btnLogin = new System.Windows.Forms.Button();
+            this.nTimeOut = new System.Windows.Forms.NumericUpDown();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -89,15 +92,16 @@
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nAutoDelay)).BeginInit();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nTimeOut)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tProgressBarTest});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 521);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 553);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(718, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(742, 22);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -135,20 +139,22 @@
             this.splitContainer1.Panel2.Controls.Add(this.groupBox3);
             this.splitContainer1.Panel2.Controls.Add(this.groupBox2);
             this.splitContainer1.Panel2.Controls.Add(this.groupBox1);
-            this.splitContainer1.Size = new System.Drawing.Size(694, 448);
-            this.splitContainer1.SplitterDistance = 240;
+            this.splitContainer1.Size = new System.Drawing.Size(718, 480);
+            this.splitContainer1.SplitterDistance = 248;
             this.splitContainer1.TabIndex = 2;
             // 
             // nPIN
             // 
-            this.nPIN.Location = new System.Drawing.Point(45, 407);
+            this.nPIN.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.nPIN.Location = new System.Drawing.Point(45, 449);
             this.nPIN.Maximum = new decimal(new int[] {
             255,
             0,
             0,
             0});
             this.nPIN.Name = "nPIN";
-            this.nPIN.Size = new System.Drawing.Size(100, 20);
+            this.nPIN.Size = new System.Drawing.Size(107, 20);
             this.nPIN.TabIndex = 5;
             // 
             // btnIODelete
@@ -157,7 +163,7 @@
             this.btnIODelete.BackgroundImage = global::SC_M4.Properties.Resources.delete_32;
             this.btnIODelete.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btnIODelete.Enabled = false;
-            this.btnIODelete.Location = new System.Drawing.Point(160, 384);
+            this.btnIODelete.Location = new System.Drawing.Point(168, 416);
             this.btnIODelete.Name = "btnIODelete";
             this.btnIODelete.Size = new System.Drawing.Size(31, 27);
             this.btnIODelete.TabIndex = 4;
@@ -169,7 +175,7 @@
             this.btnIOEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnIOEdit.BackgroundImage = global::SC_M4.Properties.Resources.edit_property_32;
             this.btnIOEdit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnIOEdit.Location = new System.Drawing.Point(197, 384);
+            this.btnIOEdit.Location = new System.Drawing.Point(205, 416);
             this.btnIOEdit.Name = "btnIOEdit";
             this.btnIOEdit.Size = new System.Drawing.Size(31, 27);
             this.btnIOEdit.TabIndex = 4;
@@ -180,7 +186,7 @@
             // 
             this.btnIOSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnIOSave.Enabled = false;
-            this.btnIOSave.Location = new System.Drawing.Point(160, 417);
+            this.btnIOSave.Location = new System.Drawing.Point(168, 449);
             this.btnIOSave.Name = "btnIOSave";
             this.btnIOSave.Size = new System.Drawing.Size(75, 23);
             this.btnIOSave.TabIndex = 4;
@@ -192,7 +198,7 @@
             // 
             this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(7, 420);
+            this.label7.Location = new System.Drawing.Point(7, 452);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(31, 13);
             this.label7.TabIndex = 1;
@@ -202,7 +208,7 @@
             // 
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(3, 394);
+            this.label6.Location = new System.Drawing.Point(3, 426);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(41, 13);
             this.label6.TabIndex = 1;
@@ -212,9 +218,9 @@
             // 
             this.txtName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtName.Location = new System.Drawing.Point(45, 391);
+            this.txtName.Location = new System.Drawing.Point(45, 423);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(99, 20);
+            this.txtName.Size = new System.Drawing.Size(107, 20);
             this.txtName.TabIndex = 1;
             // 
             // dgvIO
@@ -230,18 +236,21 @@
             this.dgvIO.ReadOnly = true;
             this.dgvIO.RowHeadersVisible = false;
             this.dgvIO.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvIO.Size = new System.Drawing.Size(231, 375);
+            this.dgvIO.Size = new System.Drawing.Size(239, 407);
             this.dgvIO.TabIndex = 0;
             this.dgvIO.SelectionChanged += new System.EventHandler(this.dgvIO_SelectionChanged);
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.label10);
             this.groupBox5.Controls.Add(this.label4);
+            this.groupBox5.Controls.Add(this.label9);
             this.groupBox5.Controls.Add(this.label3);
+            this.groupBox5.Controls.Add(this.nTimeOut);
             this.groupBox5.Controls.Add(this.nDelay);
             this.groupBox5.Location = new System.Drawing.Point(8, 381);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(437, 52);
+            this.groupBox5.Size = new System.Drawing.Size(437, 91);
             this.groupBox5.TabIndex = 1;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Next Delay";
@@ -249,7 +258,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(209, 21);
+            this.label4.Location = new System.Drawing.Point(209, 54);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(20, 13);
             this.label4.TabIndex = 1;
@@ -258,7 +267,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(24, 21);
+            this.label3.Location = new System.Drawing.Point(24, 54);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(34, 13);
             this.label3.TabIndex = 1;
@@ -266,7 +275,7 @@
             // 
             // nDelay
             // 
-            this.nDelay.Location = new System.Drawing.Point(64, 19);
+            this.nDelay.Location = new System.Drawing.Point(64, 52);
             this.nDelay.Maximum = new decimal(new int[] {
             50000,
             0,
@@ -503,6 +512,7 @@
             this.rdCompareModel.TabStop = true;
             this.rdCompareModel.Text = "Software version";
             this.rdCompareModel.UseVisualStyleBackColor = true;
+            this.rdCompareModel.CheckedChanged += new System.EventHandler(this.type_Checked);
             // 
             // rdTypeImage
             // 
@@ -565,7 +575,7 @@
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Location = new System.Drawing.Point(631, 495);
+            this.btnSave.Location = new System.Drawing.Point(655, 527);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 4;
@@ -575,8 +585,8 @@
             // 
             // btnTest
             // 
-            this.btnTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnTest.Location = new System.Drawing.Point(631, 9);
+            this.btnTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnTest.Location = new System.Drawing.Point(655, 9);
             this.btnTest.Name = "btnTest";
             this.btnTest.Size = new System.Drawing.Size(75, 23);
             this.btnTest.TabIndex = 5;
@@ -587,7 +597,7 @@
             // btnLogin
             // 
             this.btnLogin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLogin.Location = new System.Drawing.Point(12, 492);
+            this.btnLogin.Location = new System.Drawing.Point(12, 524);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(75, 23);
             this.btnLogin.TabIndex = 4;
@@ -595,18 +605,52 @@
             this.btnLogin.UseVisualStyleBackColor = true;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
+            // nTimeOut
+            // 
+            this.nTimeOut.Location = new System.Drawing.Point(64, 26);
+            this.nTimeOut.Maximum = new decimal(new int[] {
+            50000,
+            0,
+            0,
+            0});
+            this.nTimeOut.Name = "nTimeOut";
+            this.nTimeOut.Size = new System.Drawing.Size(139, 20);
+            this.nTimeOut.TabIndex = 0;
+            this.nTimeOut.Value = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(10, 28);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(48, 13);
+            this.label9.TabIndex = 1;
+            this.label9.Text = "Time out";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(209, 28);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(20, 13);
+            this.label10.TabIndex = 1;
+            this.label10.Text = "ms";
+            // 
             // Actions_io
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(718, 543);
+            this.ClientSize = new System.Drawing.Size(742, 575);
             this.Controls.Add(this.btnTest);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnLogin);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);
-            this.MaximumSize = new System.Drawing.Size(734, 582);
             this.MinimumSize = new System.Drawing.Size(734, 582);
             this.Name = "Actions_io";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -639,6 +683,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nAutoDelay)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nTimeOut)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -688,5 +733,8 @@
         private System.Windows.Forms.RadioButton rdCompareModel;
         private System.Windows.Forms.ToolStripProgressBar tProgressBarTest;
         private System.Windows.Forms.Button btnLogin;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.NumericUpDown nTimeOut;
     }
 }

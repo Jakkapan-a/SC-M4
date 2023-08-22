@@ -70,6 +70,10 @@ namespace SC_M4.Forms
                     fileNameImage = action.image_name;
                     Camera_OnSave(action.image_name);
                     break;
+                case TypeAction.Compare:
+                    rdCompareModel.Checked = true;
+                    nTimeOut.Value = action.time_out;
+                    break;
             }
 
             nDelay.Value = action.delay;
@@ -255,6 +259,7 @@ namespace SC_M4.Forms
             tServo.Enabled = false;
             nServo.Enabled = false;
             nThreshold.Enabled = false;
+            nTimeOut.Enabled = false;
 
             if (radioButton.Checked && radioButton == rdTypeManual)
             {
@@ -270,6 +275,7 @@ namespace SC_M4.Forms
                 btnLoadImage.Enabled = true;
                 btnRect.Enabled = true;
                 nThreshold.Enabled = true;
+                dgvIO.ClearSelection();
 
                 if (typeState == TypeState.Create)
                 {
@@ -284,13 +290,17 @@ namespace SC_M4.Forms
             {
                 tServo.Enabled = true;
                 nServo.Enabled = true;
+                dgvIO.ClearSelection();
+            }
+            else if (radioButton.Checked && radioButton == rdCompareModel)
+            {
+                nTimeOut.Enabled = true;
+                dgvIO.ClearSelection();
             }
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-
-
             try
             {
                 if (!rdTypeManual.Checked && !rdTypeAuto.Checked && !rdTypeImage.Checked && !rdTypeServo.Checked)
@@ -353,6 +363,7 @@ namespace SC_M4.Forms
                     return HandleImageType(actions);
                 case TypeAction.Compare:
                     actions.type = (int)TypeAction.Compare;
+                    actions.time_out = (int)nTimeOut.Value;
                     return "Compare Master";
                 default:
                     throw new Exception("Please choose type");
@@ -365,10 +376,9 @@ namespace SC_M4.Forms
             if (rdTypeAuto.Checked) return TypeAction.Auto;
             if (rdTypeServo.Checked) return TypeAction.Servo;
             if (rdTypeImage.Checked) return TypeAction.Image;
+            if (rdCompareModel.Checked) return TypeAction.Compare;
             return default; // You may want to handle this case appropriately.
         }
-
-
 
         private string HandleManualType(Modules.Actions actions)
         {
@@ -399,9 +409,7 @@ namespace SC_M4.Forms
         {
             if (string.IsNullOrEmpty(fileNameImage))
             {
-                // MessageBox.Show("Please choose image", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 throw new Exception("Please choose image");
-                // return null;
             }
             actions.type = (int)TypeAction.Image;
             actions.image_name = fileNameImage;
@@ -465,8 +473,8 @@ namespace SC_M4.Forms
         {
             login?.Close();
             login = new SC_M4.Forms.Login();
-            login.Show();
             login.OnLogin += Login_OnLogin;
+            login.Show();
 
         }
 
