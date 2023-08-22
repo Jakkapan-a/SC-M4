@@ -263,20 +263,16 @@ void btnStartOnPush(void) {
 }
 
 void btnResetChanged(bool pressed) {
-  if(!pressed){
-    return;
-  }
   Serial.println("reset");
-  // if (pressed) {
-  //   byte data[8];
-  //   memcpy(data, UpdateStatusReset, sizeof(UpdateStatusReset));
-  //   data[6] = 0x01;
-  //   Serial.write(data, sizeof(data));
-  // }else{
-  //   Serial.write(UpdateModeNone, sizeof(UpdateModeNone));}
-
+  if (pressed) {
+    byte data[8];
+    memcpy(data, UpdateStatusReset, sizeof(UpdateStatusReset));
+    data[6] = 0x01;
+    Serial.write(data, sizeof(data));
+  }else{
+    Serial.write(UpdateModeNone, sizeof(UpdateModeNone));}
+  mes.off();
   //  ASK_ECU_VER();
- 
 }
 
 void Touch_View_Func(uint8_t view_flag) 

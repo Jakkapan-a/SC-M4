@@ -408,6 +408,17 @@ namespace SC_M4
 
                     UpdateUIAndInvokeCommand("OK", Color.Green);
 
+                    if(typeSelected == TypeAction.Manual){
+                        int pin = 50;
+                        byte value = ((byte)pin);
+                        templateData["Command_io"][2] = 0X49;
+                        templateData["Command_io"][3] = 0x50;
+                        templateData["Command_io"][4] = value;
+                        templateData["Command_io"][6] = (byte)0x01;
+                        // Send parameter
+                        serialPortIO.SerialCommand(templateData["Command_io"]);
+                    }                   
+
                     history.name = txtEmployee.Text.Trim();
                     history.name_lb = txt_lb;
                     history.name_sw = txt_sw;

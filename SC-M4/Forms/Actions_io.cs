@@ -459,7 +459,6 @@ namespace SC_M4.Forms
                     //Thread.Sleep(200);
                     tProgressBarTest.Value = 100;
                     tProgressBarTest.Visible = false;
-
                 }
 
             }
@@ -475,7 +474,6 @@ namespace SC_M4.Forms
             login = new SC_M4.Forms.Login();
             login.OnLogin += Login_OnLogin;
             login.Show();
-
         }
 
         private void Login_OnLogin(object sender, EventArgs e)
@@ -489,5 +487,4 @@ namespace SC_M4.Forms
             }
         }
     }
-
 }
