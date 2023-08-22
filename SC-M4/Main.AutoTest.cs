@@ -20,6 +20,8 @@ namespace SC_M4
     {
         private CancellationTokenSource cts_auto = new CancellationTokenSource();
         private Task task_auto;
+        private ResultType result_type = ResultType.None;
+
         public void InitializeAutoTest()
         {
 
@@ -77,9 +79,9 @@ namespace SC_M4
                     return;
                 }
             }
-
+            result_type = ResultType.None;
             // For each item
-            foreach(var item in items){
+            foreach (var item in items){
                 List<Actions> actions = Actions.GetListByItemId(item.id);
                 foreach(var action in actions)
                 {
@@ -88,7 +90,7 @@ namespace SC_M4
                 }
             }
 
-            Console.WriteLine($"Tset Done");
+            Console.WriteLine($"Tset Done " + (result_type == ResultType.OK || result_type == ResultType.OK ? "PASS" : "NG"));
         }
 
         public void SortingProcess(Actions action, CancellationToken token)
@@ -109,7 +111,18 @@ namespace SC_M4
                     ProcessTypeImage(action, token);
                     break;
                 case Utilities.TypeAction.Compare:
-                    processOCR(token);
+                    System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+                    stopwatch.Start();
+                    result_type = ResultType.None;
+                    while (result_type == ResultType.None)
+                    {
+                        processOCR(token);
+                        if(stopwatch.ElapsedMilliseconds > action.time_out)
+                        {
+                            result_type = ResultType.NG;
+                            break;
+                        }
+                    }
                     break;
             }
         }
@@ -201,7 +214,6 @@ namespace SC_M4
                         foreach(var r in rect)
                         {
                             Console.WriteLine($"Rect: {r.x} {r.y} {r.width} {r.height}");
-
                             
                             // using (Bitmap template = new Bitmap(r.width, r.height))
                             // {

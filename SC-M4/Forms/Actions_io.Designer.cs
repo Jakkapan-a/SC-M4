@@ -379,7 +379,7 @@
             // 
             // nServo
             // 
-            this.nServo.Location = new System.Drawing.Point(294, 19);
+            this.nServo.Location = new System.Drawing.Point(303, 17);
             this.nServo.Maximum = new decimal(new int[] {
             180,
             0,
