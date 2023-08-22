@@ -46,6 +46,7 @@ namespace SC_M4
             this.keyCAM2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sTEPTESTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.commandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelHeader = new System.Windows.Forms.Panel();
             this.cbQrCode = new System.Windows.Forms.CheckBox();
             this.btStartStop = new System.Windows.Forms.Button();
@@ -98,7 +99,6 @@ namespace SC_M4
             this.toolStripStatusSerialData = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelError = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerMain = new System.Windows.Forms.Timer(this.components);
-            this.commandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerHomeMain)).BeginInit();
@@ -248,6 +248,13 @@ namespace SC_M4
             this.sTEPTESTToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.sTEPTESTToolStripMenuItem.Text = "STEP TEST";
             this.sTEPTESTToolStripMenuItem.Click += new System.EventHandler(this.sTEPTESTToolStripMenuItem_Click);
+            // 
+            // commandToolStripMenuItem
+            // 
+            this.commandToolStripMenuItem.Name = "commandToolStripMenuItem";
+            this.commandToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.commandToolStripMenuItem.Text = "Analyze";
+            this.commandToolStripMenuItem.Click += new System.EventHandler(this.commandToolStripMenuItem_Click);
             // 
             // panelHeader
             // 
@@ -853,12 +860,6 @@ namespace SC_M4
             // 
             this.timerMain.Interval = 1000;
             this.timerMain.Tick += new System.EventHandler(this.timerMain_Tick);
-            // 
-            // commandToolStripMenuItem
-            // 
-            this.commandToolStripMenuItem.Name = "commandToolStripMenuItem";
-            this.commandToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.commandToolStripMenuItem.Text = "Command";
             // 
             // Main
             // 

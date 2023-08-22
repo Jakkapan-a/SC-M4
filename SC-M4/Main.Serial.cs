@@ -257,13 +257,14 @@ namespace SC_M4
 
         private void ModeReset(byte[] dataReceived)
         {
+            // Check data is reset
             if(dataReceived[3] == 0x52)
             {
                 isStateReset = true;
                 is_Blink_NG = false;
                 if (capture_1.IsOpened && capture_1.IsOpened)
                 {
-                    lbTitle.Text = "Start...."; // Wiat for detect....
+                    lbTitle.Text = "Wait for detect..."; // Wait for detect....
                 }
                 lbTitle.ForeColor = Color.Black;
                 lbTitle.BackColor = Color.Yellow;

@@ -43,7 +43,7 @@ namespace SC_M4.Forms
         {
             if(settingModel != null)
             {
-                settingModel.loadTable();
+                settingModel.RandersTable();
             }
         }
         public void loadTable_SW()

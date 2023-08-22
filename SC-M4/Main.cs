@@ -31,6 +31,7 @@ using TClass;
 using Windows.UI.Xaml.Controls;
 using SC_M4.Utilities;
 using System.Xml.Linq;
+using SC_M4.Forms.Analyze;
 
 //using Windows.UI.Xaml.Controls;
 
@@ -242,7 +243,7 @@ namespace SC_M4
         private void btRefresh_Click(object sender, EventArgs e)
         {
             RefreshVideoDevices();
-            RefreshComboBoxWithList(comboBoxBaud, this.baudList, true);
+            RefreshComboBoxWithList(comboBoxBaud, this.baudList);
             RefreshComboBoxWithList(comboBoxCOMPort, SerialPort.GetPortNames());
         }
         private void RefreshVideoDevices()
@@ -377,22 +378,22 @@ namespace SC_M4
             {
                 cameraControl = null;
             }
-            cameraControl = new TClass.TControl(cbDriveCam02.SelectedIndex);
+            //cameraControl = new TClass.TControl(cbDriveCam02.SelectedIndex);
 
-            if (!checkBoxAutoFocus.Checked)
-            {
-                cameraControl.set(driveindex_02);
-                cameraControl.setFocus(Properties.Settings.Default.dFocus);
-                cameraControl.setZoom(Properties.Settings.Default.dZoom);
-                cameraControl.setPan(Properties.Settings.Default.dPan);
-                cameraControl.setTilt(Properties.Settings.Default.dTilt);
-                cameraControl.setExposure(Properties.Settings.Default.dExposure);
+            //if (!checkBoxAutoFocus.Checked)
+            //{
+            //    cameraControl.set(driveindex_02);
+            //    cameraControl.setFocus(Properties.Settings.Default.dFocus);
+            //    cameraControl.setZoom(Properties.Settings.Default.dZoom);
+            //    cameraControl.setPan(Properties.Settings.Default.dPan);
+            //    cameraControl.setTilt(Properties.Settings.Default.dTilt);
+            //    cameraControl.setExposure(Properties.Settings.Default.dExposure);
 
-                nFocus.Value = cameraControl.fValue;
-                nFocus.Value = 68 > cameraControl.fmax ? cameraControl.fmax : 68;
-                nFocus.Maximum = cameraControl.fmax;
-                nFocus.Minimum = cameraControl.fmin;
-            }
+            //    nFocus.Value = cameraControl.fValue;
+            //    nFocus.Value = 68 > cameraControl.fmax ? cameraControl.fmax : 68;
+            //    nFocus.Maximum = cameraControl.fmax;
+            //    nFocus.Minimum = cameraControl.fmin;
+            //}
 
             btConnect.Text = "Disconnect";
 
@@ -1015,7 +1016,6 @@ namespace SC_M4
             searchModel = new SearchLB(SearchType.Models);
             searchModel.OnSelect += SearchModel_OnSelect;
             searchModel.Show();
-
         }
 
         private void SearchModel_OnSelect(string name)
@@ -1029,6 +1029,14 @@ namespace SC_M4
                 return;
             }
             txtModel.Text = name;
+        }
+
+        private ImageProcessing imageProcessing;
+        private void commandToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            imageProcessing?.Close();
+            imageProcessing = new ImageProcessing(this);
+            imageProcessing.Show();
         }
 
         //private void commandToolStripMenuItem_Click(object sender, EventArgs e)

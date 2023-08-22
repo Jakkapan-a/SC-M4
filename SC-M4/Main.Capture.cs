@@ -114,7 +114,7 @@ namespace SC_M4
             LogWriter.SaveLog("Video 1 Start");
         }
 
-        private Bitmap bmp1;
+        public Bitmap bmp1;
         private Stopwatch stopwatchManualTest = new Stopwatch();
         private void Capture_1_OnFrameHeader(Bitmap bitmap)
         {

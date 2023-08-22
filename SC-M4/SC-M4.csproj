@@ -190,6 +190,18 @@
     <Compile Include="Forms\Actions_io.Designer.cs">
       <DependentUpon>Actions_io.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Analyze\ImageProcessing.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Analyze\ImageProcessing.Designer.cs">
+      <DependentUpon>ImageProcessing.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Analyze\Show.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Analyze\Show.Designer.cs">
+      <DependentUpon>Show.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Camera.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -334,6 +346,7 @@
     <Compile Include="OCR\OCRImageEntity.cs" />
     <Compile Include="OCR\OCRImages.cs" />
     <Compile Include="OCR\OcrProcessor.cs" />
+    <Compile Include="Processing\ImageProcessing.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\ColorName.cs" />
@@ -349,6 +362,12 @@
     <Compile Include="Utilities\SelectionType.cs" />
     <EmbeddedResource Include="Forms\Actions_io.resx">
       <DependentUpon>Actions_io.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Analyze\ImageProcessing.resx">
+      <DependentUpon>ImageProcessing.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Analyze\Show.resx">
+      <DependentUpon>Show.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Camera.resx">
       <DependentUpon>Camera.cs</DependentUpon>

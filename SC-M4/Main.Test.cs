@@ -58,116 +58,117 @@ namespace SC_M4
             {
 
                 // Check initial conditions before processing
-                if (!PreProcessChecks()) return;
+                //if (!PreProcessChecks()) return;
 
-                InitializeProcess();
+                //InitializeProcess();
 
-                // Process Image 01 OCR
-                ProcessImage01OCR();
+                //// Process Image 01 OCR
+                //ProcessImage01OCR();
 
-                // Check condition and process Image 02 OCR
-                if (IsResult01Valid())
+                //// Check condition and process Image 02 OCR
+                //if (IsResult01Valid())
+                //{
+
+                //    ProcessImage02OCR();
+
+                //    var resultType = CompareData(result_1, result_2);
+                //    if (resultType == ResultType.OK || resultType == ResultType.NG)
+                //    {
+                //        loadTableHistory();
+                //        isStateReset = false;
+                //    }
+                //}
+                //UpdateUIPostProcess();
+
+                #region Old code
+
+                if (capture_1._isRunning && capture_2._isRunning && bitmapCamera_01 != null && bitmapCamera_02 != null && isStateReset && scrollablePictureBoxCamera01.Image != null && scrollablePictureBoxCamera02.Image != null)
                 {
-
-                    ProcessImage02OCR();
-
-                    var resultType = CompareData(result_1, result_2);
-                    if (resultType == ResultType.OK || resultType == ResultType.NG)
+                    if (isStarted)
                     {
-                        loadTableHistory();
-                        isStateReset = false;
+                        //capture_2.setFocus((int)nFocus.Value);
+                        isStarted = false;
                     }
+                    IsChangeSelectedMode = false;
+                    stopwatch.Reset();
+                    ToggleDetectionStatus();
+
+                    // Image 01 OCR 
+                    if (useQrCode)
+                    {
+                        result_1 = QrCode.DecodeQRCode(scrollablePictureBoxCamera01.Image);
+                    }
+                    else
+                    {
+                        imageList?.Clear();
+                        imageList.Add((System.Drawing.Image)scrollablePictureBoxCamera01.Image.Clone());
+                        result_1 = performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty).Result;
+                    }
+
+                    var a = result_1.IndexOf("-731");
+                    result_1 = result_1.Substring(a + 1);
+                    a = result_1.IndexOf("|731");
+                    result_1 = result_1.Substring(a + 1);
+                    result_1 = result_1.Replace("T31TM", "731TM");
+                    result_1 = result_1.Replace("731THC", "731TMC");
+                    result_1 = result_1.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "").Replace("\\", "").Replace("|", "").Replace(@"\", "");
+                    result_1 = result_1.Replace("7731TMC", "731TMC");
+                    result_1 = result_1.Replace("731TMCO", "731TMC6").Replace("-I", "-1");
+                    result_1 = result_1.Replace("-S-", "-5-");
+                    result_1 = result_1.Replace("G.22", "G:22");
+
+                    result_1 = CleanAndReplaceResult(result_1, replaceNames1);
+
+                    if (isOCR1 && result_1 == string.Empty)
+                    {
+                        result_1 = Properties.Settings.Default.keyCAM1;
+                        isOCR1 = false;
+                    }
+
+                    richTextBox1.Invoke(new Action(() =>
+                    {
+                        this.richTextBox1.Text = string.Empty;
+                        this.richTextBox1.Text = result_1.Trim();
+
+                    }));
+                    // Image 02
+                    int lb = result_1.IndexOf(Properties.Settings.Default.keyCAM1);
+                    if (result_1 != string.Empty && lb != -1)
+                    {
+                        // OCR 2
+                        result_2 = string.Empty;
+                        ocrResult2 = null;
+                        ocrResult2 = GetOcrResultBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(), SelectedLang).Result;
+
+                        result_2 = ocrResult2.Text;
+                        result_2 = CleanAndReplaceText(result_2);
+                        result_2 = CleanAndReplaceResult(result_2, replaceNames2);
+
+                        richTextBox2.Invoke(new Action(() =>
+                        {
+                            this.richTextBox2.Text = string.Empty;
+                            this.richTextBox2.Text = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
+                        }));
+
+
+                        ResultType result = CompareData(result_1, result_2);
+
+                        if (result == ResultType.OK || result == ResultType.NG)
+                        {
+                            loadTableHistory();
+                            isStateReset = false;
+                        }
+                    }
+
+                    stopwatch.Stop();
+                    Invoke(new Action(() =>
+                    {
+                        toolStripStatusTime.Text = "Load " + stopwatch.ElapsedMilliseconds.ToString() + "ms";
+                        toolStripStatusLabelError.ForeColor = Color.Green;
+                    }));
                 }
-                UpdateUIPostProcess();
-                 #region Old code
-
-                    //    if (capture_1._isRunning && capture_2._isRunning && bitmapCamera_01 != null && bitmapCamera_02 != null && isStateReset && scrollablePictureBoxCamera01.Image != null && scrollablePictureBoxCamera02.Image != null)
-                    //    {
-                    //        if (isStarted)
-                    //        {
-                    //            capture_2.setFocus((int)nFocus.Value);
-                    //            isStarted = false;
-                    //        }
-                    //        IsChangeSelectedMode = false;
-                    //        stopwatch.Reset();
-                    //        ToggleDetectionStatus();
-
-                    //        // Image 01 OCR 
-                    //        if (useQrCode)
-                    //        {
-                    //            result_1 = QrCode.DecodeQRCode(scrollablePictureBoxCamera01.Image);
-                    //        }
-                    //        else
-                    //        {
-                    //            imageList?.Clear();
-                    //            imageList.Add((System.Drawing.Image)scrollablePictureBoxCamera01.Image.Clone());
-                    //            result_1 = performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty).Result;
-                    //        }
-
-                    //        var a = result_1.IndexOf("-731");
-                    //        result_1 = result_1.Substring(a + 1);
-                    //        a = result_1.IndexOf("|731");
-                    //        result_1 = result_1.Substring(a + 1);
-                    //        result_1 = result_1.Replace("T31TM", "731TM");
-                    //        result_1 = result_1.Replace("731THC", "731TMC");
-                    //        result_1 = result_1.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "").Replace("\\", "").Replace("|", "").Replace(@"\", "");
-                    //        result_1 = result_1.Replace("7731TMC", "731TMC");
-                    //        result_1 = result_1.Replace("731TMCO", "731TMC6").Replace("-I", "-1");
-                    //        result_1 = result_1.Replace("-S-", "-5-");
-                    //        result_1 = result_1.Replace("G.22", "G:22");
-
-                    //        result_1 = CleanAndReplaceResult(result_1, replaceNames1);
-
-                    //        if (isOCR1 && result_1 == string.Empty)
-                    //        {
-                    //            result_1 = Properties.Settings.Default.keyCAM1;
-                    //            isOCR1 = false;
-                    //        }
-
-                    //        richTextBox1.Invoke(new Action(() =>
-                    //        {
-                    //            this.richTextBox1.Text = string.Empty;
-                    //            this.richTextBox1.Text = result_1.Trim();
-
-                    //        }));
-                    //        // Image 02
-                    //        int lb = result_1.IndexOf(Properties.Settings.Default.keyCAM1);
-                    //        if (result_1 != string.Empty && lb != -1)
-                    //        {
-                    //            // OCR 2
-                    //            result_2 = string.Empty;
-                    //            ocrResult2 = null;
-                    //            ocrResult2 = GetOcrResultBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(), SelectedLang).Result;
-
-                    //            result_2 = ocrResult2.Text;
-                    //            result_2 = CleanAndReplaceText(result_2);
-                    //            result_2 = CleanAndReplaceResult(result_2, replaceNames2);
-
-                    //            richTextBox2.Invoke(new Action(() =>
-                    //            {
-                    //                this.richTextBox2.Text = string.Empty;
-                    //                this.richTextBox2.Text = result_2.Trim().Replace(" ", "").Replace("\r", "").Replace("\t", "").Replace("\n", "");
-                    //            }));
-
-
-                    //            ResultType result = CompareData(result_1, result_2);
-
-                    //            if (result == ResultType.OK || result == ResultType.NG)
-                    //            {
-                    //                loadTableHistory();
-                    //                isStateReset = false;
-                    //            }
-                    //        }
-
-                    //        stopwatch.Stop();
-                    //        Invoke(new Action(() =>
-                    //        {
-                    //            toolStripStatusTime.Text = "Load " + stopwatch.ElapsedMilliseconds.ToString() + "ms";
-                    //            toolStripStatusLabelError.ForeColor = Color.Green;
-                    //        }));
-                    //    }
-                    #endregion
-                }
+                #endregion
+            }
             catch (Exception ex)
             {
                 HandleExceptionTest(ex);

@@ -21,17 +21,17 @@ TcBUTTON btnStart(BUTTON_START_PIN, btnStartPressed, btnStartReleased);
 void btnResetChanged(bool pressed);
 TcBUTTON btnReset(BUTTON_RESET_PIN, btnResetChanged, NULL, NULL, TcBUTTON::ButtonMode::PULLUP, true);  // RESET SW VER
 
-#define BUTTON_ASK_SOFTWARE_VER_PIN 24
+#define BUTTON_ASK_SOFTWARE_VER_PIN 26
 void btnAskSoftwareVerPressed(void);
 void btnAskSoftwareVerReleased(void);
 TcBUTTON btnAskSoftwareVer(BUTTON_ASK_SOFTWARE_VER_PIN, btnAskSoftwareVerPressed, btnAskSoftwareVerReleased);
 
-#define BUTTON_TOUCH_VIEW_PIN 26
+#define BUTTON_TOUCH_VIEW_PIN 28
 void btnTouchViewPressed(void);
 void btnTouchViewReleased(void);
 TcBUTTON btnTouchView(BUTTON_TOUCH_VIEW_PIN, btnTouchViewPressed, btnTouchViewReleased);
 
-#define SERVO_PIN 4
+#define SERVO_PIN 6
 Servo servo;
 // ------------------ Output ------------------
 #define ACC_PIN 44
@@ -87,9 +87,9 @@ unsigned long lastTimeServoPosition = 0;
 uint8_t servoPosition = 100;
 uint8_t servoPositionOld = 100;
 uint8_t speedServo = 200;
-const uint8_t servoDiscrepancy = 20;
-const uint8_t servoSlow = 40;
-const uint8_t servoFast = 5;
+const uint8_t servoDiscrepancy = 30;
+const uint8_t servoSlow = 20;
+const uint8_t servoFast = 2;
 uint8_t GetSpeed(uint8_t servoPositionOld, uint8_t servoPosition);
 
 int countBtnStart = 0;
@@ -270,9 +270,9 @@ void btnResetChanged(bool pressed) {
     data[6] = 0x01;
     Serial.write(data, sizeof(data));
   }else{
-    Serial.write(UpdateModeNone, sizeof(UpdateModeNone));}
-  mes.off();
-  //  ASK_ECU_VER();
+    Serial.write(UpdateStatusReset, sizeof(UpdateStatusReset));
+    }
+    mes.off();
 }
 
 void Touch_View_Func(uint8_t view_flag) 
@@ -396,17 +396,18 @@ void DecodeData(byte data[]) {
       if (action == 0x01) mes.on();
       else if (action == 0x00) mes.off();
     } else if(command == 0x18){   // 24
-      if(action == 0x01) {
-        // More... code
-      }
-      else if(action == 0x00){
-        btnAskSoftwareVerReleased();
-      }
+     
     }else if(command == 0x1A){    // 26
       if(action == 0x01){
         // More... code
       } else if(action == 0x00){
         btnTouchViewReleased();
+      }
+    }else if(command == 0x1C){    // 28
+      if(action == 0x01){
+        // More... code
+      } else if(action == 0x00){
+        btnAskSoftwareVerReleased();
       }
     }
 

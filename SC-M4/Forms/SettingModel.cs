@@ -24,7 +24,7 @@ namespace SC_M4.Forms
         Rename rename;
         private void Setting_Load(object sender, EventArgs e)
         {
-            loadTable();
+            RandersTable();
             // Clear status bar
             foreach (ToolStripItem item in statusStrip1.Items)
             {
@@ -35,12 +35,12 @@ namespace SC_M4.Forms
             }
         }
 
-        public void loadTable()
+        public void RandersTable()
         {
 
             var all = MasterAll.GetMasterAll();
 
-            dataGridViewReport.DataSource = null;
+            dgvModels.DataSource = null;
 
             int i = 0;
 
@@ -55,28 +55,26 @@ namespace SC_M4.Forms
                             Updated = a.updated_at
                         }).ToList();
 
-            dataGridViewReport.DataSource = data;
-            dataGridViewReport.Columns[0].Visible = false;
-            dataGridViewReport.Columns[1].Visible = false;
-            dataGridViewReport.Columns[2].Width = dataGridViewReport.Width / 10;
+            dgvModels.DataSource = data;
+            dgvModels.Columns[0].Visible = false;
+            dgvModels.Columns[1].Visible = false;
+            dgvModels.Columns[2].Width = dgvModels.Width / 10;
 
 
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-
             _Items?.Dispose();
-
             _Items = new Edit_Items(this);
             _Items.Show();
         }
         private void dataGridViewReport_SelectionChanged(object sender, EventArgs e)
         {
-            if (dataGridViewReport.SelectedRows.Count > 0)
+            if (dgvModels.SelectedRows.Count > 0)
             {
-                id_sw = int.Parse(dataGridViewReport.SelectedRows[0].Cells[0].Value.ToString());
-                id_lb = int.Parse(dataGridViewReport.SelectedRows[0].Cells[1].Value.ToString());
+                id_sw = int.Parse(dgvModels.SelectedRows[0].Cells[0].Value.ToString());
+                id_lb = int.Parse(dgvModels.SelectedRows[0].Cells[1].Value.ToString());
                 toolStripStatusID_SW.Text = "SW :" + id_sw.ToString();
                 toolStripStatusID_LB.Text = "LB :" + id_lb.ToString();
             }
@@ -102,7 +100,7 @@ namespace SC_M4.Forms
                 return;
             }
 
-            loadTable();
+            RandersTable();
         }
 
         private void renameModelToolStripMenuItem_Click(object sender, EventArgs e)
@@ -127,7 +125,7 @@ namespace SC_M4.Forms
                 {
                     data[0].Delete();
                 }
-                loadTable();
+                RandersTable();
                 MessageBox.Show("Delete model success", "Delete Model", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
@@ -146,9 +144,9 @@ namespace SC_M4.Forms
                 if (data.Count > 0)
                 {
                     data[0].Delete();
-                    loadTable();
+                    RandersTable();
                 }
-                loadTable();
+                RandersTable();
                 MessageBox.Show("Delete software success", "Delete Software", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
@@ -156,6 +154,25 @@ namespace SC_M4.Forms
         private void editToolStripMenuItem_Click(object sender, EventArgs e)
         {
             btnEdit.PerformClick();
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            string search = txtSearch.Text;
+            // Clear selection
+            dgvModels.ClearSelection();
+            // Search all column in dgvModels
+            foreach (DataGridViewRow row in dgvModels.Rows)
+            {
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    if (cell.Value.ToString().ToLower().Contains(search.ToLower()))
+                    {
+                        cell.Selected = true;
+                        break;
+                    }
+                }
+            }
         }
     }
 }
