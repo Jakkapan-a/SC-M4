@@ -305,6 +305,18 @@
     <Compile Include="Forms\SettingModel.Designer.cs">
       <DependentUpon>SettingModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Show\ManualTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Show\ManualTest.Designer.cs">
+      <DependentUpon>ManualTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Show\ShowImage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Show\ShowImage.Designer.cs">
+      <DependentUpon>ShowImage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Interfaces\IModule.cs" />
     <Compile Include="IO\SerialPortIO.cs">
       <SubType>Component</SubType>
@@ -420,6 +432,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SettingModel.resx">
       <DependentUpon>SettingModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Show\ManualTest.resx">
+      <DependentUpon>ManualTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Show\ShowImage.resx">
+      <DependentUpon>ShowImage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>

@@ -45,6 +45,7 @@ namespace SC_M4.Forms
                 image = Image.FromStream(fs);
             }
 
+            nThreshold.Value = Properties.Settings.Default.Threshold;
             RandersDGV_Rect(id);
         }
         private void RenderRectangle(Graphics g, Rectangle rectangle, bool isHighlighted)

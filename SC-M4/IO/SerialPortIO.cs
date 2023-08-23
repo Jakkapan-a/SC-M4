@@ -69,7 +69,6 @@ namespace SC_M4.IO
                     // Print to hex
                     Console.Write($"{d}->"+d.ToString("X2") + ", ");
                 }
-                //Console.Write($"[{bytes} -> {bytes:X2}]");
                 Console.WriteLine("---------------------");
                 this.Write(bytes, 0, bytes.Length);
             }

@@ -28,7 +28,7 @@ namespace SC_M4
             templateData.Add("Query_Status", new byte[8] { 0x02, 0x51, 0x53, 0x00, 0x00, 0x00, 0x00, 0x03 });
             templateData.Add("Command", new byte[8] { 0x02, 0x43, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03 });
             templateData.Add("Command_io", new byte[8] { 0x02, 0x43, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03 });
-
+            templateData.Add("Command_MES", new byte[8] { 0x02, 0x43, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03 });
         }
         #region Serial Port 
 
@@ -84,14 +84,14 @@ namespace SC_M4
                 _dataBuffer.AddRange(bytes);
 
                 Console.WriteLine("Receive : ");
-                string recive = string.Empty;
+                string receive = string.Empty;
                 foreach (var d in _dataBuffer)
                 {
                     // Print to hex
                     Console.Write(d.ToString("X2") + ", ");
-                    recive += d.ToString("X2") +", ";
+                    receive += d.ToString("X2") +", ";
                 }
-                LogWriter.SaveLog("Receive : "+ recive);
+                LogWriter.SaveLog("Receive : "+ receive);
                 Console.WriteLine(" ");
                 ProcessDataBuffer();
 
@@ -223,12 +223,14 @@ namespace SC_M4
             {
                 typeSelected = TypeAction.None;
                 stopwatchManualTest.Stop();
+                manualTest?.Close();
                 lbTitle.BackColor = Color.Gray;
             }
             else if (dataReceived[6] == 0x41)
             {
                 typeSelected = TypeAction.Auto;
                 stopwatchManualTest.Stop();
+                manualTest?.Close();
                 lbTitle.BackColor = Color.Orange;
             }
             // Check data is Mode Manual
@@ -247,6 +249,7 @@ namespace SC_M4
                 manualTest.Show();
                 typeSelected = TypeAction.Manual;
             }
+            IsCapture = false;
             // Set title 
             lbTitle.Text = "Mode : " + (typeSelected == TypeAction.Auto ? "Auto" : typeSelected == TypeAction.Manual ? "Manual" : "None");
             Console.WriteLine(" Mode : " + (typeSelected == TypeAction.Auto ? "Auto" : typeSelected == TypeAction.Manual ? "Manual" : "None"));
@@ -260,9 +263,12 @@ namespace SC_M4
             {
                 isStateReset = true;
                 is_Blink_NG = false;
-                if (capture_1.IsOpened && capture_1.IsOpened)
+                if (dataReceived[6] == 0x01)
                 {
                     lbTitle.Text = "Ready....";
+                }else if (dataReceived[6] == 0x02)
+                {
+                    lbTitle.Text = "Empty!";
                 }
                 lbTitle.ForeColor = Color.Black;
                 lbTitle.BackColor = Color.Yellow;

@@ -65,7 +65,7 @@ namespace SC_M4
                         //capture_2.setFocus((int)nFocus.Value);
                         isStarted = false;
                     }
-                    IsChangeSelectedMode = false;
+                    IsChangeSelectedMode = true;
                     stopwatch.Reset();
                     ToggleDetectionStatus();
 
@@ -192,7 +192,7 @@ namespace SC_M4
                 isStarted = false;
             }
 
-            IsChangeSelectedMode = false;
+            IsChangeSelectedMode = true;
             stopwatch.Reset();
             ToggleDetectionStatus();
         }
@@ -328,17 +328,17 @@ namespace SC_M4
             return txt.Replace("\r", "").Replace("\n", "");
         }
 
-        private void UpdateUIAndInvokeCommand(string status, Color color)
+        private void UpdateUIAndInvoke(string status, Color color)
         {
             Invoke(new Action(() =>
             {
                 lbTitle.Text = status;
-                lbTitle.ForeColor = Color.White;
+                lbTitle.ForeColor = Color.Black;
                 lbTitle.BackColor = color;
             }));
 
             is_Blink_NG = status == "NG";
-            serialPortIO.SerialCommand(status);
+            //serialPortIO.SerialCommand(status);
         }
 
         private ResultType CompareData(string txt_sw, string txt_lb)
@@ -383,11 +383,14 @@ namespace SC_M4
                     history.master_sw = item.nameSW;
                     history.master_lb = item.nameModel;
 
-                    UpdateUIAndInvokeCommand("OK", Color.Green);
 
                     if(typeSelected == TypeAction.Manual){
+                        UpdateUIAndInvoke("OK", Color.Green);
+                        // 02 42 49 50 32 30 03
                         int pin = 50;
                         byte value = ((byte)pin);
+                        templateData["Command_io"][0] = 0x02;
+                        templateData["Command_io"][1] = 0x43;
                         templateData["Command_io"][2] = 0X49;
                         templateData["Command_io"][3] = 0x50;
                         templateData["Command_io"][4] = value;
@@ -435,7 +438,9 @@ namespace SC_M4
             {
                 this.richTextBox2.Text += $"\n Color name :{colorName[3]},{colorName[1]},{colorName[2]} ,{colorName[0]}, R{rgb.R} G{rgb.G} B{rgb.B}";
             }));
-            UpdateUIAndInvokeCommand("NG", Color.Red);
+            if(typeSelected == TypeAction.Manual){
+                UpdateUIAndInvoke("NG", Color.Red);
+            }
 
             history.name = txtEmployee.Text.Trim();
             history.name_lb = txt_lb;
@@ -448,99 +453,5 @@ namespace SC_M4
             isStateReset = false;
             return ResultType.NG;
         }
-
-        #region Old
-        private int Compare_Master(string txt_sw, string txt_lb)
-        {
-            // 0 = not fount, 1 = OK, 2 = NG
-            int result = 0;
-
-            LogWriter.SaveLog("TXT Read :" + txt_sw.Replace("\r", "").Replace("\n", "") + ", " + txt_lb.Replace("\r", "").Replace("\n", ""));
-
-            if (history == null)
-            {
-                history = new History();
-            }
-
-            int swa = txt_sw.IndexOf(Properties.Settings.Default.keyCAM1);
-            // If not found, IndexOf returns -1.
-            if (swa == -1)
-            {
-                result = 0;
-                return result;
-            }
-
-            int lb = txt_lb.IndexOf(Properties.Settings.Default.keyCAM2);
-            // If not found, IndexOf returns -1.
-            if (lb == -1)
-            {
-                // Return the original string.
-                result = 0;
-                return result;
-            }
-
-            var txt = txt_lb.Substring(0, lb);
-            txt = txt.Replace("O", "0");
-            var master_lb = MasterAll.GetMasterALLByLBName(txt);
-
-            bool check = false;
-
-            if (master_lb.Count > 0)
-            {
-                foreach (var item in master_lb)
-                {
-                    history.master_sw = item.nameSW;
-                    history.master_lb = item.nameModel;
-                    if (item.nameSW == txt_sw)
-                    {
-                        check = true;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                history.master_sw = "null";
-                history.master_lb = "null";
-            }
-
-            if (!check)
-            {
-                Invoke(new Action(() =>
-                {
-                    lbTitle.Text = "NG";
-                    lbTitle.ForeColor = Color.White;
-                    lbTitle.BackColor = Color.Red;
-                }));
-                is_Blink_NG = true;
-                serialPortIO.SerialCommand("NG");
-                result = 1;
-            }
-            else
-            {
-
-                Invoke(new Action(() =>
-                {
-                    lbTitle.Text = "OK";
-                    lbTitle.ForeColor = Color.White;
-                    lbTitle.BackColor = Color.Green;
-                    //loadTableHistory();
-                }));
-                result = 2;
-                serialPortIO.SerialCommand("OK");
-            }
-            history.name = txtEmployee.Text.Trim();
-            history.name_lb = txt_lb;
-            history.name_sw = txt_sw;
-            history.result = check ? "OK" : "NG";
-            history.Save();
-            LogWriter.SaveLog("Result :" + history.result);
-            LogWriter.SaveLog("SW :" + txt_lb);
-            LogWriter.SaveLog("LABEL :" + txt_lb);
-            isStateReset = false;
-
-            return result;
-        }
-        #endregion
     }
 }

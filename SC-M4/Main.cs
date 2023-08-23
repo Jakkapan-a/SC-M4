@@ -235,7 +235,7 @@ namespace SC_M4
                 foreach (string file in files)
                 {
                     FileInfo info = new FileInfo(file);
-                    if (info.LastAccessTime < DateTime.Now.AddMinutes(-10)){
+                    if (info.LastAccessTime < DateTime.Now.AddHours(-24)){
                         // Move file to Recycle Bin
                         Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(file, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
                     }
@@ -1104,6 +1104,17 @@ namespace SC_M4
             {
                 manualTest.lbTitle.BackColor = lbTitle.BackColor;
             }
+        }
+        private Forms.Show.ShowImage showImage;
+        private void showDiffToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(imageDiffShow == null) return;
+            
+            showImage?.Close();
+            showImage = new Forms.Show.ShowImage();
+            showImage.pictureBox1.Image?.Dispose();
+            showImage.pictureBox1.Image = new Bitmap(imageDiffShow);
+            showImage.Show();
         }
     }
 }

@@ -263,14 +263,17 @@ void btnStartOnPush(void) {
 }
 
 void btnResetChanged(bool pressed) {
-  Serial.println("reset");
   if (pressed) {
+    Serial.println("reset");
     byte data[8];
     memcpy(data, UpdateStatusReset, sizeof(UpdateStatusReset));
     data[6] = 0x01;
     Serial.write(data, sizeof(data));
   }else{
-    Serial.write(UpdateStatusReset, sizeof(UpdateStatusReset));
+    byte data[8];
+    memcpy(data, UpdateStatusReset, sizeof(UpdateStatusReset));
+    data[6] = 0x02;
+    Serial.write(data, sizeof(data));
     }
     mes.off();
 }

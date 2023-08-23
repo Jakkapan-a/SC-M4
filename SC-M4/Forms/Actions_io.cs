@@ -75,6 +75,7 @@ namespace SC_M4.Forms
                 case TypeAction.Image:
                     rdTypeImage.Checked = true;
                     fileNameImage = action.image_name;
+                    nThreshold.Value = action.threshold;
                     Camera_OnSave(action.image_name);
                     break;
                 case TypeAction.Compare:
@@ -203,7 +204,13 @@ namespace SC_M4.Forms
             {
                 // Set value to form
                 txtName.Text = dgvIO.SelectedRows[0].Cells["name"].Value.ToString();
-                nPIN.Value = (decimal)dgvIO.SelectedRows[0].Cells["Pin"].Value;
+                //nPIN.Value = (decimal)dgvIO.SelectedRows[0].Cells["Pin"].Value;
+                var cellValue = dgvIO.SelectedRows[0].Cells["Pin"].Value;
+                if (decimal.TryParse(cellValue.ToString(), out decimal pinValue))
+                {
+                    nPIN.Value = pinValue;
+                }
+
                 stateIO = TypeState.Update;
                 btnIOSave.Text = "Update";
             }
