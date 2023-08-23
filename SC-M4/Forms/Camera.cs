@@ -15,58 +15,50 @@ namespace SC_M4.Forms
 {
     public partial class Camera : Form
     {
-        private TCapture.Capture capture;
-
-        public delegate void OnSaveHandler(string fileName);
-        public event OnSaveHandler OnSave;
-        public Camera()
+        public event EventHandler<EventArgs> OnSave;
+        private Main main;
+        public Camera(Main main)
         {
             InitializeComponent();
-            capture = new TCapture.Capture();
-            capture.OnFrameHeader += Capture_OnFrameCaptured;
-            capture.OnVideoStop += Capture_OnVideoStop;
+            this.main = main;
         }
 
+        private string[] cameras = { "CAM 1", "CAM 2" };
         private void Camera_Load(object sender, EventArgs e)
         {
-            var videoDevices = new List<DsDevice>(DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice));
-            foreach (var item in videoDevices)
+            foreach (var item in cameras)
             {
-                cbCamera.Items.Add(item.Name);
+                cbCamera.Items.Add(item);
             }
             if (cbCamera.Items.Count > 0)
             {
                 cbCamera.SelectedIndex = 0;
             }
-            else
-            {
-                MessageBox.Show("No camera found");
-            }
+           
         }
 
-        private void Capture_OnFrameCaptured(Bitmap bitmap)
-        {
-            if (InvokeRequired)
-            {
-                Invoke(new Action(() => { Capture_OnFrameCaptured(bitmap); }));
-                return;
-            }
-
-            scrollablePictureBox1.Image?.Dispose();
-            scrollablePictureBox1.Image = (Image)bitmap.Clone();
-        }
-        private bool IsCapturing = false;
         private void btnConnect_Click(object sender, EventArgs e)
         {
             try
             {
-                if (IsCapturing)
+                // Get Image
+                scrollablePictureBox1.Image?.Dispose();
+                scrollablePictureBox1.Image = null;
+
+                if (cbCamera.SelectedIndex == 0)
                 {
-                    StopCamera();
+                    if(main.bitmapCamera_01 != null)
+                    {
+                        scrollablePictureBox1.Image = new Bitmap(main.bitmapCamera_01);
+                    }
                 }
                 else
                 {
-                    StartCamera();
+                    if (main.bitmapCamera_02 != null)
+                    {
+                    
+                        scrollablePictureBox1.Image = new Bitmap(main.bitmapCamera_02);
+                    }
                 }
             }
             catch (Exception ex)
@@ -75,39 +67,8 @@ namespace SC_M4.Forms
             }
         }
 
-        private void StartCamera()
-        {
-            scrollablePictureBox1.Image?.Dispose();
-            scrollablePictureBox1.Image = Properties.Resources.Spinner_0_4s_800px;
-            capture.Start(cbCamera.SelectedIndex);
-            btnConnect.Text = "Disconnect";
-            IsCapturing = true;
-        }
-
-        private void StopCamera()
-        {
-            capture.Stop();
-            btnConnect.Text = "Connect";
-            IsCapturing = false;
-        }
-
-        private void Capture_OnVideoStop()
-        {
-            if (InvokeRequired)
-            {
-                Invoke(new Action(() => { Capture_OnVideoStop(); }));
-                return;
-            }
-            scrollablePictureBox1.Image?.Dispose();
-            scrollablePictureBox1.Image = null;
-        }
-
         private void btnBrowse_Click(object sender, EventArgs e)
         {
-            if (IsCapturing)
-            {
-                StopCamera();
-            }
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png) | *.jpg; *.jpeg; *.png";
@@ -146,19 +107,20 @@ namespace SC_M4.Forms
                 MessageBox.Show("No image", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
+            if (!Directory.Exists(Properties.Resources.path_images))
+            {
+                Directory.CreateDirectory(Properties.Resources.path_images);
+            }
+
+
             string newFileName = Guid.NewGuid().ToString() + ".jpg";
             newFileName = newFileName.Replace("-", "_");
             string path = Path.Combine(Properties.Resources.path_images, newFileName);
             // Save file
             scrollablePictureBox1.Image.Save(path);
             // Invoke event
-            OnSave?.Invoke(newFileName);
-
-            if (IsCapturing)
-            {
-                StopCamera();
-            }
-
+            OnSave?.Invoke(newFileName,EventArgs.Empty);
             // Close form
             this.Close();
         }

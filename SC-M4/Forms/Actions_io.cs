@@ -35,16 +35,23 @@ namespace SC_M4.Forms
             DisableAllControls();
             dgvIO.ClearSelection();
 
+
             if (typeState == TypeState.Update)
             {
                 action = Modules.Actions.Get(id);
                 SetActionControls();
                 btnSave.Text = "Update";
             }
+            else
+            {
+                nThreshold.Value = Properties.Settings.Default.Threshold;
+                nAutoDelay.Value = Properties.Settings.Default.AutoDelay;
+                nTimeOut.Value = Properties.Settings.Default.TimeOut;
+            }
         }
         private void DisableAllControls()
         {
-            btnRect.Enabled = rdOff.Enabled = rdOn.Enabled = nAutoDelay.Enabled = btnLoadImage.Enabled = btnRect.Enabled = tServo.Enabled = nServo.Enabled = nThreshold.Enabled = false;
+            nTimeOut.Enabled = btnRect.Enabled = rdOff.Enabled = rdOn.Enabled = nAutoDelay.Enabled = btnLoadImage.Enabled = btnRect.Enabled = tServo.Enabled = nServo.Enabled = nThreshold.Enabled = false;
         }
         private void SetActionControls()
         {
@@ -78,7 +85,6 @@ namespace SC_M4.Forms
 
             nDelay.Value = action.delay;
         }
-
 
         private void SelectRowById(string id)
         {
@@ -231,14 +237,33 @@ namespace SC_M4.Forms
         private void btnLoadImage_Click(object sender, EventArgs e)
         {
             camera?.Close();
-            camera = new Camera();
+            camera = new Camera(main);
             camera.Show();
             camera.OnSave += Camera_OnSave;
         }
+
+       
+
         private string fileNameImage = string.Empty;
-        private void Camera_OnSave(string fileName)
+        private void Camera_OnSave(object sender, EventArgs e)
         {
+            string fileName = (String)sender;
             fileNameImage = fileName;
+
+            string path = Path.Combine(Properties.Resources.path_images, fileName);
+            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+            {
+                pictureBox1.Image?.Dispose();
+                pictureBox1.Image = Image.FromStream(fs);
+            }
+        }
+
+
+        private void Camera_OnSave(string image_name)
+        {
+            string fileName = image_name;
+            fileNameImage = fileName;
+
             string path = Path.Combine(Properties.Resources.path_images, fileName);
             using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
             {
@@ -455,7 +480,7 @@ namespace SC_M4.Forms
                     tProgressBarTest.Visible = true;
                     tProgressBarTest.Value = 0;
                     CancellationTokenSource cts_test = new CancellationTokenSource();
-                    main.SortingProcess(action, cts_test.Token);
+                    main.SortingProcess(actions, cts_test.Token,true);
                     //Thread.Sleep(200);
                     tProgressBarTest.Value = 100;
                     tProgressBarTest.Visible = false;
@@ -485,6 +510,24 @@ namespace SC_M4.Forms
                 btnIOSave.Enabled = true;
                 btnLogin.Visible = false;
             }
+        }
+
+        private void nThreshold_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Threshold = (int)nThreshold.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void nAutoDelay_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.AutoDelay = (int)nAutoDelay.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void nTimeOut_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.TimeOut = (int)nTimeOut.Value;
+            Properties.Settings.Default.Save();
         }
     }
 }

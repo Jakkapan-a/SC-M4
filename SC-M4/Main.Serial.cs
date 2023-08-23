@@ -83,22 +83,17 @@ namespace SC_M4
                 _dataBuffer.AddRange(bytes);
 
                 Console.WriteLine("Receive : ");
+                string recive = string.Empty;
                 foreach (var d in _dataBuffer)
                 {
                     // Print to hex
                     Console.Write(d.ToString("X2") + ", ");
+                    recive += d.ToString("X2") +", ";
                 }
-                //Console.Write($"[{bytes} -> {bytes:X2}]");
-                Console.WriteLine("---------------------");
-
+                LogWriter.SaveLog("Receive : "+ recive);
+                Console.WriteLine(" ");
                 ProcessDataBuffer();
 
-                // Read data from serial port (byte[])
-                // byte[] bytes = new byte[this.serialPortIO.BytesToRead];
-                // this.serialPortIO.Read(bytes, 0, bytes.Length);
-                // Convert byte[] to string
-
-                //this.Invoke(new UpdateDataReceived(DataReceived), bytes);
             }
             catch (Exception ex)
             {
@@ -193,13 +188,13 @@ namespace SC_M4
                 case 0x49:
                     if (dataReceived[3] == 0x53 && dataReceived[6] == 0x00)
                     {
-                        Console.WriteLine("Command : IS - IO START");
+                        LogWriter.SaveLog("Command : START");
 
                         StartAutoTest();
                     }
                     else if (dataReceived[3] == 0x53 && dataReceived[6] != 0x00)
                     {
-                        Console.WriteLine("Command : IS - IO STOP, " + dataReceived[6].ToString("X2"));
+                        LogWriter.SaveLog("Command : STOP, " + dataReceived[6].ToString("X2"));
                         StopAutoTest();
                     }
                     break;
@@ -252,7 +247,7 @@ namespace SC_M4
             // Set title 
             lbTitle.Text = "Mode : " + (typeSelected == TypeAction.Auto ? "Auto" : typeSelected == TypeAction.Manual ? "Manual" : "None");
             Console.WriteLine(" Mode : " + (typeSelected == TypeAction.Auto ? "Auto" : typeSelected == TypeAction.Manual ? "Manual" : "None"));
-            txtDebug.Text += " Mode : " + (typeSelected == TypeAction.Auto ? "Auto" : typeSelected == TypeAction.Manual ? "Manual" : "None") + "\r\n";
+
         }
 
         private void ModeReset(byte[] dataReceived)
@@ -264,7 +259,7 @@ namespace SC_M4
                 is_Blink_NG = false;
                 if (capture_1.IsOpened && capture_1.IsOpened)
                 {
-                    lbTitle.Text = "Wait for detect..."; // Wait for detect....
+                    lbTitle.Text = "Ready....";
                 }
                 lbTitle.ForeColor = Color.Black;
                 lbTitle.BackColor = Color.Yellow;

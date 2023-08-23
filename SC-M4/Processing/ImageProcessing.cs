@@ -54,6 +54,41 @@ namespace SC_M4.Processing
             }
         }
 
+
+        public static Bitmap CompareImages(Bitmap imgBitmap, Bitmap templateBitmap, out double maxVal)
+        {
+            using (Mat img = OpenCvSharp.Extensions.BitmapConverter.ToMat(imgBitmap))
+            using (Mat template = OpenCvSharp.Extensions.BitmapConverter.ToMat(templateBitmap))
+            using (Mat result = new Mat())
+            {
+                Cv2.MatchTemplate(img, template, result, TemplateMatchModes.CCoeffNormed);
+                Cv2.MinMaxLoc(result, out double minVal, out maxVal, out OpenCvSharp.Point minLoc, out OpenCvSharp.Point maxLoc);
+
+                using (Mat diff = new Mat())
+                {
+                    Cv2.Absdiff(img, template, diff);
+                    return OpenCvSharp.Extensions.BitmapConverter.ToBitmap(diff);
+                }
+            }
+        }
+
+        public static Bitmap CompareImages(Bitmap imgBitmap, Bitmap templateBitmap, out double maxVal, out OpenCvSharp.Point location)
+        {
+            using (Mat img = OpenCvSharp.Extensions.BitmapConverter.ToMat(imgBitmap))
+            using (Mat template = OpenCvSharp.Extensions.BitmapConverter.ToMat(templateBitmap))
+            using (Mat result = new Mat())
+            {
+                Cv2.MatchTemplate(img, template, result, TemplateMatchModes.CCoeffNormed);
+                Cv2.MinMaxLoc(result, out double minVal, out maxVal, out OpenCvSharp.Point minLoc, out location);
+
+                using (Mat diff = new Mat())
+                {
+                    Cv2.Absdiff(img, template, diff);
+                    return OpenCvSharp.Extensions.BitmapConverter.ToBitmap(diff);
+                }
+            }
+        }
+
         public static Bitmap CropImage(Bitmap imgBitmap, Rectangle cropArea)
         {
             using (Mat img = OpenCvSharp.Extensions.BitmapConverter.ToMat(imgBitmap))

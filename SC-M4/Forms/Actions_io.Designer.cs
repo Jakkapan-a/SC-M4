@@ -40,8 +40,11 @@
             this.txtName = new System.Windows.Forms.TextBox();
             this.dgvIO = new System.Windows.Forms.DataGridView();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.nTimeOut = new System.Windows.Forms.NumericUpDown();
             this.nDelay = new System.Windows.Forms.NumericUpDown();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.nThreshold = new System.Windows.Forms.NumericUpDown();
@@ -70,9 +73,6 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.btnTest = new System.Windows.Forms.Button();
             this.btnLogin = new System.Windows.Forms.Button();
-            this.nTimeOut = new System.Windows.Forms.NumericUpDown();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -81,6 +81,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nPIN)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvIO)).BeginInit();
             this.groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nTimeOut)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nDelay)).BeginInit();
             this.groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nThreshold)).BeginInit();
@@ -92,7 +93,6 @@
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nAutoDelay)).BeginInit();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nTimeOut)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -255,6 +255,15 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Next Delay";
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(209, 28);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(20, 13);
+            this.label10.TabIndex = 1;
+            this.label10.Text = "ms";
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -264,6 +273,15 @@
             this.label4.TabIndex = 1;
             this.label4.Text = "ms";
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(10, 28);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(48, 13);
+            this.label9.TabIndex = 1;
+            this.label9.Text = "Time out";
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -272,6 +290,24 @@
             this.label3.Size = new System.Drawing.Size(34, 13);
             this.label3.TabIndex = 1;
             this.label3.Text = "Delay";
+            // 
+            // nTimeOut
+            // 
+            this.nTimeOut.Location = new System.Drawing.Point(64, 26);
+            this.nTimeOut.Maximum = new decimal(new int[] {
+            50000,
+            0,
+            0,
+            0});
+            this.nTimeOut.Name = "nTimeOut";
+            this.nTimeOut.Size = new System.Drawing.Size(139, 20);
+            this.nTimeOut.TabIndex = 0;
+            this.nTimeOut.Value = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.nTimeOut.ValueChanged += new System.EventHandler(this.nTimeOut_ValueChanged);
             // 
             // nDelay
             // 
@@ -322,6 +358,7 @@
             0,
             0,
             0});
+            this.nThreshold.ValueChanged += new System.EventHandler(this.nThreshold_ValueChanged);
             // 
             // label8
             // 
@@ -487,6 +524,7 @@
             0,
             0,
             0});
+            this.nAutoDelay.ValueChanged += new System.EventHandler(this.nAutoDelay_ValueChanged);
             // 
             // groupBox1
             // 
@@ -605,41 +643,6 @@
             this.btnLogin.UseVisualStyleBackColor = true;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
-            // nTimeOut
-            // 
-            this.nTimeOut.Location = new System.Drawing.Point(64, 26);
-            this.nTimeOut.Maximum = new decimal(new int[] {
-            50000,
-            0,
-            0,
-            0});
-            this.nTimeOut.Name = "nTimeOut";
-            this.nTimeOut.Size = new System.Drawing.Size(139, 20);
-            this.nTimeOut.TabIndex = 0;
-            this.nTimeOut.Value = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(10, 28);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(48, 13);
-            this.label9.TabIndex = 1;
-            this.label9.Text = "Time out";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(209, 28);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(20, 13);
-            this.label10.TabIndex = 1;
-            this.label10.Text = "ms";
-            // 
             // Actions_io
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -667,6 +670,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvIO)).EndInit();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nTimeOut)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nDelay)).EndInit();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
@@ -683,7 +687,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nAutoDelay)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nTimeOut)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

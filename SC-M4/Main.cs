@@ -33,6 +33,8 @@ using SC_M4.Utilities;
 using System.Xml.Linq;
 using SC_M4.Forms.Analyze;
 
+using Microsoft.VisualBasic.FileIO;
+
 //using Windows.UI.Xaml.Controls;
 
 namespace SC_M4
@@ -102,7 +104,7 @@ namespace SC_M4
 
             Task.Run(() =>
             {
-                //Creae Database
+                //Create Database
                 Modules.Models.CreateTable();
                 Modules.Actions.CreateTable();
                 Modules.ActionIO.CreateTable();
@@ -111,7 +113,11 @@ namespace SC_M4
 
                 try
                 {
+                    // Enable Progress Bar
+                    VisibleProgressBar(true);
+
                     var s = Setting.GetSettingRemove();
+                    int i = 0;
                     if (s.Count > 0)
                     {
                         foreach (var set in s)
@@ -121,12 +127,38 @@ namespace SC_M4
                                 File.Delete(set.path_image);
                                 set.Delete();
                             }
+                            i++;
+                            // Update progress bar
+                            SetProcessBar(i * 100 / s.Count);
                         }
                     }
+                    // Move file log to Recycle Bin
+                    string[] files = Directory.GetFiles(Properties.Resources.path_log);
+                    // Reset i
+                    i = 0;
+                    foreach (string file in files)
+                    {
+                        FileInfo info = new FileInfo(file);
+                        if (info.LastAccessTime < DateTime.Now.AddDays(-5)){
+                            // Move file to Recycle Bin
+                            Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(file, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+                        }
+
+                        i++;
+                        // Update progress bar
+                        SetProcessBar(i * 100 / files.Length);
+
+                    }
+
+                    // Visible progress bar
+                    deletedFileTemp();
+                    VisibleProgressBar(false);
                 }
                 catch (Exception ex)
                 {
                     LogWriter.SaveLog("Error delete file : " + ex.Message);
+                    VisibleProgressBar(false);
+
                 }
 
             });
@@ -153,12 +185,35 @@ namespace SC_M4
             loadRect(1);
 
             timerMain.Start();
-            deletedFileTemp();
+      
             loadTableHistory();
 
             cbQrCode.Checked = Properties.Settings.Default.useQrCode;
             useQrCode = cbQrCode.Checked;
             checkBoxAutoFocus.Checked = Properties.Settings.Default.isAutoFocus;
+        }
+
+        private void VisibleProgressBar(bool input){
+            
+            // Check invoke required
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => { VisibleProgressBar(input); }));
+                return;
+            }
+            toolStripProgressBar.Visible = input;
+            toolStripProgressBar.Value = 0;
+        }
+
+       private void SetProcessBar(int value)
+        {
+            // Check invoke required
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => { SetProcessBar(value); }));
+                return;
+            }
+            toolStripProgressBar.Value = value;
         }
 
         public static void CreateDirectoryIfNotExists(string path)
@@ -171,35 +226,30 @@ namespace SC_M4
         {
             try
             {
+                // Enable Progress Bar
+                VisibleProgressBar(true);
                 string _dir = Properties.Resources.path_temp;
                 string[] files = Directory.GetFiles(_dir);
                 int i = 0;
                 foreach (string file in files)
                 {
-                    i++;
                     FileInfo info = new FileInfo(file);
-                    if (info.LastAccessTime < DateTime.Now.AddMinutes(-30))
-                        info.Delete();
-                    if (i > 200)
-                        break;
-                }
-                i = 0;
-                files.Reverse();
-                foreach (string file in files)
-                {
+                    if (info.LastAccessTime < DateTime.Now.AddMinutes(-10)){
+                        // Move file to Recycle Bin
+                        Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(file, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+                    }
                     i++;
-                    FileInfo info = new FileInfo(file);
-                    if (info.LastAccessTime < DateTime.Now.AddMinutes(-30))
-                        info.Delete();
-                    if (i > 200)
-                        break;
+                    // Update progress bar
+                    SetProcessBar(i * 100 / files.Length);
                 }
+
+                // Visible progress bar
+                VisibleProgressBar(false);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-
         }
 
         private void loadTableHistory()

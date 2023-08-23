@@ -54,7 +54,7 @@ namespace SC_M4
             this.splitContainerHomeMain = new System.Windows.Forms.SplitContainer();
             this.panel2 = new System.Windows.Forms.Panel();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.txtDebug = new System.Windows.Forms.RichTextBox();
+            this.txtBoxResult = new System.Windows.Forms.RichTextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnSearch = new System.Windows.Forms.Button();
             this.label16 = new System.Windows.Forms.Label();
@@ -99,6 +99,7 @@ namespace SC_M4
             this.toolStripStatusSerialData = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelError = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerMain = new System.Windows.Forms.Timer(this.components);
+            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.menuStrip1.SuspendLayout();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerHomeMain)).BeginInit();
@@ -349,7 +350,7 @@ namespace SC_M4
             this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox4.Controls.Add(this.txtDebug);
+            this.groupBox4.Controls.Add(this.txtBoxResult);
             this.groupBox4.Location = new System.Drawing.Point(3, 377);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(217, 77);
@@ -357,16 +358,16 @@ namespace SC_M4
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "DEBUG";
             // 
-            // txtDebug
+            // txtBoxResult
             // 
-            this.txtDebug.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.txtBoxResult.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtDebug.Location = new System.Drawing.Point(7, 19);
-            this.txtDebug.Name = "txtDebug";
-            this.txtDebug.Size = new System.Drawing.Size(205, 52);
-            this.txtDebug.TabIndex = 0;
-            this.txtDebug.Text = "";
+            this.txtBoxResult.Location = new System.Drawing.Point(7, 19);
+            this.txtBoxResult.Name = "txtBoxResult";
+            this.txtBoxResult.Size = new System.Drawing.Size(205, 52);
+            this.txtBoxResult.TabIndex = 0;
+            this.txtBoxResult.Text = "";
             // 
             // groupBox2
             // 
@@ -812,7 +813,8 @@ namespace SC_M4
             this.toolStripStatusTime,
             this.toolStripStatusConnectSerialPort,
             this.toolStripStatusSerialData,
-            this.toolStripStatusLabelError});
+            this.toolStripStatusLabelError,
+            this.toolStripProgressBar});
             this.statusStripHome.Location = new System.Drawing.Point(0, 680);
             this.statusStripHome.Name = "statusStripHome";
             this.statusStripHome.Size = new System.Drawing.Size(1080, 22);
@@ -860,6 +862,12 @@ namespace SC_M4
             // 
             this.timerMain.Interval = 1000;
             this.timerMain.Tick += new System.EventHandler(this.timerMain_Tick);
+            // 
+            // toolStripProgressBar
+            // 
+            this.toolStripProgressBar.Name = "toolStripProgressBar";
+            this.toolStripProgressBar.Size = new System.Drawing.Size(100, 16);
+            this.toolStripProgressBar.Visible = false;
             // 
             // Main
             // 
@@ -967,7 +975,7 @@ namespace SC_M4
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.TextBox txtModel;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.RichTextBox txtDebug;
+        private System.Windows.Forms.RichTextBox txtBoxResult;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox checkBoxAutoFocus;
@@ -986,6 +994,7 @@ namespace SC_M4
         private System.Windows.Forms.ComboBox cbDriveCam02;
         private System.Windows.Forms.ComboBox comboBoxBaud;
         private System.Windows.Forms.ToolStripMenuItem commandToolStripMenuItem;
+        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
     }
 }
 

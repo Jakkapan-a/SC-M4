@@ -55,31 +55,7 @@ namespace SC_M4
         private void processOCR(CancellationToken token)
         {
             try
-            {
-
-                // Check initial conditions before processing
-                //if (!PreProcessChecks()) return;
-
-                //InitializeProcess();
-
-                //// Process Image 01 OCR
-                //ProcessImage01OCR();
-
-                //// Check condition and process Image 02 OCR
-                //if (IsResult01Valid())
-                //{
-
-                //    ProcessImage02OCR();
-
-                //    var resultType = CompareData(result_1, result_2);
-                //    if (resultType == ResultType.OK || resultType == ResultType.NG)
-                //    {
-                //        loadTableHistory();
-                //        isStateReset = false;
-                //    }
-                //}
-                //UpdateUIPostProcess();
-
+            { 
                 #region Old code
 
                 if (capture_1._isRunning && capture_2._isRunning && bitmapCamera_01 != null && bitmapCamera_02 != null && isStateReset && scrollablePictureBoxCamera01.Image != null && scrollablePictureBoxCamera02.Image != null)
@@ -418,7 +394,11 @@ namespace SC_M4
                         templateData["Command_io"][6] = (byte)0x01;
                         // Send parameter
                         serialPortIO.SerialCommand(templateData["Command_io"]);
-                    }                   
+                    }
+                    else
+                    {
+                        result_auto_test = ResultType.OK;
+                    }             
 
                     history.name = txtEmployee.Text.Trim();
                     history.name_lb = txt_lb;
