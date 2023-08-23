@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SC_M4.Forms.Show;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -129,6 +130,10 @@ namespace SC_M4
             }
             pictureBoxCamera01.Image?.Dispose();
             pictureBoxCamera01.Image = (System.Drawing.Image)bitmap.Clone();
+            if (manualTest != null)
+            {
+                manualTest.SetImage(bitmap);
+            }
 
             bitmapCamera_01?.Dispose();
             bitmapCamera_01 = (Bitmap)pictureBoxCamera01.Image.Clone();

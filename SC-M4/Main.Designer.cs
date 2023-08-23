@@ -98,8 +98,8 @@ namespace SC_M4
             this.toolStripStatusConnectSerialPort = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusSerialData = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelError = new System.Windows.Forms.ToolStripStatusLabel();
-            this.timerMain = new System.Windows.Forms.Timer(this.components);
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.timerMain = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerHomeMain)).BeginInit();
@@ -306,6 +306,8 @@ namespace SC_M4
             this.lbTitle.TabIndex = 7;
             this.lbTitle.Text = "-------------------------";
             this.lbTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbTitle.BackColorChanged += new System.EventHandler(this.lbTitle_BackColorChanged);
+            this.lbTitle.TextChanged += new System.EventHandler(this.lbTitle_TextChanged);
             // 
             // splitContainerHomeMain
             // 
@@ -858,16 +860,16 @@ namespace SC_M4
             this.toolStripStatusLabelError.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusLabelError.Text = "toolStripStatusLabel1";
             // 
-            // timerMain
-            // 
-            this.timerMain.Interval = 1000;
-            this.timerMain.Tick += new System.EventHandler(this.timerMain_Tick);
-            // 
             // toolStripProgressBar
             // 
             this.toolStripProgressBar.Name = "toolStripProgressBar";
             this.toolStripProgressBar.Size = new System.Drawing.Size(100, 16);
             this.toolStripProgressBar.Visible = false;
+            // 
+            // timerMain
+            // 
+            this.timerMain.Interval = 1000;
+            this.timerMain.Tick += new System.EventHandler(this.timerMain_Tick);
             // 
             // Main
             // 

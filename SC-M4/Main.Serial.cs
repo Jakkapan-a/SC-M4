@@ -1,4 +1,5 @@
-﻿using SC_M4.IO;
+﻿using SC_M4.Forms.Show;
+using SC_M4.IO;
 using SC_M4.Utilities;
 using System;
 using System.Collections.Generic;
@@ -214,7 +215,7 @@ namespace SC_M4
                     break;
             }
         }
-
+        private ManualTest manualTest;
         private void ModeSelector(byte[] dataReceived)
         {
             // Check data is Mode Auto 
@@ -241,7 +242,9 @@ namespace SC_M4
                 lbTitle.BackColor = Color.Yellow;
 
                 stopwatchManualTest.Restart();
-
+                manualTest?.Close();
+                manualTest = new ManualTest();
+                manualTest.Show();
                 typeSelected = TypeAction.Manual;
             }
             // Set title 

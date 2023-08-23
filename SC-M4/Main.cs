@@ -34,6 +34,7 @@ using System.Xml.Linq;
 using SC_M4.Forms.Analyze;
 
 using Microsoft.VisualBasic.FileIO;
+using System.Web;
 
 //using Windows.UI.Xaml.Controls;
 
@@ -1089,9 +1090,20 @@ namespace SC_M4
             imageProcessing.Show();
         }
 
-        //private void commandToolStripMenuItem_Click(object sender, EventArgs e)
-        //{
-        //    serialPortIO.SerialCommand(templateData["Query_Mode"]);
-        //}
+        private void lbTitle_TextChanged(object sender, EventArgs e)
+        {
+            if (manualTest != null)
+            {
+                manualTest.lbTitle.Text = lbTitle.Text;
+            }
+        }
+
+        private void lbTitle_BackColorChanged(object sender, EventArgs e)
+        {
+            if (manualTest != null)
+            {
+                manualTest.lbTitle.BackColor = lbTitle.BackColor;
+            }
+        }
     }
 }
