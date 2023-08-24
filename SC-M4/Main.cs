@@ -1108,12 +1108,9 @@ namespace SC_M4
         private Forms.Show.ShowImage showImage;
         private void showDiffToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(imageDiffShow == null) return;
             
             showImage?.Close();
             showImage = new Forms.Show.ShowImage();
-            showImage.pictureBox1.Image?.Dispose();
-            showImage.pictureBox1.Image = new Bitmap(imageDiffShow);
             showImage.Show();
         }
     }

@@ -509,6 +509,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="layers.ico" />
+    <None Include="Resources\process.png" />
+    <None Include="Resources\show.png" />
+    <None Include="Resources\laptop.png" />
+    <None Include="Resources\data-analysis.png" />
     <None Include="Resources\search1.png" />
     <None Include="Resources\down_32.png" />
     <None Include="Resources\up_32.png" />

@@ -47,6 +47,7 @@ namespace SC_M4.Forms
                 nThreshold.Value = Properties.Settings.Default.Threshold;
                 nAutoDelay.Value = Properties.Settings.Default.AutoDelay;
                 nTimeOut.Value = Properties.Settings.Default.TimeOut;
+                nDelay.Value = Properties.Settings.Default.Delay;
             }
         }
         private void DisableAllControls()
@@ -335,7 +336,7 @@ namespace SC_M4.Forms
         {
             try
             {
-                if (!rdTypeManual.Checked && !rdTypeAuto.Checked && !rdTypeImage.Checked && !rdTypeServo.Checked)
+                if (!rdTypeManual.Checked && !rdTypeAuto.Checked && !rdTypeImage.Checked && !rdTypeServo.Checked && !rdCompareModel.Checked)
                 {
                     MessageBox.Show("Please choose type", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -409,6 +410,7 @@ namespace SC_M4.Forms
             if (rdTypeServo.Checked) return TypeAction.Servo;
             if (rdTypeImage.Checked) return TypeAction.Image;
             if (rdCompareModel.Checked) return TypeAction.Compare;
+
             return default; // You may want to handle this case appropriately.
         }
 

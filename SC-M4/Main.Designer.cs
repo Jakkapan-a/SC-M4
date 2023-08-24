@@ -35,6 +35,7 @@ namespace SC_M4
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sTEPTESTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.masterListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.masterColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectXYCAM1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,8 +46,9 @@ namespace SC_M4
             this.keyCAM1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.keyCAM2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.sTEPTESTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.commandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showDiffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelHeader = new System.Windows.Forms.Panel();
             this.cbQrCode = new System.Windows.Forms.CheckBox();
             this.btStartStop = new System.Windows.Forms.Button();
@@ -100,8 +102,6 @@ namespace SC_M4
             this.toolStripStatusLabelError = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.timerMain = new System.Windows.Forms.Timer(this.components);
-            this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showDiffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerHomeMain)).BeginInit();
@@ -152,6 +152,7 @@ namespace SC_M4
             // settingToolStripMenuItem
             // 
             this.settingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sTEPTESTToolStripMenuItem,
             this.masterListToolStripMenuItem,
             this.masterColorToolStripMenuItem,
             this.selectXYCAM1ToolStripMenuItem,
@@ -162,11 +163,18 @@ namespace SC_M4
             this.keyCAM1ToolStripMenuItem,
             this.keyCAM2ToolStripMenuItem,
             this.changeNameToolStripMenuItem,
-            this.sTEPTESTToolStripMenuItem,
             this.commandToolStripMenuItem});
             this.settingToolStripMenuItem.Name = "settingToolStripMenuItem";
             this.settingToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
             this.settingToolStripMenuItem.Text = "Setting";
+            // 
+            // sTEPTESTToolStripMenuItem
+            // 
+            this.sTEPTESTToolStripMenuItem.Image = global::SC_M4.Properties.Resources.laptop;
+            this.sTEPTESTToolStripMenuItem.Name = "sTEPTESTToolStripMenuItem";
+            this.sTEPTESTToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.sTEPTESTToolStripMenuItem.Text = "STEP TEST";
+            this.sTEPTESTToolStripMenuItem.Click += new System.EventHandler(this.sTEPTESTToolStripMenuItem_Click);
             // 
             // masterListToolStripMenuItem
             // 
@@ -226,6 +234,7 @@ namespace SC_M4
             // 
             // keyCAM1ToolStripMenuItem
             // 
+            this.keyCAM1ToolStripMenuItem.Image = global::SC_M4.Properties.Resources.process;
             this.keyCAM1ToolStripMenuItem.Name = "keyCAM1ToolStripMenuItem";
             this.keyCAM1ToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.keyCAM1ToolStripMenuItem.Text = "Key CAM 1";
@@ -233,6 +242,7 @@ namespace SC_M4
             // 
             // keyCAM2ToolStripMenuItem
             // 
+            this.keyCAM2ToolStripMenuItem.Image = global::SC_M4.Properties.Resources.process;
             this.keyCAM2ToolStripMenuItem.Name = "keyCAM2ToolStripMenuItem";
             this.keyCAM2ToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.keyCAM2ToolStripMenuItem.Text = "Key CAM 2";
@@ -246,19 +256,30 @@ namespace SC_M4
             this.changeNameToolStripMenuItem.Text = "Setting";
             this.changeNameToolStripMenuItem.Click += new System.EventHandler(this.changeNameToolStripMenuItem_Click);
             // 
-            // sTEPTESTToolStripMenuItem
-            // 
-            this.sTEPTESTToolStripMenuItem.Name = "sTEPTESTToolStripMenuItem";
-            this.sTEPTESTToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.sTEPTESTToolStripMenuItem.Text = "STEP TEST";
-            this.sTEPTESTToolStripMenuItem.Click += new System.EventHandler(this.sTEPTESTToolStripMenuItem_Click);
-            // 
             // commandToolStripMenuItem
             // 
+            this.commandToolStripMenuItem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.commandToolStripMenuItem.Image = global::SC_M4.Properties.Resources.data_analysis;
             this.commandToolStripMenuItem.Name = "commandToolStripMenuItem";
             this.commandToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.commandToolStripMenuItem.Text = "Analyze";
             this.commandToolStripMenuItem.Click += new System.EventHandler(this.commandToolStripMenuItem_Click);
+            // 
+            // debugToolStripMenuItem
+            // 
+            this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showDiffToolStripMenuItem});
+            this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
+            this.debugToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
+            this.debugToolStripMenuItem.Text = "Debug";
+            // 
+            // showDiffToolStripMenuItem
+            // 
+            this.showDiffToolStripMenuItem.Image = global::SC_M4.Properties.Resources.show;
+            this.showDiffToolStripMenuItem.Name = "showDiffToolStripMenuItem";
+            this.showDiffToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.showDiffToolStripMenuItem.Text = "Show different picture";
+            this.showDiffToolStripMenuItem.Click += new System.EventHandler(this.showDiffToolStripMenuItem_Click);
             // 
             // panelHeader
             // 
@@ -873,21 +894,6 @@ namespace SC_M4
             // 
             this.timerMain.Interval = 1000;
             this.timerMain.Tick += new System.EventHandler(this.timerMain_Tick);
-            // 
-            // debugToolStripMenuItem
-            // 
-            this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.showDiffToolStripMenuItem});
-            this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
-            this.debugToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
-            this.debugToolStripMenuItem.Text = "Debug";
-            // 
-            // showDiffToolStripMenuItem
-            // 
-            this.showDiffToolStripMenuItem.Name = "showDiffToolStripMenuItem";
-            this.showDiffToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
-            this.showDiffToolStripMenuItem.Text = "Show different picture";
-            this.showDiffToolStripMenuItem.Click += new System.EventHandler(this.showDiffToolStripMenuItem_Click);
             // 
             // Main
             // 

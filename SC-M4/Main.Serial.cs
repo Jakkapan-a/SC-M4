@@ -27,7 +27,7 @@ namespace SC_M4
             templateData.Add("Query_Mode", new byte[8] { 0x02, 0x51, 0x4D, 0x00, 0x00, 0x00, 0x00, 0x03 });
             templateData.Add("Query_Status", new byte[8] { 0x02, 0x51, 0x53, 0x00, 0x00, 0x00, 0x00, 0x03 });
             templateData.Add("Command", new byte[8] { 0x02, 0x43, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03 });
-            templateData.Add("Command_io", new byte[8] { 0x02, 0x43, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03 });
+            templateData.Add("Command_io", new byte[8] { 0x02, 0x43, 0x49, 0x00, 0x00, 0x00, 0x00, 0x03 });
             templateData.Add("Command_MES", new byte[8] { 0x02, 0x43, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03 });
         }
         #region Serial Port 
@@ -263,15 +263,15 @@ namespace SC_M4
             {
                 isStateReset = true;
                 is_Blink_NG = false;
-                if (dataReceived[6] == 0x01)
+                if (dataReceived[6] == 0x02)
                 {
                     lbTitle.Text = "Ready....";
-                }else if (dataReceived[6] == 0x02)
+                }else if (dataReceived[6] == 0x01)
                 {
                     lbTitle.Text = "Empty!";
                 }
                 lbTitle.ForeColor = Color.Black;
-                lbTitle.BackColor = Color.Yellow;
+                lbTitle.BackColor = (typeSelected == TypeAction.Auto ? Color.Orange : typeSelected == TypeAction.Manual ? Color.Yellow : Color.Gray);
                 richTextBox1.Text = "";
                 richTextBox2.Text = "";
             }

@@ -85,6 +85,12 @@ namespace SC_M4
                     return;
                 }
             }
+            Invoke(new Action(() =>
+            {
+                this.richTextBox1.Text = string.Empty;
+                this.richTextBox2.Text = string.Empty;
+            }));
+
             // Start process
             ClearTxtBox();
             UpdateUIAndInvoke("START", System.Drawing.Color.Yellow);
@@ -97,9 +103,9 @@ namespace SC_M4
             {
                 List<Actions> actions = Actions.GetListByItemId(item.id);
                 AppendTxtBox($"Start Test Item: {item.name}");
+                UpdateUIAndInvoke($"{item.name} {(++i)}/{items.Count()}", System.Drawing.Color.Yellow);
                 foreach (var action in actions)
                 {
-                    UpdateUIAndInvoke($"{item.name} {action.name}, {(++i)}/{items.Count()}", System.Drawing.Color.Yellow);
                     AppendTxtBox($"Start Test Action: {action.name}");
                     SortingProcess(action, token);
                     // Check token is cancel
@@ -107,6 +113,7 @@ namespace SC_M4
                     {
                         break;
                     }
+                    // Sleep next
                     Thread.Sleep(action.delay);
                     if (result_auto_test == ResultType.NG)
                     {
@@ -117,7 +124,6 @@ namespace SC_M4
 
                 if (result_auto_test == ResultType.NG)
                 {
-                    title = $"Item : {item.name}";
                     break;
                 }
                 // Check token is cancel
@@ -125,10 +131,11 @@ namespace SC_M4
                 {
                     Console.WriteLine("Cancel Process...");
                     AppendTxtBox($"Cancel Process...");
+                    CloseAllIO();
                     return;
                 }
             }
-
+            Thread.Sleep(100);
             if (result_auto_test == ResultType.NG)
             {
                 IsChangeSelectedMode = false;
@@ -159,12 +166,39 @@ namespace SC_M4
                 UpdateUIAndInvoke("PASS", System.Drawing.Color.Green);
             }
 
-            string result = result_auto_test == ResultType.OK ? "PASS" : "NG";
-
             AppendTxtBox($"Test Done " + (result_auto_test == ResultType.OK || result_auto_test == ResultType.OK ? "PASS" : "NG"));
             Console.WriteLine($"Test Done " + (result_auto_test == ResultType.OK || result_auto_test == ResultType.OK ? "PASS" : "NG"));
             IsCapture = false;
+            CloseAllIO();
 
+        }
+
+        private void CloseAllIO()
+        {
+            if (actionIO == null) return;
+            // Close All IO
+            foreach (var item in actionIO)
+            {
+                int pin = item.pin;
+
+                byte value = ((byte)pin);
+                templateData["Command_io"][0] = 0x02; // 02 STX
+                templateData["Command_io"][1] = 0x43; // 43
+                templateData["Command_io"][2] = 0X49;
+                templateData["Command_io"][3] = 0x50;
+                templateData["Command_io"][4] = value;
+                templateData["Command_io"][6] = 0x00;
+
+                string hex = string.Empty;
+                foreach (var b in templateData["Command_io"])
+                {
+                    hex += b.ToString("X2") + " ";
+                }
+                AppendTxtBox($"Command: {hex}");
+                // Send parameter
+                serialPortIO.SerialCommand(templateData["Command_io"]);
+                Thread.Sleep(100);
+            }
         }
 
         public void SortingProcess(Actions action, CancellationToken token, bool isGetIO = false)
@@ -196,196 +230,310 @@ namespace SC_M4
                     System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
                     stopwatch.Start();
                     result_auto_test = ResultType.None;
-                    while (result_auto_test == ResultType.None)
+
+                    int retries = 3;
+                    while (retries > 0)
                     {
-                        processOCR(token);
-                        if (stopwatch.ElapsedMilliseconds > action.time_out)
+                        try
                         {
-                            result_auto_test = ResultType.NG;
+                            while (result_auto_test == ResultType.None)
+                            {
+                                if (token.IsCancellationRequested)
+                                {
+                                    break;
+                                }
+
+                                processOCR(token);
+
+                                if (stopwatch.ElapsedMilliseconds > action.time_out)
+                                {
+                                    result_auto_test = ResultType.NG;
+                                    break;
+                                }
+
+                                if (token.IsCancellationRequested)
+                                {
+                                    Console.WriteLine("Cancel Process...");
+                                    break;
+                                }
+
+                                AppendTxtBox($"Time Out:{(stopwatch.ElapsedMilliseconds / 1000)}s");
+                                isStateReset = true;
+                                Thread.Sleep(500);
+                            }
+
                             break;
                         }
-
-                        if (token.IsCancellationRequested)
+                        catch (Exception ex)
                         {
-                            Console.WriteLine("Cancel Process...");
-                            break;
+                            HandleExceptionTest(ex);
+                            AppendTxtBox($"ERROR :{ex.Message}");
+                            retries--;
                         }
 
-                        AppendTxtBox($"Sec: {stopwatch.ElapsedMilliseconds:2}");
+                        if (retries == 0)
+                        {
+                            AppendTxtBox("Failed after 3 attempts.");
+                        }
+
                     }
+
                     break;
             }
         }
-
         private void ProcessTypeAuto(Actions action, CancellationToken token)
         {
-            // Set parameter
-            ActionIO iO = actionIO.FirstOrDefault(x => x.id == action.action_io_id);
-            if (iO == null)
+            int retries = 3;
+            while (retries > 0)
             {
-                Console.WriteLine($"Action IO not found");
-                return;
+                try
+                {
+                    // Set parameter
+                    ActionIO iO = actionIO.FirstOrDefault(x => x.id == action.action_io_id);
+                    if (iO == null)
+                    {
+                        Console.WriteLine($"Action IO not found");
+                        return;
+                    }
+
+                    int pin = iO.pin;
+                    byte value = ((byte)pin);
+
+                    templateData["Command_io"][2] = 0X49;
+                    templateData["Command_io"][3] = 0x50;
+                    templateData["Command_io"][4] = value;
+                    templateData["Command_io"][6] = 0x01;
+
+                    string hex = string.Empty;
+                    foreach (var b in templateData["Command_io"])
+                    {
+                        hex += b.ToString("X2") + " ";
+                    }
+                    AppendTxtBox($"Command: {hex}");
+                    // Send parameter
+                    serialPortIO.SerialCommand(templateData["Command_io"]);
+                    Thread.Sleep(action.auto_delay);
+                    // Set parameter
+                    templateData["Command_io"][6] = 0x00;
+                    hex = string.Empty;
+                    foreach (var b in templateData["Command_io"])
+                    {
+                        hex += b.ToString("X2") + " ";
+                    }
+                    AppendTxtBox($"Command: {hex}");
+                    // Send parameter
+                    serialPortIO.SerialCommand(templateData["Command_io"]);
+                    Thread.Sleep(100);
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    HandleExceptionTest(ex);
+                    AppendTxtBox($"ERROR :{ex.Message}");
+                    retries--;
+                }
             }
 
-            int pin = iO.pin;
-            byte value = ((byte)pin);
-
-            templateData["Command_io"][2] = 0X49;
-            templateData["Command_io"][3] = 0x50;
-            templateData["Command_io"][4] = value;
-            templateData["Command_io"][6] = 0x01;
-
-            string hex = string.Empty;
-            foreach (var b in templateData["Command_io"])
+            if (retries == 0)
             {
-                hex += b.ToString("X2") + " ";
+                AppendTxtBox("Failed after 3 attempts.");
             }
-            AppendTxtBox($"Command: {hex}");
-            // Send parameter
-            serialPortIO.SerialCommand(templateData["Command_io"]);
-            Thread.Sleep(action.auto_delay);
-            // Set parameter
-            templateData["Command_io"][6] = 0x00;
-
-            hex = string.Empty;
-            foreach (var b in templateData["Command_io"])
-            {
-                hex += b.ToString("X2") + " ";
-            }
-            AppendTxtBox($"Command: {hex}");
-            // Send parameter
-            serialPortIO.SerialCommand(templateData["Command_io"]);
         }
 
 
         private void ProcessTypeManual(Actions action, CancellationToken token)
         {
-            // Set parameter
-            ActionIO iO = actionIO.FirstOrDefault(x => x.id == action.action_io_id);
-            if (iO == null)
+            int retries = 3;
+            while (retries > 0)
             {
-                Console.WriteLine($"Action IO not found");
-                return;
+                try
+                {
+                    // Set parameter
+                    ActionIO iO = actionIO.FirstOrDefault(x => x.id == action.action_io_id);
+                    if (iO == null)
+                    {
+                        Console.WriteLine($"Action IO not found");
+                        return;
+                    }
+                    int pin = iO.pin;
+                    byte value = ((byte)pin);
+                    templateData["Command_io"][0] = 0X02;
+                    templateData["Command_io"][1] = 0x43;
+                    templateData["Command_io"][2] = 0X49;
+                    templateData["Command_io"][3] = 0x50;
+                    templateData["Command_io"][4] = value;
+                    templateData["Command_io"][6] = action.state == 1 ? (byte)0x01 : (byte)0x00; ;
+                    // Send parameter
+                    serialPortIO.SerialCommand(templateData["Command_io"]);
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    HandleExceptionTest(ex);
+                    AppendTxtBox($"ERROR :{ex.Message}");
+                    retries--;
+                }
             }
-            int pin = iO.pin;
-            byte value = ((byte)pin);
-            templateData["Command_io"][2] = 0X49;
-            templateData["Command_io"][3] = 0x50;
-            templateData["Command_io"][4] = value;
-            templateData["Command_io"][6] = action.state == 1 ? (byte)0x01 : (byte)0x00; ;
-            // Send parameter
-            serialPortIO.SerialCommand(templateData["Command_io"]);
+
+            if (retries == 0)
+            {
+                AppendTxtBox("Failed after 3 attempts.");
+            }
         }
 
         private void ProcessTypeServo(Actions action, CancellationToken token)
         {
-            // Set parameter           
-            int pin = 4;
-            byte value = ((byte)pin);
-            templateData["Command_io"][2] = 0X49;
-            templateData["Command_io"][3] = 0x50;
-            templateData["Command_io"][4] = value;
-            templateData["Command_io"][6] = (byte)action.servo;
-            // Send parameter
-            serialPortIO.SerialCommand(templateData["Command_io"]);
+            int retries = 3;
+            while (retries > 0)
+            {
+                try
+                {
+                    // Set parameter           
+                    int pin = 4;
+                    byte value = ((byte)pin);
+                    templateData["Command_io"][2] = 0X49;
+                    templateData["Command_io"][3] = 0x50;
+                    templateData["Command_io"][4] = value;
+                    templateData["Command_io"][6] = (byte)action.servo;
+                    // Send parameter
+                    serialPortIO.SerialCommand(templateData["Command_io"]);
+                    break;
+
+                }
+                catch (Exception ex)
+                {
+                    HandleExceptionTest(ex);
+                    AppendTxtBox($"ERROR :{ex.Message}");
+                    retries--;
+                }
+            }
+
+            if (retries == 0)
+            {
+                AppendTxtBox("Failed after 3 attempts.");
+            }
         }
 
         private Bitmap imageDiff;
 
-
-
         private void ProcessTypeImage(Actions action, CancellationToken token)
         {
-            // Check master image
-            string path = Path.Combine(Properties.Resources.path_images, action.image_name);
-            if (!File.Exists(path))
+            int retries = 3;
+            while (retries > 0)
             {
-                Console.WriteLine($"Image not found");
-                return;
-            }
-            // Load image
-            using (Bitmap image = new Bitmap(bitmapCamera_01.Width, bitmapCamera_01.Height))
-            {
-                using (Graphics g = Graphics.FromImage(image))
+                try
                 {
-                    g.DrawImage(bitmapCamera_01, 0, 0, bitmapCamera_01.Width, bitmapCamera_01.Height);
-                }
-
-                // Load master image
-                using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
-                {
-                    using (Bitmap master = (Bitmap)Image.FromStream(fs))
+                    // Check master image
+                    string path = Path.Combine(Properties.Resources.path_images, action.image_name);
+                    if (!File.Exists(path))
                     {
-                        List<Modules.Rect> rect = Modules.Rect.GetByAction(action.id);
-
+                        Console.WriteLine($"Image not found");
+                        return;
+                    }
+                    // Load image
+                    using (Bitmap image = new Bitmap(bitmapCamera_01.Width, bitmapCamera_01.Height))
+                    {
                         IsCapture = true;
-                        // Compare 
-                        Invoke(new Action(() =>
+                        Thread.Sleep(50);
+                        using (Graphics g = Graphics.FromImage(image))
                         {
-                            pictureBoxCamera01.Image?.Dispose();
-                            pictureBoxCamera01.Image = new Bitmap(image);
-
-
-                            pictureBoxCamera02.Image?.Dispose();
-                            pictureBoxCamera02.Image = new Bitmap(master);
-                        }));
-
-                        CompareAndHandle(image, master, action.threshold, action);
-
-                        imageDiffShow?.Dispose();
-                        imageDiffShow = new Bitmap(imageDiff);
-                        
+                            g.DrawImage(bitmapCamera_01, 0, 0, bitmapCamera_01.Width, bitmapCamera_01.Height);
+                        }
                         IsCapture = false;
-                        if (rect != null && rect.Count > 0)
+                        // Load master image
+                        using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
                         {
-                            IsCapture = true;
-                            foreach (var r in rect)
+                            using (Bitmap master = (Bitmap)Image.FromStream(fs))
                             {
-                                Console.WriteLine($"Rect: {r.x} {r.y} {r.width} {r.height}");
-                                using (Bitmap template = new Bitmap(r.width, r.height))
-                                {
-                                    using (Graphics g = Graphics.FromImage(template))
-                                    {
-                                        Rectangle rectangle = new Rectangle(r.x, r.y, r.width, r.height);
-                                        g.DrawImage(master, 0, 0, rectangle, GraphicsUnit.Pixel);
-                                    }
+                                List<Modules.Rect> rect = Modules.Rect.GetByAction(action.id);
 
-                                    using (Bitmap comparator = new Bitmap(r.width, r.height))
+                                IsCapture = true;
+                                // Compare 
+                                Invoke(new Action(() =>
+                                {
+                                    pictureBoxCamera01.Image?.Dispose();
+                                    pictureBoxCamera01.Image = new Bitmap(image);
+
+
+                                    pictureBoxCamera02.Image?.Dispose();
+                                    pictureBoxCamera02.Image = new Bitmap(master);
+                                }));
+
+                                CompareAndHandle(image, master, action.threshold, action);
+
+                                imageDiffShow?.Dispose();
+                                imageDiffShow = new Bitmap(imageDiff.Width, imageDiff.Height);
+                                using (Graphics g = Graphics.FromImage(imageDiffShow))
+                                {
+                                    g.DrawImage(imageDiff, 0, 0, imageDiffShow.Width, imageDiffShow.Height);
+                                }
+
+
+                                IsCapture = false;
+                                if (rect != null && rect.Count > 0)
+                                {
+                                    IsCapture = true;
+                                    foreach (var r in rect)
                                     {
-                                        using (Graphics g = Graphics.FromImage(comparator))
+                                        Console.WriteLine($"Rect: {r.x} {r.y} {r.width} {r.height}");
+                                        using (Bitmap template = new Bitmap(r.width, r.height))
                                         {
-                                            Rectangle rectangle = new Rectangle(r.x, r.y, r.width, r.height);
-                                            g.DrawImage(image, 0, 0, rectangle, GraphicsUnit.Pixel);
+                                            using (Graphics g = Graphics.FromImage(template))
+                                            {
+                                                Rectangle rectangle = new Rectangle(r.x, r.y, r.width, r.height);
+                                                g.DrawImage(master, 0, 0, rectangle, GraphicsUnit.Pixel);
+                                            }
+
+                                            using (Bitmap comparator = new Bitmap(r.width, r.height))
+                                            {
+                                                using (Graphics g = Graphics.FromImage(comparator))
+                                                {
+                                                    Rectangle rectangle = new Rectangle(r.x, r.y, r.width, r.height);
+                                                    g.DrawImage(image, 0, 0, rectangle, GraphicsUnit.Pixel);
+                                                }
+
+                                                Invoke(new Action(() =>
+                                                {
+                                                    pictureBoxCamera01.Image?.Dispose();
+                                                    pictureBoxCamera01.Image = new Bitmap(comparator);
+
+
+                                                    pictureBoxCamera02.Image?.Dispose();
+                                                    pictureBoxCamera02.Image = new Bitmap(template);
+                                                }));
+
+
+                                                CompareAndHandle(comparator, template, r.threshold, action);
+                                                Thread.Sleep(50);
+                                            }
+
                                         }
 
-                                        Invoke(new Action(() =>
+                                        if (token.IsCancellationRequested || result_auto_test == ResultType.NG)
                                         {
-                                            pictureBoxCamera01.Image?.Dispose();
-                                            pictureBoxCamera01.Image = new Bitmap(comparator);
-
-
-                                            pictureBoxCamera02.Image?.Dispose();
-                                            pictureBoxCamera02.Image = new Bitmap(template);
-                                        }));
-
-
-                                        CompareAndHandle(comparator, template, r.threshold, action);
-                                        Thread.Sleep(50);
+                                            break;
+                                        }
                                     }
-
-                                }
-
-                                if (token.IsCancellationRequested || result_auto_test == ResultType.NG)
-                                {
-                                    break;
+                                    IsCapture = false;
                                 }
                             }
-                            IsCapture = false;
                         }
                     }
+                    break;
                 }
-
+                catch (Exception ex)
+                {
+                    HandleExceptionTest(ex);
+                    AppendTxtBox($"ERROR :{ex.Message}");
+                    retries--;
+                }
             }
+
+            if (retries == 0)
+            {
+                AppendTxtBox("Failed after 3 attempts.");
+            }
+
         }
 
         private ManualTest manualTestShow;
@@ -393,42 +541,64 @@ namespace SC_M4
 
         private void CompareAndHandle(Bitmap comparator, Bitmap master, double threshold, Actions action)
         {
-            double maxVal;
-            OpenCvSharp.Point location;
-
-            imageDiff?.Dispose();  // ทำลาย imageDiff ที่เก่าเมื่อจำเป็น
-            imageDiff = ImageProcessing.CompareImages(comparator, master, out maxVal, out location);
-            // maxVal = ImageProcessing.CompareImages(comparator, master);
-            // Display ...
-            AppendTxtBox($"Compare : {(maxVal * 100):F2} > {action.threshold}");
-
-            UpdateUIAndInvoke($"Different: {(maxVal * 100):F2} > {action.threshold}", System.Drawing.Color.Yellow);
-
-
-            if ((maxVal * 100) > action.threshold)
+            int retries = 3;
+            while (retries > 0)
             {
-                result_auto_test = ResultType.OK;
+                try
+                {
+                    double maxVal;
+                    OpenCvSharp.Point location;
+
+                    imageDiff?.Dispose();  // ทำลาย imageDiff ที่เก่าเมื่อจำเป็น
+                    imageDiff = ImageProcessing.CompareImages(comparator, master, out maxVal, out location);
+                    // maxVal = ImageProcessing.CompareImages(comparator, master);
+                    // Display ...
+                    AppendTxtBox($"Compare : {(maxVal * 100):F2} > {action.threshold}");
+
+                    UpdateUIAndInvoke($"Different: {(maxVal * 100):F2} > {action.threshold}", System.Drawing.Color.Yellow);
+
+
+                    if ((maxVal * 100) > action.threshold)
+                    {
+                        result_auto_test = ResultType.OK;
+                    }
+                    else
+                    {
+                        string file_name = $"{DateTime.Now.ToString("yyyyMMddHHmmss")}";
+                        // Difference image
+                        string name = file_name + "_Diff.jpg";
+                        string path = Path.Combine(Properties.Resources.path_temp, $"{name}.jpg");
+                        imageDiff?.Save(path, System.Drawing.Imaging.ImageFormat.Jpeg);
+                        LogWriter.SaveLog(name);
+                        // Comparator image
+                        name = file_name + "_Comparator.jpg";
+                        path = Path.Combine(Properties.Resources.path_temp, $"{name}.jpg");
+                        comparator?.Save(path, System.Drawing.Imaging.ImageFormat.Jpeg);
+                        LogWriter.SaveLog(name);
+                        // Master image
+                        name = file_name + "_Master.jpg";
+                        path = Path.Combine(Properties.Resources.path_temp, $"{name}.jpg");
+                        master?.Save(path, System.Drawing.Imaging.ImageFormat.Jpeg);
+                        LogWriter.SaveLog(name);
+
+                        result_auto_test = ResultType.NG;
+                    }
+                    break;
+                }
+                catch (Exception ex)
+                {
+
+                    HandleExceptionTest(ex);
+                    AppendTxtBox($"ERROR :{ex.Message}");
+                    retries--;
+                }
             }
-            else
+
+            if (retries == 0)
             {
-                string file_name = $"{DateTime.Now.ToString("yyyyMMddHHmmss")}";
-                // Difference image
-                string name = file_name + "_Diff.jpg";
-                string path = Path.Combine(Properties.Resources.path_temp, $"{name}.jpg");
-
-                imageDiff?.Save(path, System.Drawing.Imaging.ImageFormat.Jpeg);
-                // Comparator image
-                name = file_name + "_Comparator.jpg";
-                path = Path.Combine(Properties.Resources.path_temp, $"{name}.jpg");
-                comparator?.Save(path, System.Drawing.Imaging.ImageFormat.Jpeg);
-
-                // Master image
-                name = file_name + "_Master.jpg";
-                path = Path.Combine(Properties.Resources.path_temp, $"{name}.jpg");
-                master?.Save(path, System.Drawing.Imaging.ImageFormat.Jpeg);
-
-                result_auto_test = ResultType.NG;
+                AppendTxtBox("Failed after 3 attempts.");
             }
+
         }
 
         public bool CompareImages(Bitmap imgBitmap, Bitmap templateBitmap, double threshold)
@@ -439,7 +609,6 @@ namespace SC_M4
             {
                 Cv2.MatchTemplate(img, template, result, TemplateMatchModes.CCoeffNormed);
                 Cv2.MinMaxLoc(result, out double minVal, out double maxVal, out _, out _);  // ใช้ discards สำหรับตัวแปรที่ไม่จำเป็นต้องใช้
-                // if (maxVal > threshold) return true;
                 return maxVal > threshold;
             }
         }
@@ -449,13 +618,15 @@ namespace SC_M4
             if (txtBoxResult.InvokeRequired)
             {
                 txtBoxResult.Invoke(new Action<string>(AppendTxtBox), new object[] { txt_input });
+
+                return;
             }
-            else
-            {
-                txtBoxResult.AppendText(txt_input + Environment.NewLine);
-                // Scroll to end
-                txtBoxResult.SelectionStart = txtBoxResult.Text.Length;
-            }
+
+            txtBoxResult.AppendText(txt_input + Environment.NewLine);
+            // Scroll to end
+            txtBoxResult.SelectionStart = txtBoxResult.Text.Length;
+            txtBoxResult.ScrollToCaret();
+
         }
 
         // Clear text to txtBoxResult

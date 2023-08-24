@@ -165,6 +165,8 @@ namespace SC_M4.Forms
                     return "Manual";
                 case TypeAction.Image:
                     return "Image";
+                case TypeAction.Compare:
+                    return "SW VER";
                 default:
                     return "Servo";
             }
@@ -225,7 +227,6 @@ namespace SC_M4.Forms
 
                     items.Save();
                 }
-
                 RenderDGVItem(model_id);
                 ClearForm();
             }
