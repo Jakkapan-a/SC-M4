@@ -63,8 +63,8 @@ namespace SC_M4.IO
             // Is the port open?
             if (this.IsOpen)
             {
-                this.Close();
-                this.Open();
+                //this.Close();
+                //this.Open();
                 Console.Write("Send : ");
                 foreach (var d in bytes)
                 {

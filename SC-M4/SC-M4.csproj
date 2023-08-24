@@ -345,6 +345,7 @@
     <Compile Include="Modules\ActionIO.cs" />
     <Compile Include="Modules\Actions.cs" />
     <Compile Include="Modules\History.cs" />
+    <Compile Include="Modules\HsitoryAuto.cs" />
     <Compile Include="Modules\Items.cs" />
     <Compile Include="Modules\MasterAll.cs" />
     <Compile Include="Modules\MasterLB.cs" />

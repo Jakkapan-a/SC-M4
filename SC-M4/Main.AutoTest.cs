@@ -7,6 +7,7 @@ using SC_M4.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -24,10 +25,11 @@ namespace SC_M4
         private CancellationTokenSource cts_auto = new CancellationTokenSource();
         private Task task_auto;
         private ResultType result_auto_test = ResultType.None;
-
+        private HistoryAuto historyAuto;
+        private Stopwatch stopwatchAuto;
         public void InitializeAutoTest()
         {
-
+            stopwatchAuto = new Stopwatch();
         }
 
         private void StartAutoTest()
@@ -50,6 +52,7 @@ namespace SC_M4
         }
 
         private List<ActionIO> actionIO;
+
         private void DoWorkAutoTest(CancellationToken token)
         {
             IsCapture = false;
@@ -66,6 +69,9 @@ namespace SC_M4
             IsChangeSelectedMode = false;
             // 
             actionIO = ActionIO.Get();
+            //
+            historyAuto = new HistoryAuto();
+
 
             var model = Models.Get(txtModel.Text);
             // 1. Check model
@@ -91,7 +97,7 @@ namespace SC_M4
                 this.richTextBox1.Text = string.Empty;
                 this.richTextBox2.Text = string.Empty;
             }));
-
+            stopwatchAuto.Restart();
             // Start process
             ClearTxtBox();
             UpdateUIAndInvoke("START", System.Drawing.Color.Yellow);
@@ -104,7 +110,9 @@ namespace SC_M4
             {
                 List<Actions> actions = Actions.GetListByItemId(item.id);
                 AppendTxtBox($"Start Test Item: {item.name}");
-                UpdateUIAndInvoke($"{item.name} {(++i)}/{items.Count()}", System.Drawing.Color.Yellow);
+                ++i;
+                historyAuto.step = $"{item.name} {i}/{items.Count()}";
+                UpdateUIAndInvoke($"{item.name} {i}/{items.Count()}", System.Drawing.Color.Yellow);
                 foreach (var action in actions)
                 {
                     AppendTxtBox($"Start Test Action: {action.name}");
@@ -123,6 +131,7 @@ namespace SC_M4
                     }
                 }
 
+
                 if (result_auto_test == ResultType.NG)
                 {
                     break;
@@ -132,18 +141,21 @@ namespace SC_M4
                 {
                     Console.WriteLine("Cancel Process...");
                     AppendTxtBox($"Cancel Process...");
+                    historyAuto.result = $"Cancel Process...";
                     CloseAllIO();
                     return;
                 }
             }
+           
             Thread.Sleep(100);
             if (result_auto_test == ResultType.NG)
             {
+                historyAuto.result = "NG";
                 IsChangeSelectedMode = false;
                 UpdateUIAndInvoke("NG", System.Drawing.Color.Red);
             }
 
-            if (result_auto_test == ResultType.OK || result_auto_test == ResultType.None)
+            if (result_auto_test == ResultType.OK || result_auto_test == ResultType.None || result_auto_test == ResultType.Pass)
             {
                 // 02 43 49 50 32 00 01 03 MES ON
                 templateData["Command_MES"][0] = 0x02; // 02 STX
@@ -159,18 +171,21 @@ namespace SC_M4
                 {
                     hex += b.ToString("X2") + " ";
                 }
+
                 AppendTxtBox($"Command: {hex}");
                 // Send parameter
                 serialPortIO.SerialCommand(templateData["Command_MES"]);
                 IsChangeSelectedMode = true;
                 // Update
+
                 UpdateUIAndInvoke("PASS", System.Drawing.Color.Green);
+                historyAuto.result = "PASS";
             }
+            CloseAllIO();
 
             AppendTxtBox($"Test Done " + (result_auto_test == ResultType.OK || result_auto_test == ResultType.OK ? "PASS" : "NG"));
             Console.WriteLine($"Test Done " + (result_auto_test == ResultType.OK || result_auto_test == ResultType.OK ? "PASS" : "NG"));
             IsCapture = false;
-            CloseAllIO();
 
         }
 
@@ -200,6 +215,22 @@ namespace SC_M4
                 serialPortIO.SerialCommand(templateData["Command_io"]);
                 Thread.Sleep(100);
             }
+
+
+            Invoke(new Action(() =>
+            {
+                historyAuto.name = txtEmployee.Text;
+                historyAuto.sw_ver = this.richTextBox1.Text;
+                historyAuto.lb_ver = this.richTextBox2.Text.IndexOf(Properties.Settings.Default.keyCAM2) == -1 ? this.richTextBox2.Text : this.richTextBox2.Text.Substring(0, this.richTextBox2.Text.Replace("O", "0").IndexOf(Properties.Settings.Default.keyCAM2));
+            }));
+
+            stopwatchAuto.Stop();
+
+            historyAuto.time_s = (int)Math.Round((stopwatchAuto.ElapsedMilliseconds / 1000.0), 0);
+            AppendTxtBox($"Test Times : {historyAuto.time_s}s");
+            historyAuto.Save();
+
+            RandersTableHistoryAuto();
         }
 
         public void SortingProcess(Actions action, CancellationToken token, bool isGetIO = false)

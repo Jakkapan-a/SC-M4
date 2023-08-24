@@ -23,8 +23,6 @@ namespace SC_M4
     {
 
         private Task taskProcess;
-
-
         private void TimerOCR_Tick(object sender, EventArgs e)
         {
             onTest();
@@ -131,7 +129,10 @@ namespace SC_M4
 
                         if (result == ResultType.OK || result == ResultType.NG)
                         {
-                            loadTableHistory();
+                            if(typeSelected == TypeAction.Manual)
+                            {
+                                RandersTableHistory();
+                            }
                             isStateReset = false;
                         }
                     }
@@ -338,7 +339,7 @@ namespace SC_M4
             }));
 
             is_Blink_NG = status == "NG";
-            //serialPortIO.SerialCommand(status);
+
         }
 
         private ResultType CompareData(string txt_sw, string txt_lb)
@@ -361,7 +362,7 @@ namespace SC_M4
              *  Colors name
              */
             Heller.AverageColor rgb;
-            //AverageColor _color = new AverageColor();
+
             using (var bm = (Bitmap)bmp2_color.Clone())
             {
                 rgb = Heller.GetAverageColor(bm);

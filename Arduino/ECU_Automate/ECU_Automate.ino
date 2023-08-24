@@ -112,6 +112,7 @@ void serialEvent() {
         // Check and process the data
         // Ask for Mode Auto or Manual
         if (data[1] == 0x51 && data[2] == 0x4D) {
+          delay(50);
           // Check Selector Button
           if (btnAutoSelector.getState() || btnManualSelector.getState()) {
             if (btnAutoSelector.getState()) {
@@ -403,18 +404,14 @@ void DecodeData(byte data[]) {
 
     } else if (command == 0x1A) {  // 26
       if (action == 0x01) {
+         btnTouchViewReleased();
       } else if (action == 0x00) {
+
       }
 
-      btnTouchViewReleased(void);
+      // btnTouchViewReleased(void);
 
     } else if (command == 0x1C) {  // 28
-                                   // if (action == 0x01) {
-                                   //   // btnAskSoftwareVerReleased();
-                                   //     ASK_ECU_VER();
-                                   // } else if (action == 0x00) {
-                                   //     ASK_ECU_VER();
-                                   // }
       ASK_ECU_VER();
     }
 

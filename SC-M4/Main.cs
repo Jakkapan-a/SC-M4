@@ -50,6 +50,7 @@ namespace SC_M4
         {
             InitializeComponent();
             InitializeSerial();
+            InitializeAutoTest();
         }
 
         public TCapture.Capture capture_1;
@@ -111,6 +112,7 @@ namespace SC_M4
                 Modules.ActionIO.CreateTable();
                 Modules.Items.CreateTable();
                 Modules.Rect.CreateTable();
+                HistoryAuto.CreateTable();
 
                 try
                 {
@@ -187,7 +189,7 @@ namespace SC_M4
 
             timerMain.Start();
       
-            loadTableHistory();
+            RandersTableHistory();
 
             cbQrCode.Checked = Properties.Settings.Default.useQrCode;
             useQrCode = cbQrCode.Checked;
@@ -253,12 +255,49 @@ namespace SC_M4
             }
         }
 
-        private void loadTableHistory()
+         private void RandersTableHistoryAuto()
+        {
+            if(InvokeRequired)
+            {
+                Invoke(new Action(() => { RandersTableHistoryAuto(); }));
+                return;
+            }
+
+            DataTable dt = new DataTable();
+            dt.Columns.Add("ID", typeof(int));
+            dt.Columns.Add("No", typeof(int));
+            dt.Columns.Add("Employee", typeof(string));
+            dt.Columns.Add("SW", typeof(string));
+            dt.Columns.Add("LB", typeof(string));
+            dt.Columns.Add("Step", typeof(string));
+            dt.Columns.Add("Time", typeof(string));
+            dt.Columns.Add("Result", typeof(string));
+            dt.Columns.Add("Update", typeof(string));
+
+            var history = HistoryAuto.Get();
+            int i = 1;
+            foreach (var h in history)
+            {
+                dt.Rows.Add(h.id, i, h.name, h.sw_ver, h.lb_ver, h.step, h.time_s.ToString()+"sec", h.result, h.updated_at);
+                i++;
+            }
+
+            dataGridViewHistory.DataSource = dt;
+            // His Auto
+            dataGridViewHistory.Columns["ID"].Visible = false;
+            // 10% of the width of the DataGridView
+            dataGridViewHistory.Columns["No"].Width = dataGridViewHistory.Width * 10 / 100;
+            // last 20% of the width of the DataGridView
+            dataGridViewHistory.Columns["Update"].Width = dataGridViewHistory.Width * 20 / 100;
+            
+        }
+
+        private void RandersTableHistory()
         {
 
             if (InvokeRequired)
             {
-                Invoke(new Action(() => { loadTableHistory(); }));
+                Invoke(new Action(() => { RandersTableHistory(); }));
                 return;
             }
             DataTable dt = new DataTable();

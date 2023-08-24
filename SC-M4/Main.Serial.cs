@@ -218,7 +218,7 @@ namespace SC_M4
         private ManualTest manualTest;
         private void ModeSelector(byte[] dataReceived)
         {
-            // Check data is Mode Auto 
+            // Check data is Mode Auto or not 
             if (dataReceived[6] == 0x40)
             {
                 typeSelected = TypeAction.None;
@@ -232,6 +232,7 @@ namespace SC_M4
                 stopwatchManualTest.Stop();
                 manualTest?.Close();
                 lbTitle.BackColor = Color.Orange;
+                RandersTableHistoryAuto();
             }
             // Check data is Mode Manual
             else if (dataReceived[6] == 0x42)
@@ -239,9 +240,9 @@ namespace SC_M4
                 if (stopwatchManualTest == null)
                 {
                     stopwatchManualTest = new Stopwatch();
-                    stopwatchManualTest.Start();
                 }
                 lbTitle.BackColor = Color.Yellow;
+                RandersTableHistory();
 
                 stopwatchManualTest.Restart();
                 manualTest?.Close();
