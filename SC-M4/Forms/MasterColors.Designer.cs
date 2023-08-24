@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MasterColors));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cbUseData = new System.Windows.Forms.CheckBox();
             this.pictureBoxColor = new System.Windows.Forms.PictureBox();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -48,14 +50,17 @@
             this.btnSearch = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel_Id = new System.Windows.Forms.ToolStripStatusLabel();
-            this.cbUseData = new System.Windows.Forms.CheckBox();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxColor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMasterColors)).BeginInit();
             this.panel3.SuspendLayout();
             this.panel4.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -77,6 +82,18 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Update";
+            // 
+            // cbUseData
+            // 
+            this.cbUseData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbUseData.AutoSize = true;
+            this.cbUseData.Location = new System.Drawing.Point(6, 199);
+            this.cbUseData.Name = "cbUseData";
+            this.cbUseData.Size = new System.Drawing.Size(69, 17);
+            this.cbUseData.TabIndex = 3;
+            this.cbUseData.Text = "Use data";
+            this.cbUseData.UseVisualStyleBackColor = true;
+            this.cbUseData.CheckedChanged += new System.EventHandler(this.cbUseData_CheckedChanged);
             // 
             // pictureBoxColor
             // 
@@ -271,29 +288,40 @@
             this.toolStripStatusLabel_Id.Size = new System.Drawing.Size(12, 17);
             this.toolStripStatusLabel_Id.Text = "-";
             // 
-            // cbUseData
-            // 
-            this.cbUseData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbUseData.AutoSize = true;
-            this.cbUseData.Location = new System.Drawing.Point(6, 199);
-            this.cbUseData.Name = "cbUseData";
-            this.cbUseData.Size = new System.Drawing.Size(69, 17);
-            this.cbUseData.TabIndex = 3;
-            this.cbUseData.Text = "Use data";
-            this.cbUseData.UseVisualStyleBackColor = true;
-            this.cbUseData.CheckedChanged += new System.EventHandler(this.cbUseData_CheckedChanged);
-            // 
             // toolStripProgressBar1
             // 
             this.toolStripProgressBar1.Name = "toolStripProgressBar1";
             this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
             this.toolStripProgressBar1.Visible = false;
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exportToolStripMenuItem,
+            this.importToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(111, 48);
+            // 
+            // exportToolStripMenuItem
+            // 
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+            this.exportToolStripMenuItem.Text = "Export";
+            this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
+            // 
+            // importToolStripMenuItem
+            // 
+            this.importToolStripMenuItem.Name = "importToolStripMenuItem";
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(110, 22);
+            this.importToolStripMenuItem.Text = "Import";
+            this.importToolStripMenuItem.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
+            // 
             // MasterColors
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(935, 543);
+            this.ContextMenuStrip = this.contextMenuStrip1;
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel3);
@@ -312,6 +340,7 @@
             this.panel4.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -339,5 +368,8 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_Id;
         private System.Windows.Forms.CheckBox cbUseData;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
     }
 }

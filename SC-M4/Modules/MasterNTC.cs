@@ -66,6 +66,12 @@ namespace SC_M4.Modules
             parameters.Add("@updated_at", SQliteDataAccess.GetDateTimeNow());
             SQliteDataAccess.Execute(sql, parameters);
         }
+        public static bool isIDExist(int id){
+            string sql = "select * from master_ntc where id = @id";
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@id", id);
+            return SQliteDataAccess.Query<MasterNTC>(sql, parameters).Count > 0 ? true : false;
+        }
         public static List<MasterNTC> GetMasterNTC() => SQliteDataAccess.GetRow<MasterNTC>("select * from master_ntc order by id asc");
         public static List<MasterNTC> GetMasterNTC(int id) => SQliteDataAccess.GetRow<MasterNTC>("select * from master_ntc where id = " + id);
         public static List<MasterNTC> GetMasterNTC(int start, int end) => SQliteDataAccess.GetRow<MasterNTC>("select * from master_ntc where id between " + start + " and " + end);

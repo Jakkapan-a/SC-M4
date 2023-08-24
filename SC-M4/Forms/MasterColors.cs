@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -256,6 +257,118 @@ namespace SC_M4.Forms
             if (e.KeyChar == (char)Keys.Enter)
             {
                 btnSearch_Click(sender, e);
+            }
+        }
+        private Task taskSave;
+        private async void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<MasterNTC> colors = MasterNTC.GetMasterNTC();
+            if (colors != null && colors.Count > 0)
+            {
+                using (SaveFileDialog sfd = new SaveFileDialog())
+                {
+                    sfd.Filter = "CSV files (*.csv)|*.csv";
+                    sfd.DefaultExt = "csv";
+                    sfd.AddExtension = true;
+
+                    if (sfd.ShowDialog() == DialogResult.OK)
+                    {
+                        toolStripProgressBar1.Visible = true;
+                        toolStripProgressBar1.Value = 0;
+                        taskSave = SaveFile(sfd, colors);
+                        await taskSave;
+                        toolStripProgressBar1.Visible = false;
+
+                        // Open the location of the file
+                        System.Diagnostics.Process.Start("explorer.exe", "/select, \"" + sfd.FileName + "\"");
+
+                    }
+                }
+            }
+        }
+
+        public async Task SaveFile(SaveFileDialog sfd, List<MasterNTC> colors)
+        {
+            await Task.Run(() => _SaveFile(sfd,colors));
+        }
+
+        private void _SaveFile(SaveFileDialog sfd, List<MasterNTC> colors)
+        {
+            using (System.IO.StreamWriter writer = new System.IO.StreamWriter(sfd.FileName))
+            {
+                int i =0;
+                // Write header (if needed)
+                writer.WriteLine("id,hex,name,color,created_at,updated_at"); // Replace Property1, Property2, etc. with your actual properties
+                foreach (var item in colors)
+                {
+                    writer.WriteLine($"{item.id},{item.hex},{item.name},{item.color},{item.created_at},{item.updated_at}"); // Replace .Property1, .Property2, etc. with your actual properties
+                    i++;
+                   
+                    // Update progress bar
+                    UpdateProgress((int)((float)i / colors.Count * 100));
+                }
+            }
+        }
+      private Task taskImport;
+        private async void importToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "CSV files (*.csv)|*.csv",
+                Title = "Import from CSV"
+            };
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                toolStripProgressBar1.Visible = true;
+                toolStripProgressBar1.Value = 0;
+                taskImport = ImportFile(openFileDialog);
+                await taskImport;
+                toolStripProgressBar1.Visible = false;   
+
+                // Randers Table
+                RenderTable();
+            }
+        }
+
+         public async Task ImportFile(OpenFileDialog openFileDialog)
+        {
+            await Task.Run(() => _ImportFile(openFileDialog));
+        }
+
+        private void _ImportFile(OpenFileDialog openFileDialog)
+        {
+            string[] lines = File.ReadAllLines(openFileDialog.FileName);
+
+            List<MasterNTC> colors = new List<MasterNTC>();
+
+            // Assuming first line is header, start from second line
+            for (int i = 1; i < lines.Length; i++)
+            {
+                string[] values = lines[i].Split(',');
+
+                MasterNTC color = new MasterNTC
+                {
+                    id = Convert.ToInt32(values[0]),
+                    hex = values[1],
+                    name = values[2],
+                    color = values[3],
+                    created_at = values[4],
+                    updated_at = values[5]
+                };
+                colors.Add(color);
+
+                // Update progress bar
+                UpdateProgress((int)((float)i / lines.Length * 100));
+            }
+
+            // Update to database
+            foreach(var color in colors){
+                if(MasterNTC.isIDExist(color.id)){
+                    color.Update();
+                }
+                // Update progress bar
+                UpdateProgress((int)((float)color.id / colors.Count * 100));
             }
         }
     }
