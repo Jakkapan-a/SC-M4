@@ -32,8 +32,9 @@ namespace SC_M4
 
         private void StartAutoTest()
         {
-            if (taskProcess != null && taskProcess.Status == TaskStatus.Running)
+            if (task_auto != null && task_auto.Status == TaskStatus.Running)
             {
+                AppendTxtBox("Task is run");
                 return;
             }
 
@@ -61,7 +62,7 @@ namespace SC_M4
 
                 return;
             }
-            Console.WriteLine("Start Process...");
+            AppendTxtBox("Start Process...");
             IsChangeSelectedMode = false;
             // 
             actionIO = ActionIO.Get();
@@ -260,6 +261,10 @@ namespace SC_M4
                                 AppendTxtBox($"Time Out:{(stopwatch.ElapsedMilliseconds / 1000)}s");
                                 isStateReset = true;
                                 Thread.Sleep(500);
+                                if (token.IsCancellationRequested)
+                                {
+                                    break;
+                                }
                             }
 
                             break;
@@ -275,9 +280,11 @@ namespace SC_M4
                         {
                             AppendTxtBox("Failed after 3 attempts.");
                         }
-
+                        if (token.IsCancellationRequested)
+                        {
+                            break;
+                        }
                     }
-
                     break;
             }
         }
@@ -298,7 +305,8 @@ namespace SC_M4
 
                     int pin = iO.pin;
                     byte value = ((byte)pin);
-
+                    templateData["Command_io"][0] = 0X02;
+                    templateData["Command_io"][1] = 0x43;
                     templateData["Command_io"][2] = 0X49;
                     templateData["Command_io"][3] = 0x50;
                     templateData["Command_io"][4] = value;
@@ -313,6 +321,8 @@ namespace SC_M4
                     // Send parameter
                     serialPortIO.SerialCommand(templateData["Command_io"]);
                     Thread.Sleep(action.auto_delay);
+
+                    // OFF
                     // Set parameter
                     templateData["Command_io"][6] = 0x00;
                     hex = string.Empty;
@@ -331,6 +341,10 @@ namespace SC_M4
                     HandleExceptionTest(ex);
                     AppendTxtBox($"ERROR :{ex.Message}");
                     retries--;
+                }
+                if (token.IsCancellationRequested)
+                {
+                    break;
                 }
             }
 
@@ -362,7 +376,15 @@ namespace SC_M4
                     templateData["Command_io"][2] = 0X49;
                     templateData["Command_io"][3] = 0x50;
                     templateData["Command_io"][4] = value;
-                    templateData["Command_io"][6] = action.state == 1 ? (byte)0x01 : (byte)0x00; ;
+                    templateData["Command_io"][6] = action.state == 1 ? (byte)0x01 : (byte)0x00;
+
+                    string hex = string.Empty;
+                    foreach (var b in templateData["Command_io"])
+                    {
+                        hex += b.ToString("X2") + " ";
+                    }
+                    AppendTxtBox($"Command: {hex}");
+
                     // Send parameter
                     serialPortIO.SerialCommand(templateData["Command_io"]);
                     break;
@@ -373,6 +395,11 @@ namespace SC_M4
                     AppendTxtBox($"ERROR :{ex.Message}");
                     retries--;
                 }
+                if (token.IsCancellationRequested)
+                {
+                    break;
+                }
+
             }
 
             if (retries == 0)
@@ -388,6 +415,7 @@ namespace SC_M4
             {
                 try
                 {
+
                     // Set parameter           
                     int pin = 4;
                     byte value = ((byte)pin);
@@ -397,6 +425,7 @@ namespace SC_M4
                     templateData["Command_io"][6] = (byte)action.servo;
                     // Send parameter
                     serialPortIO.SerialCommand(templateData["Command_io"]);
+
                     break;
 
                 }
@@ -405,6 +434,12 @@ namespace SC_M4
                     HandleExceptionTest(ex);
                     AppendTxtBox($"ERROR :{ex.Message}");
                     retries--;
+
+                }
+
+                if (token.IsCancellationRequested)
+                {
+                    break;
                 }
             }
 
@@ -536,7 +571,6 @@ namespace SC_M4
 
         }
 
-        private ManualTest manualTestShow;
         private Bitmap imageDiffShow;
 
         private void CompareAndHandle(Bitmap comparator, Bitmap master, double threshold, Actions action)

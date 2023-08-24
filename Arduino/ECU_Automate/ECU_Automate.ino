@@ -334,7 +334,7 @@ void btnAskSoftwareVerReleased(void) {
 void btnTouchViewPressed(void) {
 }
 void btnTouchViewReleased(void) {
- Touch_View_Func(view_mode_flag);
+  Touch_View_Func(view_mode_flag);
   view_mode_flag++;
   if (view_mode_flag >= 4) {
     view_mode_flag = 0;
@@ -397,25 +397,25 @@ void DecodeData(byte data[]) {
     } else if (command == 0x32) {  // 50
       if (action == 0x01) {
         mes.on();
-      }
-        else if (action == 0x00) {
-        // mes.off()
+      } else if (action == 0x00) {
       }
     } else if (command == 0x18) {  // 24
 
     } else if (command == 0x1A) {  // 26
       if (action == 0x01) {
-        btnTouchViewReleased(void);
       } else if (action == 0x00) {
       }
+
+      btnTouchViewReleased(void);
+
     } else if (command == 0x1C) {  // 28
-      // if (action == 0x01) {
-      //   // btnAskSoftwareVerReleased();
-      //     ASK_ECU_VER();
-      // } else if (action == 0x00) {
-      //     ASK_ECU_VER();
-      // }
-          ASK_ECU_VER();
+                                   // if (action == 0x01) {
+                                   //   // btnAskSoftwareVerReleased();
+                                   //     ASK_ECU_VER();
+                                   // } else if (action == 0x00) {
+                                   //     ASK_ECU_VER();
+                                   // }
+      ASK_ECU_VER();
     }
 
     else {
