@@ -214,7 +214,7 @@ namespace SC_M4.Forms
                 else if (typeStateItem == TypeState.Create)
                 {
                     // Validate name is exist
-                    if (Modules.Items.IsExist(txtName.Text))
+                    if (Modules.Items.IsExistByModelId(txtName.Text,model_id))
                     {
                         MessageBox.Show("Name is exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
@@ -391,6 +391,10 @@ namespace SC_M4.Forms
                 int item_id = (int)dgvItems.SelectedRows[0].Cells["id"].Value;
                 // Render dgvIO
                 RenderDGV_IO(item_id);
+            }
+            else
+            {
+                RenderDGV_IO(0);
             }
 
         }

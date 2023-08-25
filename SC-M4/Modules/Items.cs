@@ -97,6 +97,17 @@ namespace SC_M4.Modules
             List<Items> items = SQliteDataAccess.Query<Items>(sql, parameters);
             return items.Count > 0;
         }
+        
+        public static bool IsExistByModelId(string name,int model_id)
+        {
+            string sql = "select * from items where name = @name and model_id = @model_id";
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("@name", name);
+            parameters.Add("@model_id", model_id);
+            List<Items> items = SQliteDataAccess.Query<Items>(sql, parameters);
+            return items.Count > 0;
+        }
+
         public static bool IsExist(string name, int id)
         {
             string sql = "select * from items where name = @name and id != @id";
