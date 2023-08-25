@@ -143,5 +143,11 @@ namespace SC_M4.Modules
             }
             return false;
         }
+
+        public static bool IsImageExist(string image_name){
+            // Like image_name
+            string sql = "select count(*) from actions where image_name like @image_name";
+            return SQliteDataAccess.Query<int>(sql, new Dictionary<string, object> { { "@image_name", "%" + image_name + "%" } }).FirstOrDefault() > 0;
+        }
     }
 }

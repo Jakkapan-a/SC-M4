@@ -24,17 +24,13 @@ using Windows.Globalization;
 using Windows.Graphics.Imaging;
 using BitmapDecoder = Windows.Graphics.Imaging.BitmapDecoder;
 using System.Drawing.Imaging;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
-using System.Windows.Markup;
+
 
 using TClass;
 using Windows.UI.Xaml.Controls;
 using SC_M4.Utilities;
-using System.Xml.Linq;
 using SC_M4.Forms.Analyze;
 
-using Microsoft.VisualBasic.FileIO;
-using System.Web;
 
 //using Windows.UI.Xaml.Controls;
 
@@ -127,7 +123,9 @@ namespace SC_M4
                         {
                             if (File.Exists(set.path_image))
                             {
-                                File.Delete(set.path_image);
+                                //File.Delete(set.path_image);
+                                // Move file to Recycle Bin
+                                Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(set.path_image, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
                                 set.Delete();
                             }
                             i++;
@@ -146,11 +144,29 @@ namespace SC_M4
                             // Move file to Recycle Bin
                             Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(file, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
                         }
-
                         i++;
                         // Update progress bar
                         SetProcessBar(i * 100 / files.Length);
+                    }
 
+                    // Move file log to Recycle Bin path image
+                    
+                    files = Directory.GetFiles(Properties.Resources.path_images);
+                    // Reset i
+                    i = 0;
+                    foreach (string file in files)
+                    {
+                        FileInfo info = new FileInfo(file);
+                        string fileName = Path.GetFileName(file);
+                        // Console.WriteLine(fileName);
+                        if(!Actions.IsImageExist(fileName))
+                        {
+                            // Move file to Recycle Bin
+                            Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(file, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+                        }
+                        i++;
+                        // Update progress bar
+                        SetProcessBar(i * 100 / files.Length);
                     }
 
                     // Visible progress bar
@@ -161,9 +177,7 @@ namespace SC_M4
                 {
                     LogWriter.SaveLog("Error delete file : " + ex.Message);
                     VisibleProgressBar(false);
-
                 }
-
             });
 
             // Create Video Capture Object
@@ -624,7 +638,7 @@ namespace SC_M4
         }
 
 
-        private History history;
+        //private History history;
         private bool is_Blink_NG = false;
 
         #endregion

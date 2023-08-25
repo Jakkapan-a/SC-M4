@@ -67,6 +67,7 @@ namespace SC_M4
                     stopwatch.Reset();
                     ToggleDetectionStatus();
 
+                    IsCapture = true;
                     // Image 01 OCR 
                     if (useQrCode)
                     {
@@ -75,8 +76,14 @@ namespace SC_M4
                     else
                     {
                         imageList?.Clear();
-                        imageList.Add((System.Drawing.Image)scrollablePictureBoxCamera01.Image.Clone());
-                        result_1 = performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty).Result;
+                        using (Bitmap image = new Bitmap(bmp1))
+                        {
+                            //ocrResult2 = GetOcrResultBitmap(image, SelectedLang).Result;
+                            imageList.Add(image);
+                            result_1 = performOCR(imageList, inputfilename, imageIndex, Rectangle.Empty).Result;
+                        }
+
+
                     }
 
                     var a = result_1.IndexOf("-731");
@@ -107,12 +114,16 @@ namespace SC_M4
                     }));
                     // Image 02
                     int lb = result_1.IndexOf(Properties.Settings.Default.keyCAM1);
-                    if (result_1 != string.Empty && lb != -1)
+                    if (result_1 != string.Empty && lb != -1 )
                     {
                         // OCR 2
                         result_2 = string.Empty;
                         ocrResult2 = null;
-                        ocrResult2 = GetOcrResultBitmap((Bitmap)scrollablePictureBoxCamera02.Image.Clone(), SelectedLang).Result;
+
+                        using(Bitmap image = new Bitmap(bmp2))
+                        {
+                            ocrResult2 = GetOcrResultBitmap(image, SelectedLang).Result;
+                        }
 
                         result_2 = ocrResult2.Text;
                         result_2 = CleanAndReplaceText(result_2);
@@ -144,11 +155,13 @@ namespace SC_M4
                         toolStripStatusLabelError.ForeColor = Color.Green;
                     }));
                 }
+                IsCapture = false;
                 #endregion
             }
             catch (Exception ex)
             {
                 HandleExceptionTest(ex);
+                IsCapture = false;
             }
         }
 
@@ -345,16 +358,17 @@ namespace SC_M4
         private ResultType CompareData(string txt_sw, string txt_lb)
         {
             LogWriter.SaveLog($"TXT Read : {PrepareLogMessage(txt_sw)}, {PrepareLogMessage(txt_lb)}");
-
-            history = history ?? new History();
+            LogWriter.SaveLog($"New History OBJ");
+            var history = new History();
 
             if (txt_sw.IndexOf(Properties.Settings.Default.keyCAM1) == -1 || txt_lb.IndexOf(Properties.Settings.Default.keyCAM2) == -1)
                 return ResultType.Error;
 
+            LogWriter.SaveLog($"Qury master data");
             var master_lb = MasterAll.GetMasterALLByLBName(txt_lb.Substring(0, txt_lb.IndexOf(Properties.Settings.Default.keyCAM2)).Replace("O", "0"));
 
-            history.master_sw = "null";
-            history.master_lb = "null";
+            //history.master_sw = "null";
+            //history.master_lb = "null";
             string description = "";
             string color_error = "";
 
@@ -362,24 +376,27 @@ namespace SC_M4
              *  Colors name
              */
             Heller.AverageColor rgb;
-
-            using (var bm = (Bitmap)bmp2_color.Clone())
+            LogWriter.SaveLog($"GetColor RGB");
+            using (var bm = new Bitmap(bmp2_color))
             {
                 rgb = Heller.GetAverageColor(bm);
             }
 
+            LogWriter.SaveLog($"Check RGB");
             string[] colorName = _colorName.Name(_colorName.RgbToHex(rgb.R, rgb.G, rgb.B));
+
             Console.WriteLine("Color Name : " + colorName[3]);
             LogWriter.SaveLog($"Color name :{colorName[3]},{colorName[1]},{colorName[2]} ,{colorName[0]}, R{rgb.R} G{rgb.G} B{rgb.B}");
             description += $"Color name :{colorName[3]},{colorName[1]},{colorName[2]} ,{colorName[0]}, R{rgb.R} G{rgb.G} B{rgb.B}";
 
             string color = colorName[3];
+            LogWriter.SaveLog($"TXT Compaare : {PrepareLogMessage(txt_sw)}, {PrepareLogMessage(txt_lb)}");
             foreach (var item in master_lb)
             {
                 history.master_sw = item.nameSW;
                 history.master_lb = item.nameModel;
 
-                if (item.nameSW == txt_sw && color.Equals(item.color_name, StringComparison.OrdinalIgnoreCase))
+                if (item.nameSW.Contains(txt_sw) && color.Equals(item.color_name, StringComparison.OrdinalIgnoreCase))
                 {
                     history.master_sw = item.nameSW;
                     history.master_lb = item.nameModel;
@@ -396,6 +413,12 @@ namespace SC_M4
                         templateData["Command_io"][3] = 0x50;
                         templateData["Command_io"][4] = value;
                         templateData["Command_io"][6] = (byte)0x01;
+                        string hex = string.Empty;
+                        foreach (var b in templateData["Command_io"])
+                        {
+                            hex += b.ToString("X2") + " ";
+                        }
+                        LogWriter.SaveLog($"Command : {hex}");
                         // Send parameter
                         serialPortIO.SerialCommand(templateData["Command_io"]);
                     }

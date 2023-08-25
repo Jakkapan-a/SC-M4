@@ -454,6 +454,13 @@ namespace SC_M4
                     templateData["Command_io"][3] = 0x50;
                     templateData["Command_io"][4] = value;
                     templateData["Command_io"][6] = (byte)action.servo;
+                    string hex = string.Empty;
+                    foreach (var b in templateData["Command_io"])
+                    {
+                        hex += b.ToString("X2") + " ";
+                    }
+                    LogWriter.SaveLog($"Command : {hex}");
+
                     // Send parameter
                     serialPortIO.SerialCommand(templateData["Command_io"]);
 
