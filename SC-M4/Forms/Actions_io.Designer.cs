@@ -325,6 +325,7 @@
             0,
             0,
             0});
+            this.nDelay.ValueChanged += new System.EventHandler(this.nDelay_ValueChanged);
             // 
             // groupBox7
             // 

@@ -538,5 +538,11 @@ namespace SC_M4.Forms
             Properties.Settings.Default.TimeOut = (int)nTimeOut.Value;
             Properties.Settings.Default.Save();
         }
+
+        private void nDelay_ValueChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Delay = (int)nDelay.Value;
+            Properties.Settings.Default.Save();
+        }
     }
 }
