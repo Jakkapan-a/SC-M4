@@ -24,6 +24,8 @@
         "xtree": "cpp",
         "associative_base": "cpp",
         "iterator": "cpp",
-        "serstream": "cpp"
-    }
+        "serstream": "cpp",
+        "iterator_base": "cpp"
+    },
+    "dotnet.defaultSolution": "SC-M4.sln"
 }

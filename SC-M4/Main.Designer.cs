@@ -50,6 +50,8 @@ namespace SC_M4
             this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showDiffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelHeader = new System.Windows.Forms.Panel();
+            this.lbVoltage = new System.Windows.Forms.Label();
+            this.lbAmp = new System.Windows.Forms.Label();
             this.cbQrCode = new System.Windows.Forms.CheckBox();
             this.btStartStop = new System.Windows.Forms.Button();
             this.lbTitle = new System.Windows.Forms.Label();
@@ -285,6 +287,8 @@ namespace SC_M4
             // 
             this.panelHeader.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelHeader.Controls.Add(this.lbVoltage);
+            this.panelHeader.Controls.Add(this.lbAmp);
             this.panelHeader.Controls.Add(this.cbQrCode);
             this.panelHeader.Controls.Add(this.btStartStop);
             this.panelHeader.Controls.Add(this.lbTitle);
@@ -292,6 +296,34 @@ namespace SC_M4
             this.panelHeader.Name = "panelHeader";
             this.panelHeader.Size = new System.Drawing.Size(1050, 67);
             this.panelHeader.TabIndex = 3;
+            // 
+            // lbVoltage
+            // 
+            this.lbVoltage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbVoltage.AutoSize = true;
+            this.lbVoltage.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.lbVoltage.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            this.lbVoltage.ForeColor = System.Drawing.Color.Blue;
+            this.lbVoltage.Location = new System.Drawing.Point(908, 19);
+            this.lbVoltage.Name = "lbVoltage";
+            this.lbVoltage.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lbVoltage.Size = new System.Drawing.Size(45, 20);
+            this.lbVoltage.TabIndex = 10;
+            this.lbVoltage.Text = "---V";
+            // 
+            // lbAmp
+            // 
+            this.lbAmp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbAmp.AutoSize = true;
+            this.lbAmp.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.lbAmp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            this.lbAmp.ForeColor = System.Drawing.Color.Red;
+            this.lbAmp.Location = new System.Drawing.Point(908, 44);
+            this.lbAmp.Name = "lbAmp";
+            this.lbAmp.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lbAmp.Size = new System.Drawing.Size(45, 20);
+            this.lbAmp.TabIndex = 10;
+            this.lbAmp.Text = "---A";
             // 
             // cbQrCode
             // 
@@ -326,7 +358,7 @@ namespace SC_M4
             this.lbTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbTitle.Location = new System.Drawing.Point(142, 4);
             this.lbTitle.Name = "lbTitle";
-            this.lbTitle.Size = new System.Drawing.Size(767, 59);
+            this.lbTitle.Size = new System.Drawing.Size(760, 59);
             this.lbTitle.TabIndex = 7;
             this.lbTitle.Text = "-------------------------";
             this.lbTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1024,6 +1056,8 @@ namespace SC_M4
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
         private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showDiffToolStripMenuItem;
+        private System.Windows.Forms.Label lbVoltage;
+        private System.Windows.Forms.Label lbAmp;
     }
 }
 

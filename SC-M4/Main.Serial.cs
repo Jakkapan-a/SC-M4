@@ -171,11 +171,11 @@ namespace SC_M4
                     break;
                 case 0x52:
                     // 0X52 is Response
-                    DataReceivedResponse(dataReceived);
+                    DataReceivedResponseOrUpdate(dataReceived);
                     break;
                 case 0x55:
                     // 0X55 is Update
-                    DataReceivedResponse(dataReceived);
+                    DataReceivedResponseOrUpdate(dataReceived);
                     break;
             }
 
@@ -202,7 +202,7 @@ namespace SC_M4
             }
         }
         // Subtitle
-        private void DataReceivedResponse(byte[] dataReceived)
+        private void DataReceivedResponseOrUpdate(byte[] dataReceived)
         {
             IsChangeSelectedMode = true;
             switch (dataReceived[2])
@@ -213,7 +213,30 @@ namespace SC_M4
                 case 0x53:
                     ModeReset(dataReceived);
                     break;
+                case 0x56: //V Voltage
+                    VoltageUpdate(dataReceived);
+                    break;
+                case 0x43: //A Amp
+                    AmpUpdate(dataReceived);
+                    break;
             }
+        }
+
+
+        private void VoltageUpdate(byte[] dataReceived)
+        {
+            byte[] voltageByte = new byte[4] { dataReceived[3], dataReceived[4], dataReceived[5], dataReceived[6] };
+            int voltage = BitConverter.ToInt32(voltageByte, 0);
+
+            lbVoltage.Text = $"{voltage}V";
+        }
+
+        private void AmpUpdate(byte[] dataReceived)
+        {
+            byte[] ampByte = new byte[4] { dataReceived[3], dataReceived[4], dataReceived[5], dataReceived[6] };
+            int amp = BitConverter.ToInt32(ampByte, 0);
+
+            lbAmp.Text = $"{amp}A";
         }
         private ManualTest manualTest;
         private void ModeSelector(byte[] dataReceived)
