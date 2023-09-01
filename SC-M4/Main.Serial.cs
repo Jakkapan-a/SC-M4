@@ -262,66 +262,205 @@ namespace SC_M4
                 case 0x53:
                     ModeReset(dataReceived);
                     break;
-                case 0x56: // V Voltage
-                    VoltageUpdate(dataReceived);
+                case 0x56: // V Voltage B
+                    //VoltageUpdateB(dataReceived);
+                    UpdateUIControl(ConvertBytesToFloat, UpdateVoltageB, dataReceived);
                     break;
-                case 0x43: // A Amp
-                    AmpUpdate(dataReceived);
+                case 0x57: // V Voltage V
+                           //VoltageUpdateV(dataReceived);
+                    UpdateUIControl(ConvertBytesToFloat, UpdateVoltageV, dataReceived);
+                    break;
+                case 0x43: // A Amp B
+                            //AmpUpdate(dataReceived);
+                    UpdateUIControl(ConvertBytesToFloat, UpdateAmpB, dataReceived);
+                    break;
+                case 0x44: // A Amp V
+                            //AmpUpdateV(dataReceived);
+                    UpdateUIControl(ConvertBytesToFloat, UpdateAmpV, dataReceived);
                     break;
             }
         }
 
-        private string currentVoltage = "";
-        private void VoltageUpdate(byte[] dataReceived)
+        #region Old
+        //private string currentAmpV = "";
+        //private float ampV = 0;
+
+        //private void AmpUpdateV(byte[] dataReceived)
+        //{
+        //    try
+        //    {
+
+        //        if (InvokeRequired)
+        //        {
+        //            Invoke(new Action(() => AmpUpdate(dataReceived)));
+        //            return;
+        //        }
+        //        if (dataReceived.Length >= 7)
+        //        {
+        //            byte[] ampByte = new byte[4] { dataReceived[3], dataReceived[4], dataReceived[5], dataReceived[6] };
+        //            ampB = BitConverter.ToSingle(ampByte, 0);
+        //            lbAmpV.Text = $"{ampB:F2}mA";
+        //            currentAmpB = lbAmpV.Text;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("ERROR Decode amp :" + ex.Message);
+        //    }
+        //}
+        //private string currentVoltageV = "";
+        //private float voltageV = 0;
+
+        //private void VoltageUpdateV(byte[] dataReceived)
+        //{
+        //    try
+        //    {
+        //        if (InvokeRequired)
+        //        {
+        //            Invoke(new Action(() => VoltageUpdateB(dataReceived)));
+        //            return;
+        //        }
+
+        //        if (dataReceived.Length >= 7)
+        //        {
+        //            byte[] voltageByte = new byte[4] { dataReceived[3], dataReceived[4], dataReceived[5], dataReceived[6] };
+        //            voltageV= BitConverter.ToSingle(voltageByte, 0);
+        //            lbVoltageV.Text = $"{voltageV:F2}V";
+        //            currentVoltageV = $"{voltageV:F2}V";
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("ERROR Decode voltage :" + ex.Message);
+        //    }
+        //}
+
+        //private string currentVoltageB = "";
+        //private float voltageB = 0;
+        //private void VoltageUpdateB(byte[] dataReceived)
+        //{
+        //    try
+        //    {
+        //        if (InvokeRequired)
+        //        {
+        //            Invoke(new Action(() => VoltageUpdateB(dataReceived))) ;
+        //            return;
+        //        }
+
+        //        if (dataReceived.Length >= 7)
+        //        {
+        //            byte[] voltageByte = new byte[4] { dataReceived[3], dataReceived[4], dataReceived[5], dataReceived[6] };
+        //            voltageB = BitConverter.ToSingle(voltageByte, 0);
+        //            lbVoltageB.Text = $"{voltageB:F2}V";
+        //            currentVoltageB = lbVoltageB.Text;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("ERROR Decode voltage :"+ex.Message);
+        //    }
+        //}
+
+        //private string currentAmpB = "";
+        //private float ampB = 0;
+        //private void AmpUpdate(byte[] dataReceived)
+        //{
+        //    try{
+
+        //        if (InvokeRequired)
+        //        {
+        //            Invoke(new Action(() => AmpUpdate(dataReceived)));
+        //            return;
+        //        }
+        //        if (dataReceived.Length >= 7)
+        //        {
+        //            byte[] ampByte = new byte[4] { dataReceived[3], dataReceived[4], dataReceived[5], dataReceived[6] };
+        //            ampB = BitConverter.ToSingle(ampByte, 0);
+        //            lbAmpB.Text = $"{ampB:F2}mA";
+        //            currentAmpB = lbAmpB.Text;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine("ERROR Decode amp :" + ex.Message);
+        //    }           
+        //}
+
+        #endregion
+        private float ConvertBytesToFloat(byte[] data)
         {
+            byte[] floatBytes = new byte[4] { data[3], data[4], data[5], data[6] };
+            return BitConverter.ToSingle(floatBytes, 0);
+        }
+
+        private void UpdateUIControl(Func<byte[], float> dataConversion, Action<float> updateAction, byte[] dataReceived)
+        {
+            if (dataReceived.Length < 7)
+            {
+                return;
+            }
+
             try
             {
+                float value = dataConversion(dataReceived);
 
                 if (InvokeRequired)
                 {
-                    Invoke(new Action(() => VoltageUpdate(dataReceived))) ;
-                    return;
+                    Invoke(new Action(() => updateAction(value)));
                 }
-
-                if (dataReceived.Length >= 7)
+                else
                 {
-                    byte[] voltageByte = new byte[4] { dataReceived[3], dataReceived[4], dataReceived[5], dataReceived[6] };
-                    float voltage = BitConverter.ToSingle(voltageByte, 0);
-                    lbVoltage.Text = $"{voltage:F2}V";
+                    updateAction(value);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("ERROR Decode voltage :"+ex.Message);
+                Console.WriteLine($"ERROR Decode data: {ex.Message}");
             }
-  
-
         }
 
-        private string currentAmp = "";
-        private void AmpUpdate(byte[] dataReceived)
+        private float ampV;
+        private string currentAmpV;
+        private float voltageV;
+        private string currentVoltageV;
+        private float voltageB;
+        private string currentVoltageB;
+        private float ampB;
+        private string currentAmpB;
+
+        private void UpdateAmpV(float value)
         {
-            try{
-
-                if (InvokeRequired)
-                {
-                    Invoke(new Action(() => AmpUpdate(dataReceived)));
-                    return;
-                }
-
-                if (dataReceived.Length >= 7)
-                {
-                    byte[] ampByte = new byte[4] { dataReceived[3], dataReceived[4], dataReceived[5], dataReceived[6] };
-                    float amp = BitConverter.ToSingle(ampByte, 0);
-                    lbAmp.Text = $"{amp:F2}mA";
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("ERROR Decode amp :" + ex.Message);
-            }           
+            ampV = value;
+            lbAmpV.Text = $"{ampV:F2}mA";
+            currentAmpV = lbAmpV.Text;
         }
+
+        private void UpdateVoltageV(float value)
+        {
+            voltageV = value;
+            lbVoltageV.Text = $"{voltageV:F2}V";
+            currentVoltageV = lbVoltageV.Text;
+        }
+
+        private void UpdateVoltageB(float value)
+        {
+            voltageB = value;
+            lbVoltageB.Text = $"{voltageB:F2}V";
+            currentVoltageB = lbVoltageB.Text;
+        }
+
+        private void UpdateAmpB(float value)
+        {
+            ampB = value;
+            lbAmpB.Text = $"{ampB:F2}mA";
+            currentAmpB = lbAmpB.Text;
+        }
+
+
+
         private ManualTest manualTest;
+
+
         private void ModeSelector(byte[] dataReceived)
         {
             if (InvokeRequired)
