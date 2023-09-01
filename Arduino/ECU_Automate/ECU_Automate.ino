@@ -1,6 +1,19 @@
 #include <TcBUTTON.h>
 #include <TcPINOUT.h>
 #include <Servo.h>
+#include <Adafruit_INA219.h>
+//*********************** INPUT Sensor ***********************//
+/* 
+ * Up to 4 boards may be connected. Addressing is as follows:
+ * Board 0: Address = 0x40 Offset = binary 00000 (no jumpers required)
+ * Board 1: Address = 0x41 Offset = binary 00001 (bridge A0 as in the photo above)
+ * Board 2: Address = 0x44 Offset = binary 00100 (bridge A1)
+ * Board 3: Address = 0x45 Offset = binary 00101 (bridge A0 & A1)
+*/
+
+Adafruit_INA219 ina219_A(0x40);
+Adafruit_INA219 ina219_V(0x41);
+
 #define BUTTON_SELECTOR_AUTO_PIN 8
 
 void ASK_ECU_VER(void);
@@ -84,6 +97,7 @@ uint8_t view_mode_flag = 0;
 
 unsigned long lastTimeBtnStart = 0;
 unsigned long lastTimeServoPosition = 0;
+unsigned long lastTimeUpdateCurrent = 0;
 uint8_t servoPosition = 100;
 uint8_t servoPositionOld = 100;
 uint8_t speedServo = 200;
@@ -115,7 +129,6 @@ void serialEvent() {
           //  delay(50);
           isUpdateSelectorStatus = true;
           lastTimeUpdateCurrent = millis();
-        
         }
 
         if (data[1] == 0x43 && data[2] == 0x49) {
@@ -132,6 +145,8 @@ void serialEvent() {
 void setup() {
   Serial.begin(9600);
   Serial3.begin(9600);
+  ina219_A.begin();
+  ina219_V.begin();
 
 
   servo.attach(SERVO_PIN);
@@ -156,16 +171,18 @@ union DoubleToBytes {
 };
 
 bool IsToggleCurrentVoltage = false;
+uint8_t countCurrentUpdate = 0;
 void UpdateCurrent() {
-  //   double current = ina219_A.getCurrent_mA();
-  // double voltage = ina219_A.getBusVoltage_V();
-  // double power = ina219_A.getPower_mW();
-  // double shuntvoltage = ina219_A.getShuntVoltage_mV();
   if (millis() - lastTimeUpdateCurrent > 500) {
-    
+
     IsToggleCurrentVoltage = !IsToggleCurrentVoltage;
-    if (IsToggleCurrentVoltage) {
+    //---------------------------------Update current -----------------------------------------//
+    countCurrentUpdate++;
+    if(countCurrentUpdate >0){
+      // Update Voltage B
       double voltage = ina219_A.getBusVoltage_V();
+      // Check voltage is negative
+      
       DoubleToBytes doubleToBytes;
       doubleToBytes.doubleVal = voltage;
       // 02 55 43 00 00 00 00 03
@@ -178,9 +195,10 @@ void UpdateCurrent() {
       data[5] = doubleToBytes.byteArray[2];
       data[6] = doubleToBytes.byteArray[3];
       data[7] = 0x03;
-
       Serial.write(data, sizeof(data));
-    } else {
+
+    }else if(countCurrentUpdate > 1){
+      // Update Amp B
       double current = ina219_A.getCurrent_mA();
       DoubleToBytes doubleToBytes;
       doubleToBytes.doubleVal = current;
@@ -194,10 +212,93 @@ void UpdateCurrent() {
       data[5] = doubleToBytes.byteArray[2];
       data[6] = doubleToBytes.byteArray[3];
       data[7] = 0x03;
-
       Serial.write(data, sizeof(data));
+    }else if(countCurrentUpdate > 2){
+      // Update Voltage V
+       double voltage = ina219_V.getBusVoltage_V();
+      DoubleToBytes doubleToBytes;
+      doubleToBytes.doubleVal = voltage;
+      // 02 55 43 00 00 00 00 03
+      byte data[8];
+      data[0] = 0x02;
+      data[1] = 0x55;
+      data[2] = 0x57;
+      data[3] = doubleToBytes.byteArray[0];
+      data[4] = doubleToBytes.byteArray[1];
+      data[5] = doubleToBytes.byteArray[2];
+      data[6] = doubleToBytes.byteArray[3];
+      data[7] = 0x03;
+      Serial.write(data, sizeof(data));
+    }else if(countCurrentUpdate > 3){
+      // Update Amp V
+      double current = ina219_V.getCurrent_mA();
+      DoubleToBytes doubleToBytes;
+      doubleToBytes.doubleVal = current;
+      // 02 55 44 00 00 00 00 03
+      byte data[8];
+      data[0] = 0x02;
+      data[1] = 0x55;
+      data[2] = 0x44;
+      data[3] = doubleToBytes.byteArray[0];
+      data[4] = doubleToBytes.byteArray[1];
+      data[5] = doubleToBytes.byteArray[2];
+      data[6] = doubleToBytes.byteArray[3];
+      data[7] = 0x03;
+      Serial.write(data, sizeof(data));
+      
+      countCurrentUpdate = 0;
     }
-    
+
+    if (IsToggleCurrentVoltage) {
+     
+    } else {
+     
+    }
+    //---------------------------------End Update current -----------------------------------------//
+
+    if (isUpdateSelectorStatus) {
+      if (btnAutoSelector.getState() || btnManualSelector.getState()) {
+
+        if (btnAutoSelector.getState()) {
+          // 0x02, 0x52, 0x4D, 0x00, 0x00, 0x00, 0x41, 0x03 
+          byte data[8];
+          data[0] = 0x02;
+          data[1] = 0x52;
+          data[2] = 0x4D;
+          data[3] = 0x00;
+          data[4] = 0x00;
+          data[5] = 0x00;
+          data[6] = 0x41;
+          data[7] = 0x03;
+          Serial.write(data, sizeof(data));
+        } else {
+          // 0x02, 0x52, 0x4D, 0x00, 0x00, 0x00, 0x42, 0x03
+          byte data[8];
+          data[0] = 0x02;
+          data[1] = 0x52;
+          data[2] = 0x4D;
+          data[3] = 0x00;
+          data[4] = 0x00;
+          data[5] = 0x00;
+          data[6] = 0x42;
+          data[7] = 0x03;
+          Serial.write(data, sizeof(data));
+        }
+      } else {
+        // 0x02, 0x52, 0x4D, 0x00, 0x00, 0x00, 0x40, 0x03
+        byte data[8];
+        data[0] = 0x02;
+        data[1] = 0x52;
+        data[2] = 0x4D;
+        data[3] = 0x00;
+        data[4] = 0x00;
+        data[5] = 0x00;
+        data[6] = 0x40;
+        data[7] = 0x03;
+      }
+      
+      isUpdateSelectorStatus = false;
+    }
     lastTimeUpdateCurrent = millis();
   }
 }
@@ -451,9 +552,8 @@ void DecodeData(byte data[]) {
 
     } else if (command == 0x1A) {  // 26
       if (action == 0x01) {
-         btnTouchViewReleased();
+        btnTouchViewReleased();
       } else if (action == 0x00) {
-
       }
 
       // btnTouchViewReleased(void);
