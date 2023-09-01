@@ -31,6 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ManualTest));
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.lbTitle = new System.Windows.Forms.Label();
+            this.lbVoltage = new System.Windows.Forms.Label();
+            this.lbAmp = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -55,10 +57,38 @@
             this.lbTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
             this.lbTitle.Location = new System.Drawing.Point(13, 9);
             this.lbTitle.Name = "lbTitle";
-            this.lbTitle.Size = new System.Drawing.Size(792, 56);
+            this.lbTitle.Size = new System.Drawing.Size(716, 56);
             this.lbTitle.TabIndex = 1;
             this.lbTitle.Text = "--------------";
             this.lbTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lbVoltage
+            // 
+            this.lbVoltage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbVoltage.AutoSize = true;
+            this.lbVoltage.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.lbVoltage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lbVoltage.ForeColor = System.Drawing.Color.Blue;
+            this.lbVoltage.Location = new System.Drawing.Point(736, 13);
+            this.lbVoltage.Name = "lbVoltage";
+            this.lbVoltage.Padding = new System.Windows.Forms.Padding(5, 2, 5, 2);
+            this.lbVoltage.Size = new System.Drawing.Size(22, 19);
+            this.lbVoltage.TabIndex = 2;
+            this.lbVoltage.Text = "-";
+            // 
+            // lbAmp
+            // 
+            this.lbAmp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbAmp.AutoSize = true;
+            this.lbAmp.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.lbAmp.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lbAmp.ForeColor = System.Drawing.Color.Red;
+            this.lbAmp.Location = new System.Drawing.Point(736, 41);
+            this.lbAmp.Name = "lbAmp";
+            this.lbAmp.Padding = new System.Windows.Forms.Padding(5, 2, 5, 2);
+            this.lbAmp.Size = new System.Drawing.Size(22, 19);
+            this.lbAmp.TabIndex = 2;
+            this.lbAmp.Text = "-";
             // 
             // ManualTest
             // 
@@ -66,6 +96,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(817, 551);
+            this.Controls.Add(this.lbAmp);
+            this.Controls.Add(this.lbVoltage);
             this.Controls.Add(this.lbTitle);
             this.Controls.Add(this.pictureBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -76,11 +108,14 @@
             this.Load += new System.EventHandler(this.ManualTest_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
         public System.Windows.Forms.Label lbTitle;
         public System.Windows.Forms.PictureBox pictureBox1;
+        public System.Windows.Forms.Label lbVoltage;
+        public System.Windows.Forms.Label lbAmp;
     }
 }

@@ -1163,6 +1163,8 @@ namespace SC_M4
                 manualTest.lbTitle.BackColor = lbTitle.BackColor;
             }
         }
+
+
         private Forms.Show.ShowImage showImage;
         private void showDiffToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1170,6 +1172,22 @@ namespace SC_M4
             showImage?.Close();
             showImage = new Forms.Show.ShowImage();
             showImage.Show();
+        }
+
+        private void lbVoltage_TextChanged(object sender, EventArgs e)
+        {
+            if (manualTest != null)
+            {
+                manualTest.lbVoltage.Text = lbVoltage.Text;
+            }
+        }
+
+        private void lbAmp_TextChanged(object sender, EventArgs e)
+        {
+            if (manualTest != null)
+            {
+                manualTest.lbAmp.Text = lbAmp.Text;
+            }
         }
     }
 }

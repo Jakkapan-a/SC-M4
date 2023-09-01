@@ -310,6 +310,7 @@ namespace SC_M4
             this.lbVoltage.Size = new System.Drawing.Size(45, 20);
             this.lbVoltage.TabIndex = 10;
             this.lbVoltage.Text = "---V";
+            this.lbVoltage.TextChanged += new System.EventHandler(this.lbVoltage_TextChanged);
             // 
             // lbAmp
             // 
@@ -324,6 +325,7 @@ namespace SC_M4
             this.lbAmp.Size = new System.Drawing.Size(45, 20);
             this.lbAmp.TabIndex = 10;
             this.lbAmp.Text = "---A";
+            this.lbAmp.TextChanged += new System.EventHandler(this.lbAmp_TextChanged);
             // 
             // cbQrCode
             // 

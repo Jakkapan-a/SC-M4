@@ -14,15 +14,13 @@ namespace SC_M4
         #region Video Capture
         private void Capture_2_OnVideoStop()
         {
-            Console.WriteLine("Video 2 Stop");
             LogWriter.SaveLog("Video 2 Stop");
             // Clear Image
             if (InvokeRequired)
             {
                 Invoke(new Action(() =>
                 {
-                    pictureBoxCamera02.Image?.Dispose();
-                    pictureBoxCamera02.Image = null;
+                    Capture_2_OnVideoStop();
                 }));
                 return;
             }
@@ -43,13 +41,15 @@ namespace SC_M4
 
         private void Capture_2_OnFrameHeader(Bitmap bitmap)
         {
-            if (pictureBoxCamera02.InvokeRequired)
+            if (InvokeRequired)
             {
-                pictureBoxCamera02.Invoke(new Action(() => Capture_2_OnFrameHeader(bitmap)));
+                bitmapCamera_02?.Dispose();
+                bitmapCamera_02 = (Bitmap)bitmap.Clone();
+
+                Invoke(new Action(() => Capture_2_OnFrameHeader(bitmap)));
                 return;
             }
-            bitmapCamera_02?.Dispose();
-            bitmapCamera_02 = (Bitmap)bitmap.Clone();
+
 
             if (!IsCapture)
             {
@@ -102,8 +102,7 @@ namespace SC_M4
             {
                 Invoke(new Action(() =>
                 {
-                    pictureBoxCamera01.Image?.Dispose();
-                    pictureBoxCamera01.Image = null;
+                    Capture_1_OnVideoStop();
                 }));
                 return;
             }
@@ -126,16 +125,19 @@ namespace SC_M4
         {
             if (InvokeRequired)
             {
+                bitmapCamera_01?.Dispose();
+                bitmapCamera_01 = (Bitmap)bitmap.Clone();
                 Invoke(new Action(() => Capture_1_OnFrameHeader(bitmap)));
                 return;
             }
+
             if(stopwatchManualTest == null)
             {
                 stopwatchManualTest = new Stopwatch();
             }
-            
-            bitmapCamera_01?.Dispose();
-            bitmapCamera_01 = (Bitmap)bitmap.Clone();
+
+            return;
+
 
             if (!IsCapture)
             {
@@ -162,13 +164,12 @@ namespace SC_M4
                         g.DrawRectangle(new Pen(Color.Red, 2), rect_1);
                     }
                 }
-
             }
+
             if (typeSelected == Utilities.TypeAction.Manual)
             {
                 if (stopwatchManualTest.ElapsedMilliseconds > 1000)
                 {
-                    //Console.WriteLine("Manual Test "+ stopwatchManualTest.ElapsedMilliseconds);
                     StartManualTest();
                     stopwatchManualTest.Restart();
                 }
