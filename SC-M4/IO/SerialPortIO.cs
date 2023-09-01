@@ -13,6 +13,10 @@ namespace SC_M4.IO
         private const byte STX = 0x02;
         private const byte EOT = 0x03;
 
+        // Create event handler for sending data
+        public delegate void SerialDataSentEventHandler(object sender, SerialDataSentEventArgs e);
+        public event SerialDataSentEventHandler SerialDataSent;
+
         /// <summary>
         /// Sends a serial command using a string.
         /// </summary>
@@ -63,17 +67,20 @@ namespace SC_M4.IO
             // Is the port open?
             if (this.IsOpen)
             {
-                //this.Close();
-                //this.Open();
-                Console.Write("Send : ");
-                foreach (var d in bytes)
-                {
-                    // Print to hex
-                    Console.Write($"{d.ToString("X2")}, ");
-                }
-                Console.WriteLine("---------------------");
                 this.Write(bytes, 0, bytes.Length);
+                // Fire event
+                SerialDataSent?.Invoke(this, new SerialDataSentEventArgs(bytes));
             }
+        }
+    }
+
+    public class SerialDataSentEventArgs : EventArgs
+    {
+        public byte[] Data { get; private set; }
+
+        public SerialDataSentEventArgs(byte[] data)
+        {
+            Data = data;
         }
     }
 }

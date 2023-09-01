@@ -354,7 +354,8 @@ namespace SC_M4
             is_Blink_NG = status == "NG";
 
         }
-
+        private string updateVoltage = "";
+        private string updateAmp = "";
         private ResultType CompareData(string txt_sw, string txt_lb)
         {
             LogWriter.SaveLog($"TXT Read : {PrepareLogMessage(txt_sw)}, {PrepareLogMessage(txt_lb)}");
@@ -384,8 +385,10 @@ namespace SC_M4
 
             LogWriter.SaveLog($"Check RGB");
             string[] colorName = _colorName.Name(_colorName.RgbToHex(rgb.R, rgb.G, rgb.B));
+            description += currentVoltage + "," + currentAmp+",";
+            updateAmp = currentAmp;
+            updateVoltage = currentVoltage;
 
-            Console.WriteLine("Color Name : " + colorName[3]);
             LogWriter.SaveLog($"Color name :{colorName[3]},{colorName[1]},{colorName[2]} ,{colorName[0]}, R{rgb.R} G{rgb.G} B{rgb.B}");
             description += $"Color name :{colorName[3]},{colorName[1]},{colorName[2]} ,{colorName[0]}, R{rgb.R} G{rgb.G} B{rgb.B}";
 

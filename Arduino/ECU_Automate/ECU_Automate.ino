@@ -112,7 +112,7 @@ const int LENGTH = 8;
 byte data[LENGTH];
 int dataIndex = 0;
 bool startReceived = false;
-
+bool isUpdateSelectorStatus = false;
 void serialEvent() {
   while (Serial.available()) {
     byte incomingByte = Serial.read();
@@ -127,17 +127,10 @@ void serialEvent() {
         // Check and process the data
         // Ask for Mode Auto or Manual
         if (data[1] == 0x51 && data[2] == 0x4D) {
-          delay(50);
-          // Check Selector Button
-          if (btnAutoSelector.getState() || btnManualSelector.getState()) {
-            if (btnAutoSelector.getState()) {
-              Serial.write(ResponseModeAuto, sizeof(ResponseModeAuto));
-            } else {
-              Serial.write(ResponseModeManual, sizeof(ResponseModeManual));
-            }
-          } else {
-            Serial.write(ResponseModeNone, sizeof(ResponseModeNone));
-          }
+          //  delay(50);
+          isUpdateSelectorStatus = true;
+          lastTimeUpdateCurrent = millis();
+        
         }
 
         if (data[1] == 0x43 && data[2] == 0x49) {
@@ -150,6 +143,7 @@ void serialEvent() {
     }
   }
 }
+
 void setup() {
   Serial.begin(9600);
   Serial3.begin(9600);
@@ -169,8 +163,28 @@ void loop() {
   btnStartOnPush();
   ServoControl();
   UpdateCurrent();
+  // UpdateStatus();
 }
+void UpdateStatus() {
+  if (isUpdateSelectorStatus) {
+    delay(100);
+    if (btnAutoSelector.getState() || btnManualSelector.getState()) {
 
+      if (btnAutoSelector.getState()) {
+        // Serial.write(ResponseModeAuto, sizeof(ResponseModeAuto));
+        // Serial.write(UpdateModeAuto, sizeof(UpdateModeAuto));
+       
+      } else {
+        // Serial.write(ResponseModeManual, sizeof(ResponseModeManual));
+        Serial.write(UpdateModeManual, sizeof(UpdateModeManual));
+      }
+    } else {
+      // Serial.write(ResponseModeNone, sizeof(ResponseModeNone));
+      Serial.write(UpdateModeNone, sizeof(UpdateModeNone));
+    }
+    isUpdateSelectorStatus = false;
+  }
+}
 union DoubleToBytes {
   double doubleVal;
   byte byteArray[4];
@@ -178,18 +192,14 @@ union DoubleToBytes {
 
 bool IsToggleCurrentVoltage = false;
 void UpdateCurrent() {
-  //   double current = ina219_A.getCurrent_mA();
-  // double voltage = ina219_A.getBusVoltage_V();
-  // double power = ina219_A.getPower_mW();
-  // double shuntvoltage = ina219_A.getShuntVoltage_mV();
+  
   if (millis() - lastTimeUpdateCurrent > 500) {
-    
     IsToggleCurrentVoltage = !IsToggleCurrentVoltage;
-    if (IsToggleCurrentVoltage) {
+     if (IsToggleCurrentVoltage) {
       double voltage = ina219_A.getBusVoltage_V();
       DoubleToBytes doubleToBytes;
       doubleToBytes.doubleVal = voltage;
-      // 02 55 43 00 00 00 00 03
+      // 02 55 56 00 00 00 00 03
       byte data[8];
       data[0] = 0x02;
       data[1] = 0x55;
@@ -199,7 +209,6 @@ void UpdateCurrent() {
       data[5] = doubleToBytes.byteArray[2];
       data[6] = doubleToBytes.byteArray[3];
       data[7] = 0x03;
-
       Serial.write(data, sizeof(data));
     } else {
       double current = ina219_A.getCurrent_mA();
@@ -218,7 +227,65 @@ void UpdateCurrent() {
 
       Serial.write(data, sizeof(data));
     }
-    
+
+
+    if (isUpdateSelectorStatus) {
+      if (btnAutoSelector.getState() || btnManualSelector.getState()) {
+         if (btnAutoSelector.getState()) {
+          // Serial.write(ResponseModeAuto, sizeof(ResponseModeAuto));
+          // Serial.write(UpdateModeAuto, sizeof(UpdateModeAuto));
+          // 02, 52, 4D, 00, 00, 00, 40, 03
+          byte data[8];
+          data[0] = 0x02;
+          data[1] = 0x52;
+          data[2] = 0x4D;
+          data[3] = 0x00;
+          data[4] = 0x00;
+          data[5] = 0x00;
+          data[6] = 0x41;
+          data[7] = 0x03;
+          Serial.write(data, sizeof(data));
+          // btnSelectorAutoChanged(true);
+          // btnSelectorAutoChanged(true);
+
+        } else {
+          // Serial.write(ResponseModeManual, sizeof(ResponseModeManual));
+          // Serial.write(UpdateModeManual, sizeof(UpdateModeManual));
+          byte data[8];
+          data[0] = 0x02;
+          data[1] = 0x52;
+          data[2] = 0x4D;
+          data[3] = 0x00;
+          data[4] = 0x00;
+          data[5] = 0x00;
+          data[6] = 0x42;
+          data[7] = 0x03;
+          Serial.write(data, sizeof(data));
+          // btnSelectorManualChanged(true);
+          // btnSelectorManualChanged(true);
+
+        }
+      } else {
+        // Serial.write(ResponseModeNone, sizeof(ResponseModeNone));
+        // Serial.write(UpdateModeNone, sizeof(UpdateModeNone));
+          byte data[8];
+          data[0] = 0x02;
+          data[1] = 0x52;
+          data[2] = 0x4D;
+          data[3] = 0x00;
+          data[4] = 0x00;
+          data[5] = 0x00;
+          data[6] = 0x40;
+          data[7] = 0x03;
+          Serial.write(data, sizeof(data));
+          // btnSelectorAutoChanged(false);
+          // btnSelectorAutoChanged(false);
+
+      }
+      isUpdateSelectorStatus = false;
+    }
+
+
     lastTimeUpdateCurrent = millis();
   }
 }

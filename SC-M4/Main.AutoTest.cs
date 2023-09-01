@@ -228,6 +228,7 @@ namespace SC_M4
 
             historyAuto.time_s = (int)Math.Round((stopwatchAuto.ElapsedMilliseconds / 1000.0), 0);
             AppendTxtBox($"Test Times : {historyAuto.time_s}s");
+            historyAuto.result += updateVoltage + "," + updateAmp;
             historyAuto.Save();
 
             RandersTableHistoryAuto();

@@ -749,6 +749,11 @@ namespace SC_M4
                     lbTitle.ForeColor = Color.Black;
                 }
             }
+
+            //if(this.serialPortIO != null && serialPortIO.IsOpen && IsReceiveModeStarted)
+            //{
+            //    serialPortIO.SerialCommand(templateData["Query_Mode"]);
+            //}
         }
 
         private void numericUpDownFocus_ValueChanged(object sender, EventArgs e)

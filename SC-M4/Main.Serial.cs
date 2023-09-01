@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Markup;
+using Windows.ApplicationModel.Store;
 
 namespace SC_M4
 {
@@ -20,8 +21,6 @@ namespace SC_M4
         private SerialPortIO serialPortIO;
         private void InitializeSerial()
         {
-            serialPortIO = new SerialPortIO();
-            serialPortIO.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort_DataReceived);
             // Default byte data
             templateData = new Dictionary<string, byte[]>();
             templateData.Add("Query_Mode", new byte[8] { 0x02, 0x51, 0x4D, 0x00, 0x00, 0x00, 0x00, 0x03 });
@@ -43,19 +42,36 @@ namespace SC_M4
             this.serialPortIO.PortName = portName;
             this.serialPortIO.BaudRate = baud;
         }
-
         private void CloseSerialPortIfExists()
         {
-            if (this.serialPortIO != null && this.serialPortIO.IsOpen)
+            try
             {
-                this.serialPortIO.Close();
+                if (this.serialPortIO != null && this.serialPortIO.IsOpen)
+                {
+                    serialPortIO.DataReceived -= new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort_DataReceived);
+                    serialPortIO.SerialDataSent -= new SerialPortIO.SerialDataSentEventHandler(this.serialPort_DataSent);
+                    // Dispose serial port
+                    this.serialPortIO.Close();
+                    this.serialPortIO = null;
+                }
+                // Create new serial port
+                this.serialPortIO = new SerialPortIO();
+                this.serialPortIO.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort_DataReceived);
+                this.serialPortIO.SerialDataSent += new SerialPortIO.SerialDataSentEventHandler(this.serialPort_DataSent);
+
+            }catch(Exception ex)
+            {
+                Console.WriteLine("Close serial:" + ex.Message);
             }
         }
+        private bool IsReceiveModeStarted = false;
         private void AttemptSerialConnection()
         {
             try
             {
                 this.serialPortIO.Open();
+                IsReceiveModeStarted = true;
+                _dataBuffer.Clear();
                 serialPortIO.SerialCommand(templateData["Query_Mode"]);
                 UpdateConnectionStatus("Serial Connected", Color.Green);
             }
@@ -72,9 +88,32 @@ namespace SC_M4
             this.toolStripStatusConnectSerialPort.ForeColor = color;
         }
 
+        private void serialPort_DataSent(object sender, SerialDataSentEventArgs e)
+        {
+            try
+            {
+                byte[] bytes = e.Data;
+                this.serialPortIO.Read(bytes, 0, bytes.Length);
+                Console.Write("Send :");
+                string send = string.Empty;
+                foreach (var d in bytes)
+                {
+                    // Print to hex
+                    Console.Write(d.ToString("X2") + ", ");
+                    send += d.ToString("X2") + ", ";
+                }
+                LogWriter.SaveLog("Send : " + send);
+                Console.WriteLine(" ");
+            }
+            catch (Exception ex)
+            {
+                LogWriter.SaveLog("Error :" + ex.Message);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private delegate void UpdateDataReceived(byte[] data);
         private List<byte> _dataBuffer = new List<byte>();
-
         private void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             try
@@ -82,17 +121,6 @@ namespace SC_M4
                 byte[] bytes = new byte[this.serialPortIO.BytesToRead];
                 this.serialPortIO.Read(bytes, 0, bytes.Length);
                 _dataBuffer.AddRange(bytes);
-
-                Console.WriteLine("Receive : ");
-                string receive = string.Empty;
-                foreach (var d in _dataBuffer)
-                {
-                    // Print to hex
-                    Console.Write(d.ToString("X2") + ", ");
-                    receive += d.ToString("X2") +", ";
-                }
-                LogWriter.SaveLog("Receive : "+ receive);
-                Console.WriteLine(" ");
                 ProcessDataBuffer();
 
             }
@@ -103,31 +131,52 @@ namespace SC_M4
             }
         }
 
+        private System.Threading.Tasks.Task taskProcessDataButter;
         private void ProcessDataBuffer()
         {
-            // Loop until we no longer have both STX and EOT in the buffer
-            while (_dataBuffer.Contains((byte)0x02) && _dataBuffer.Contains((byte)0x03))
+
+            if(taskProcessDataButter != null && taskProcessDataButter.Status != System.Threading.Tasks.TaskStatus.RanToCompletion)
             {
-                int indexSTX = _dataBuffer.IndexOf((byte)0x02);
-                int indexEOT = _dataBuffer.IndexOf((byte)0x03);
-
-                // Check index of STX and EOT
-                if (indexSTX < indexEOT)
-                {
-                    // Extract message
-                    var message = _dataBuffer.GetRange(indexSTX, indexEOT - indexSTX + 1).ToArray();
-                    //DecodeDataReceived(message);
-
-                    this.Invoke(new UpdateDataReceived(DataReceived), message);
-                    // Remove processed data from buffer
-                    _dataBuffer.RemoveRange(0, indexEOT + 1);
-                }
-                else
-                {
-                    // Remove corrupted data (if EOT appears before STX)
-                    _dataBuffer.RemoveRange(0, indexSTX + 1);
-                }
+                return;
             }
+            taskProcessDataButter = System.Threading.Tasks.Task.Run(() =>
+            {
+
+                // Loop until we no longer have both STX and EOT in the buffer
+                while (_dataBuffer.Contains((byte)0x02) && _dataBuffer.Contains((byte)0x03))
+                {
+                    int indexSTX = _dataBuffer.IndexOf((byte)0x02);
+                    int indexEOT = _dataBuffer.IndexOf((byte)0x03);
+
+                    Console.Write("Receive : ");
+                    string receive = string.Empty;
+                    foreach (var d in _dataBuffer)
+                    {
+                        // Print to hex
+                        Console.Write(d.ToString("X2") + ", ");
+                        receive += d.ToString("X2") + ", ";
+                    }
+                    //LogWriter.SaveLog("Receive : " + receive);
+                    Console.WriteLine(" ");
+
+                    // Check index of STX and EOT
+                    if (indexSTX < indexEOT)
+                    {
+                        // Extract message
+                        var message = _dataBuffer.GetRange(indexSTX, indexEOT - indexSTX + 1).ToArray();
+                        //DecodeDataReceived(message);
+
+                        this.Invoke(new UpdateDataReceived(DataReceived), message);
+                        // Remove processed data from buffer
+                        _dataBuffer.RemoveRange(0, indexEOT + 1);
+                    }
+                    else
+                    {
+                        // Remove corrupted data (if EOT appears before STX)
+                        _dataBuffer.RemoveRange(0, indexSTX);
+                    }
+                }
+            });
         }
 
 
@@ -213,30 +262,50 @@ namespace SC_M4
                 case 0x53:
                     ModeReset(dataReceived);
                     break;
-                case 0x56: //V Voltage
+                case 0x56: // V Voltage
                     VoltageUpdate(dataReceived);
                     break;
-                case 0x43: //A Amp
+                case 0x43: // A Amp
                     AmpUpdate(dataReceived);
                     break;
             }
         }
 
-
+        private string currentVoltage = "";
         private void VoltageUpdate(byte[] dataReceived)
         {
-            byte[] voltageByte = new byte[4] { dataReceived[3], dataReceived[4], dataReceived[5], dataReceived[6] };
-            int voltage = BitConverter.ToInt32(voltageByte, 0);
+            try
+            {
+                if (dataReceived.Length >= 7)
+                {
+                    byte[] voltageByte = new byte[4] { dataReceived[3], dataReceived[4], dataReceived[5], dataReceived[6] };
+                    float voltage = BitConverter.ToSingle(voltageByte, 0);
+                    lbVoltage.Text = $"{voltage:F2}V";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR Decode voltage :"+ex.Message);
+            }
+  
 
-            lbVoltage.Text = $"{voltage}V";
         }
 
+        private string currentAmp = "";
         private void AmpUpdate(byte[] dataReceived)
         {
-            byte[] ampByte = new byte[4] { dataReceived[3], dataReceived[4], dataReceived[5], dataReceived[6] };
-            int amp = BitConverter.ToInt32(ampByte, 0);
-
-            lbAmp.Text = $"{amp}A";
+            try{
+                if (dataReceived.Length >= 7)
+                {
+                    byte[] ampByte = new byte[4] { dataReceived[3], dataReceived[4], dataReceived[5], dataReceived[6] };
+                    float amp = BitConverter.ToSingle(ampByte, 0);
+                    lbAmp.Text = $"{amp:F2}mA";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR Decode amp :" + ex.Message);
+            }           
         }
         private ManualTest manualTest;
         private void ModeSelector(byte[] dataReceived)
@@ -248,6 +317,7 @@ namespace SC_M4
                 stopwatchManualTest.Stop();
                 manualTest?.Close();
                 lbTitle.BackColor = Color.Gray;
+                IsReceiveModeStarted = false;
             }
             else if (dataReceived[6] == 0x41)
             {
@@ -255,6 +325,7 @@ namespace SC_M4
                 stopwatchManualTest.Stop();
                 manualTest?.Close();
                 lbTitle.BackColor = Color.Orange;
+                IsReceiveModeStarted = false;
                 RandersTableHistoryAuto();
             }
             // Check data is Mode Manual
@@ -266,6 +337,7 @@ namespace SC_M4
                 }
                 lbTitle.BackColor = Color.Yellow;
                 RandersTableHistory();
+                IsReceiveModeStarted = false;
 
                 stopwatchManualTest.Restart();
                 manualTest?.Close();
