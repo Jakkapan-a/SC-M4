@@ -50,8 +50,10 @@ namespace SC_M4
             this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showDiffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelHeader = new System.Windows.Forms.Panel();
-            this.lbVoltage = new System.Windows.Forms.Label();
-            this.lbAmp = new System.Windows.Forms.Label();
+            this.lbVoltageV = new System.Windows.Forms.Label();
+            this.lbAmpV = new System.Windows.Forms.Label();
+            this.lbVoltageB = new System.Windows.Forms.Label();
+            this.lbAmpB = new System.Windows.Forms.Label();
             this.cbQrCode = new System.Windows.Forms.CheckBox();
             this.btStartStop = new System.Windows.Forms.Button();
             this.lbTitle = new System.Windows.Forms.Label();
@@ -104,6 +106,9 @@ namespace SC_M4
             this.toolStripStatusLabelError = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.timerMain = new System.Windows.Forms.Timer(this.components);
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerHomeMain)).BeginInit();
@@ -287,8 +292,13 @@ namespace SC_M4
             // 
             this.panelHeader.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelHeader.Controls.Add(this.lbVoltage);
-            this.panelHeader.Controls.Add(this.lbAmp);
+            this.panelHeader.Controls.Add(this.label12);
+            this.panelHeader.Controls.Add(this.label13);
+            this.panelHeader.Controls.Add(this.label11);
+            this.panelHeader.Controls.Add(this.lbVoltageV);
+            this.panelHeader.Controls.Add(this.lbAmpV);
+            this.panelHeader.Controls.Add(this.lbVoltageB);
+            this.panelHeader.Controls.Add(this.lbAmpB);
             this.panelHeader.Controls.Add(this.cbQrCode);
             this.panelHeader.Controls.Add(this.btStartStop);
             this.panelHeader.Controls.Add(this.lbTitle);
@@ -297,35 +307,65 @@ namespace SC_M4
             this.panelHeader.Size = new System.Drawing.Size(1050, 67);
             this.panelHeader.TabIndex = 3;
             // 
-            // lbVoltage
+            // lbVoltageV
             // 
-            this.lbVoltage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbVoltage.AutoSize = true;
-            this.lbVoltage.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.lbVoltage.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
-            this.lbVoltage.ForeColor = System.Drawing.Color.Blue;
-            this.lbVoltage.Location = new System.Drawing.Point(908, 19);
-            this.lbVoltage.Name = "lbVoltage";
-            this.lbVoltage.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.lbVoltage.Size = new System.Drawing.Size(45, 20);
-            this.lbVoltage.TabIndex = 10;
-            this.lbVoltage.Text = "---V";
-            this.lbVoltage.TextChanged += new System.EventHandler(this.lbVoltage_TextChanged);
+            this.lbVoltageV.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbVoltageV.AutoSize = true;
+            this.lbVoltageV.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.lbVoltageV.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            this.lbVoltageV.ForeColor = System.Drawing.Color.Blue;
+            this.lbVoltageV.Location = new System.Drawing.Point(804, 10);
+            this.lbVoltageV.Name = "lbVoltageV";
+            this.lbVoltageV.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lbVoltageV.Size = new System.Drawing.Size(45, 20);
+            this.lbVoltageV.TabIndex = 10;
+            this.lbVoltageV.Text = "---V";
+            this.lbVoltageV.TextChanged += new System.EventHandler(this.lbVoltage_TextChanged);
             // 
-            // lbAmp
+            // lbAmpV
             // 
-            this.lbAmp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbAmp.AutoSize = true;
-            this.lbAmp.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.lbAmp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
-            this.lbAmp.ForeColor = System.Drawing.Color.Red;
-            this.lbAmp.Location = new System.Drawing.Point(908, 44);
-            this.lbAmp.Name = "lbAmp";
-            this.lbAmp.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.lbAmp.Size = new System.Drawing.Size(45, 20);
-            this.lbAmp.TabIndex = 10;
-            this.lbAmp.Text = "---A";
-            this.lbAmp.TextChanged += new System.EventHandler(this.lbAmp_TextChanged);
+            this.lbAmpV.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbAmpV.AutoSize = true;
+            this.lbAmpV.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.lbAmpV.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            this.lbAmpV.ForeColor = System.Drawing.Color.Red;
+            this.lbAmpV.Location = new System.Drawing.Point(870, 9);
+            this.lbAmpV.Name = "lbAmpV";
+            this.lbAmpV.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lbAmpV.Size = new System.Drawing.Size(45, 20);
+            this.lbAmpV.TabIndex = 10;
+            this.lbAmpV.Text = "---A";
+            this.lbAmpV.TextChanged += new System.EventHandler(this.lbAmp_TextChanged);
+            // 
+            // lbVoltageB
+            // 
+            this.lbVoltageB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbVoltageB.AutoSize = true;
+            this.lbVoltageB.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.lbVoltageB.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            this.lbVoltageB.ForeColor = System.Drawing.Color.Blue;
+            this.lbVoltageB.Location = new System.Drawing.Point(804, 39);
+            this.lbVoltageB.Name = "lbVoltageB";
+            this.lbVoltageB.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lbVoltageB.Size = new System.Drawing.Size(45, 20);
+            this.lbVoltageB.TabIndex = 10;
+            this.lbVoltageB.Text = "---V";
+            this.lbVoltageB.TextChanged += new System.EventHandler(this.lbVoltage_TextChanged);
+            // 
+            // lbAmpB
+            // 
+            this.lbAmpB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbAmpB.AutoSize = true;
+            this.lbAmpB.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.lbAmpB.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            this.lbAmpB.ForeColor = System.Drawing.Color.Red;
+            this.lbAmpB.Location = new System.Drawing.Point(870, 38);
+            this.lbAmpB.Name = "lbAmpB";
+            this.lbAmpB.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lbAmpB.Size = new System.Drawing.Size(45, 20);
+            this.lbAmpB.TabIndex = 10;
+            this.lbAmpB.Text = "---A";
+            this.lbAmpB.TextChanged += new System.EventHandler(this.lbAmp_TextChanged);
             // 
             // cbQrCode
             // 
@@ -358,9 +398,9 @@ namespace SC_M4
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbTitle.BackColor = System.Drawing.Color.Yellow;
             this.lbTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbTitle.Location = new System.Drawing.Point(142, 4);
+            this.lbTitle.Location = new System.Drawing.Point(105, 9);
             this.lbTitle.Name = "lbTitle";
-            this.lbTitle.Size = new System.Drawing.Size(760, 59);
+            this.lbTitle.Size = new System.Drawing.Size(639, 50);
             this.lbTitle.TabIndex = 7;
             this.lbTitle.Text = "-------------------------";
             this.lbTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -389,7 +429,7 @@ namespace SC_M4
             this.splitContainerHomeMain.Panel2.Controls.Add(this.dataGridViewHistory);
             this.splitContainerHomeMain.Panel2.Margin = new System.Windows.Forms.Padding(5);
             this.splitContainerHomeMain.Size = new System.Drawing.Size(1056, 564);
-            this.splitContainerHomeMain.SplitterDistance = 473;
+            this.splitContainerHomeMain.SplitterDistance = 513;
             this.splitContainerHomeMain.TabIndex = 4;
             // 
             // panel2
@@ -402,7 +442,7 @@ namespace SC_M4
             this.panel2.Controls.Add(this.groupBox1);
             this.panel2.Location = new System.Drawing.Point(823, 7);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(223, 461);
+            this.panel2.Size = new System.Drawing.Size(223, 501);
             this.panel2.TabIndex = 2;
             // 
             // groupBox4
@@ -413,7 +453,7 @@ namespace SC_M4
             this.groupBox4.Controls.Add(this.txtBoxResult);
             this.groupBox4.Location = new System.Drawing.Point(3, 377);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(217, 77);
+            this.groupBox4.Size = new System.Drawing.Size(217, 117);
             this.groupBox4.TabIndex = 2;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "DEBUG";
@@ -425,7 +465,7 @@ namespace SC_M4
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtBoxResult.Location = new System.Drawing.Point(7, 19);
             this.txtBoxResult.Name = "txtBoxResult";
-            this.txtBoxResult.Size = new System.Drawing.Size(205, 52);
+            this.txtBoxResult.Size = new System.Drawing.Size(205, 92);
             this.txtBoxResult.TabIndex = 0;
             this.txtBoxResult.Text = "";
             // 
@@ -680,7 +720,7 @@ namespace SC_M4
             // splitContainerHomeBody.Panel2
             // 
             this.splitContainerHomeBody.Panel2.Controls.Add(this.tableLayoutPanel2);
-            this.splitContainerHomeBody.Size = new System.Drawing.Size(813, 452);
+            this.splitContainerHomeBody.Size = new System.Drawing.Size(813, 492);
             this.splitContainerHomeBody.SplitterDistance = 411;
             this.splitContainerHomeBody.TabIndex = 1;
             // 
@@ -698,7 +738,7 @@ namespace SC_M4
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 63.1769F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 36.8231F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(403, 444);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(403, 484);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // tableLayoutPanelChild01
@@ -711,11 +751,11 @@ namespace SC_M4
             this.tableLayoutPanelChild01.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanelChild01.Controls.Add(this.richTextBox1, 1, 0);
             this.tableLayoutPanelChild01.Controls.Add(this.scrollablePictureBoxCamera01, 0, 0);
-            this.tableLayoutPanelChild01.Location = new System.Drawing.Point(3, 283);
+            this.tableLayoutPanelChild01.Location = new System.Drawing.Point(3, 308);
             this.tableLayoutPanelChild01.Name = "tableLayoutPanelChild01";
             this.tableLayoutPanelChild01.RowCount = 1;
             this.tableLayoutPanelChild01.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanelChild01.Size = new System.Drawing.Size(397, 158);
+            this.tableLayoutPanelChild01.Size = new System.Drawing.Size(397, 173);
             this.tableLayoutPanelChild01.TabIndex = 1;
             // 
             // richTextBox1
@@ -725,7 +765,7 @@ namespace SC_M4
             | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBox1.Location = new System.Drawing.Point(201, 3);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(193, 152);
+            this.richTextBox1.Size = new System.Drawing.Size(193, 167);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
@@ -737,7 +777,7 @@ namespace SC_M4
             this.scrollablePictureBoxCamera01.BackColor = System.Drawing.Color.Black;
             this.scrollablePictureBoxCamera01.Location = new System.Drawing.Point(3, 3);
             this.scrollablePictureBoxCamera01.Name = "scrollablePictureBoxCamera01";
-            this.scrollablePictureBoxCamera01.Size = new System.Drawing.Size(192, 152);
+            this.scrollablePictureBoxCamera01.Size = new System.Drawing.Size(192, 167);
             this.scrollablePictureBoxCamera01.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.scrollablePictureBoxCamera01.TabIndex = 1;
             this.scrollablePictureBoxCamera01.TabStop = false;
@@ -751,7 +791,7 @@ namespace SC_M4
             this.pictureBoxCamera01.Location = new System.Drawing.Point(3, 3);
             this.pictureBoxCamera01.Name = "pictureBoxCamera01";
             this.pictureBoxCamera01.SegmentedRegions = null;
-            this.pictureBoxCamera01.Size = new System.Drawing.Size(397, 274);
+            this.pictureBoxCamera01.Size = new System.Drawing.Size(397, 299);
             this.pictureBoxCamera01.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBoxCamera01.TabIndex = 2;
             this.pictureBoxCamera01.TabStop = false;
@@ -770,7 +810,7 @@ namespace SC_M4
             this.tableLayoutPanel2.RowCount = 2;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 63.1769F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 36.8231F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(390, 441);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(390, 481);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // tableLayoutPanelChild02
@@ -783,11 +823,11 @@ namespace SC_M4
             this.tableLayoutPanelChild02.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanelChild02.Controls.Add(this.scrollablePictureBoxCamera02, 0, 0);
             this.tableLayoutPanelChild02.Controls.Add(this.panel1, 1, 0);
-            this.tableLayoutPanelChild02.Location = new System.Drawing.Point(3, 281);
+            this.tableLayoutPanelChild02.Location = new System.Drawing.Point(3, 306);
             this.tableLayoutPanelChild02.Name = "tableLayoutPanelChild02";
             this.tableLayoutPanelChild02.RowCount = 1;
             this.tableLayoutPanelChild02.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanelChild02.Size = new System.Drawing.Size(384, 157);
+            this.tableLayoutPanelChild02.Size = new System.Drawing.Size(384, 172);
             this.tableLayoutPanelChild02.TabIndex = 1;
             // 
             // scrollablePictureBoxCamera02
@@ -798,7 +838,7 @@ namespace SC_M4
             this.scrollablePictureBoxCamera02.BackColor = System.Drawing.Color.Black;
             this.scrollablePictureBoxCamera02.Location = new System.Drawing.Point(3, 3);
             this.scrollablePictureBoxCamera02.Name = "scrollablePictureBoxCamera02";
-            this.scrollablePictureBoxCamera02.Size = new System.Drawing.Size(186, 151);
+            this.scrollablePictureBoxCamera02.Size = new System.Drawing.Size(186, 166);
             this.scrollablePictureBoxCamera02.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.scrollablePictureBoxCamera02.TabIndex = 1;
             this.scrollablePictureBoxCamera02.TabStop = false;
@@ -812,7 +852,7 @@ namespace SC_M4
             this.panel1.Controls.Add(this.richTextBox2);
             this.panel1.Location = new System.Drawing.Point(195, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(186, 151);
+            this.panel1.Size = new System.Drawing.Size(186, 166);
             this.panel1.TabIndex = 2;
             // 
             // pgRGB
@@ -833,7 +873,7 @@ namespace SC_M4
             | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBox2.Location = new System.Drawing.Point(3, 3);
             this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(180, 145);
+            this.richTextBox2.Size = new System.Drawing.Size(180, 160);
             this.richTextBox2.TabIndex = 0;
             this.richTextBox2.Text = "";
             // 
@@ -846,7 +886,7 @@ namespace SC_M4
             this.pictureBoxCamera02.Location = new System.Drawing.Point(3, 3);
             this.pictureBoxCamera02.Name = "pictureBoxCamera02";
             this.pictureBoxCamera02.SegmentedRegions = null;
-            this.pictureBoxCamera02.Size = new System.Drawing.Size(384, 272);
+            this.pictureBoxCamera02.Size = new System.Drawing.Size(384, 297);
             this.pictureBoxCamera02.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBoxCamera02.TabIndex = 2;
             this.pictureBoxCamera02.TabStop = false;
@@ -863,7 +903,7 @@ namespace SC_M4
             this.dataGridViewHistory.ReadOnly = true;
             this.dataGridViewHistory.RowHeadersVisible = false;
             this.dataGridViewHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewHistory.Size = new System.Drawing.Size(1048, 79);
+            this.dataGridViewHistory.Size = new System.Drawing.Size(1048, 39);
             this.dataGridViewHistory.TabIndex = 0;
             // 
             // statusStripHome
@@ -929,6 +969,38 @@ namespace SC_M4
             // 
             this.timerMain.Interval = 1000;
             this.timerMain.Tick += new System.EventHandler(this.timerMain_Tick);
+            // 
+            // label11
+            // 
+            this.label11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            this.label11.Location = new System.Drawing.Point(747, 12);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(55, 16);
+            this.label11.TabIndex = 11;
+            this.label11.Text = "V-OUT :";
+            // 
+            // label12
+            // 
+            this.label12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            this.label12.Location = new System.Drawing.Point(773, 41);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(29, 16);
+            this.label12.TabIndex = 11;
+            this.label12.Text = "B+ :";
+            // 
+            // label13
+            // 
+            this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label13.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            this.label13.Location = new System.Drawing.Point(804, 32);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(120, 3);
+            this.label13.TabIndex = 11;
             // 
             // Main
             // 
@@ -1058,8 +1130,13 @@ namespace SC_M4
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
         private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showDiffToolStripMenuItem;
-        private System.Windows.Forms.Label lbVoltage;
-        private System.Windows.Forms.Label lbAmp;
+        private System.Windows.Forms.Label lbVoltageB;
+        private System.Windows.Forms.Label lbAmpB;
+        private System.Windows.Forms.Label lbVoltageV;
+        private System.Windows.Forms.Label lbAmpV;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label13;
     }
 }
 

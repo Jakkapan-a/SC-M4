@@ -354,8 +354,8 @@ namespace SC_M4
             is_Blink_NG = status == "NG";
 
         }
-        private string updateVoltage = "";
-        private string updateAmp = "";
+        private string updateVoltageB = "";
+        private string updateAmpB = "";
         private ResultType CompareData(string txt_sw, string txt_lb)
         {
             LogWriter.SaveLog($"TXT Read : {PrepareLogMessage(txt_sw)}, {PrepareLogMessage(txt_lb)}");
@@ -368,8 +368,6 @@ namespace SC_M4
             LogWriter.SaveLog($"Qury master data");
             var master_lb = MasterAll.GetMasterALLByLBName(txt_lb.Substring(0, txt_lb.IndexOf(Properties.Settings.Default.keyCAM2)).Replace("O", "0"));
 
-            //history.master_sw = "null";
-            //history.master_lb = "null";
             string description = "";
             string color_error = "";
 
@@ -385,9 +383,10 @@ namespace SC_M4
 
             LogWriter.SaveLog($"Check RGB");
             string[] colorName = _colorName.Name(_colorName.RgbToHex(rgb.R, rgb.G, rgb.B));
-            description += currentVoltage + "," + currentAmp+",";
-            updateAmp = currentAmp;
-            updateVoltage = currentVoltage;
+            description += currentVoltageB + "," + currentAmpB+",";
+
+            updateAmpB = currentAmpB;
+            updateVoltageB = currentVoltageB;
 
             LogWriter.SaveLog($"Color name :{colorName[3]},{colorName[1]},{colorName[2]} ,{colorName[0]}, R{rgb.R} G{rgb.G} B{rgb.B}");
             description += $"Color name :{colorName[3]},{colorName[1]},{colorName[2]} ,{colorName[0]}, R{rgb.R} G{rgb.G} B{rgb.B}";
@@ -435,9 +434,8 @@ namespace SC_M4
                     history.name_sw = txt_sw;
                     history.result = "OK";
                     history.color = item.color_name + " - " + color;
-                    history.description = "-";
+                    history.description = description;
                     history.Save();
-
                     isStateReset = false;
                     return ResultType.OK;
                 }
@@ -458,8 +456,9 @@ namespace SC_M4
                         color_error = col + " - " + color + " NG";
                     }
                     break;
-
                 }
+
+
             }
             richTextBox2.Invoke(new Action(() =>
             {
@@ -479,6 +478,15 @@ namespace SC_M4
 
             isStateReset = false;
             return ResultType.NG;
+        }
+
+        private bool IsMinMax(dynamic min,dynamic max,dynamic value)
+        {
+            if (value >= min && value <= max)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -348,7 +348,7 @@ namespace SC_M4
         {
             RefreshVideoDevices();
             RefreshComboBoxWithList(comboBoxBaud, this.baudList);
-            RefreshComboBoxWithList(comboBoxCOMPort, SerialPort.GetPortNames());
+            RefreshComboBoxWithList(comboBoxCOMPort, SerialPort.GetPortNames(),true);
         }
         private void RefreshVideoDevices()
         {
@@ -1178,7 +1178,7 @@ namespace SC_M4
         {
             if (manualTest != null)
             {
-                manualTest.lbVoltage.Text = lbVoltage.Text;
+                manualTest.lbVoltage.Text = lbVoltageB.Text;
             }
         }
 
@@ -1186,7 +1186,7 @@ namespace SC_M4
         {
             if (manualTest != null)
             {
-                manualTest.lbAmp.Text = lbAmp.Text;
+                manualTest.lbAmp.Text = lbAmpB.Text;
             }
         }
     }
