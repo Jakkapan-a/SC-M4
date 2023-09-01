@@ -135,8 +135,6 @@ namespace SC_M4
             {
                 stopwatchManualTest = new Stopwatch();
             }
-
-
             if (!IsCapture)
             {
                 pictureBoxCamera01.Image?.Dispose();
