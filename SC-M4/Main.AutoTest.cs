@@ -228,7 +228,7 @@ namespace SC_M4
 
             historyAuto.time_s = (int)Math.Round((stopwatchAuto.ElapsedMilliseconds / 1000.0), 0);
             AppendTxtBox($"Test Times : {historyAuto.time_s}s");
-            historyAuto.result += updateVoltageB + "," + updateAmpB;
+            historyAuto.result += updateVoltageB + "," + updateAmpB + "," + updateVoltageV + "," + updateAmpV;
             historyAuto.Save();
 
             RandersTableHistoryAuto();
@@ -447,14 +447,16 @@ namespace SC_M4
             {
                 try
                 {
-
                     // Set parameter           
                     int pin = 4;
                     byte value = ((byte)pin);
+                    templateData["Command_io"][0] = 0X02;
+                    templateData["Command_io"][1] = 0x43;
                     templateData["Command_io"][2] = 0X49;
                     templateData["Command_io"][3] = 0x50;
                     templateData["Command_io"][4] = value;
                     templateData["Command_io"][6] = (byte)action.servo;
+                    templateData["Command_io"][7] = 0x03;
                     string hex = string.Empty;
                     foreach (var b in templateData["Command_io"])
                     {

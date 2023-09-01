@@ -356,6 +356,9 @@ namespace SC_M4
         }
         private string updateVoltageB = "";
         private string updateAmpB = "";
+        private string updateVoltageV = "";
+        private string updateAmpV = "";
+
         private ResultType CompareData(string txt_sw, string txt_lb)
         {
             LogWriter.SaveLog($"TXT Read : {PrepareLogMessage(txt_sw)}, {PrepareLogMessage(txt_lb)}");
@@ -383,10 +386,12 @@ namespace SC_M4
 
             LogWriter.SaveLog($"Check RGB");
             string[] colorName = _colorName.Name(_colorName.RgbToHex(rgb.R, rgb.G, rgb.B));
-            description += currentVoltageB + "," + currentAmpB+",";
+            description += currentVoltageB + "," + currentAmpB+"," + currentVoltageV +"," + currentAmpV+",";
 
             updateAmpB = currentAmpB;
             updateVoltageB = currentVoltageB;
+            updateAmpV = currentAmpV;
+            updateVoltageV = currentVoltageV;
 
             LogWriter.SaveLog($"Color name :{colorName[3]},{colorName[1]},{colorName[2]} ,{colorName[0]}, R{rgb.R} G{rgb.G} B{rgb.B}");
             description += $"Color name :{colorName[3]},{colorName[1]},{colorName[2]} ,{colorName[0]}, R{rgb.R} G{rgb.G} B{rgb.B}";
@@ -403,41 +408,51 @@ namespace SC_M4
                     history.master_sw = item.nameSW;
                     history.master_lb = item.nameModel;
 
-
-                    if(typeSelected == TypeAction.Manual){
-                        UpdateUIAndInvoke("OK", Color.Green);
-                        // 02 42 49 50 32 30 03
-                        int pin = 50;
-                        byte value = ((byte)pin);
-                        templateData["Command_io"][0] = 0x02;
-                        templateData["Command_io"][1] = 0x43;
-                        templateData["Command_io"][2] = 0X49;
-                        templateData["Command_io"][3] = 0x50;
-                        templateData["Command_io"][4] = value;
-                        templateData["Command_io"][6] = (byte)0x01;
-                        string hex = string.Empty;
-                        foreach (var b in templateData["Command_io"])
-                        {
-                            hex += b.ToString("X2") + " ";
+                    if(IsMinMax(4.0,5.0,voltageV) &&  IsMinMax(450.0,850.0,ampB)){
+                        if(typeSelected == TypeAction.Manual){
+                            UpdateUIAndInvoke("OK", Color.Green);
+                            // 02 42 49 50 32 30 03
+                            int pin = 50;
+                            byte value = ((byte)pin);
+                            templateData["Command_io"][0] = 0x02;
+                            templateData["Command_io"][1] = 0x43;
+                            templateData["Command_io"][2] = 0X49;
+                            templateData["Command_io"][3] = 0x50;
+                            templateData["Command_io"][4] = value;
+                            templateData["Command_io"][6] = (byte)0x01;
+                            string hex = string.Empty;
+                            foreach (var b in templateData["Command_io"])
+                            {
+                                hex += b.ToString("X2") + " ";
+                            }
+                            LogWriter.SaveLog($"Command : {hex}");
+                            // Send parameter
+                            serialPortIO.SerialCommand(templateData["Command_io"]);
                         }
-                        LogWriter.SaveLog($"Command : {hex}");
-                        // Send parameter
-                        serialPortIO.SerialCommand(templateData["Command_io"]);
-                    }
-                    else
-                    {
-                        result_auto_test = ResultType.OK;
-                    }             
+                        else
+                        {
+                            result_auto_test = ResultType.OK;
+                        }             
 
-                    history.name = txtEmployee.Text.Trim();
-                    history.name_lb = txt_lb;
-                    history.name_sw = txt_sw;
-                    history.result = "OK";
-                    history.color = item.color_name + " - " + color;
-                    history.description = description;
-                    history.Save();
-                    isStateReset = false;
-                    return ResultType.OK;
+                        history.name = txtEmployee.Text.Trim();
+                        history.name_lb = txt_lb;
+                        history.name_sw = txt_sw;
+                        history.result = "OK";
+                        history.color = item.color_name + " - " + color;
+                        history.description = description;
+                        history.Save();
+                        isStateReset = false;
+                        return ResultType.OK;
+                    }else{
+                        if(!IsMinMax(4.0,5.0,voltageV) && IsMinMax(450.0,850.0,ampB)){
+                            description += $"Voltage NG : {voltageV}, Min : 4.0, Max : 5.0";
+                        }else if(!IsMinMax(450.0,850.0,ampB) && IsMinMax(4.0,5.0,voltageV) ){
+                            description += $"Amp NG : {ampB}, Min : 450.0, Max : 850.0";
+                        }else{  
+                            description += $"Voltage NG : {voltageV}, Min : 4.0, Max : 5.0";
+                            description += $"Amp NG : {ampB}, Min : 450.0, Max : 850.0";
+                        }
+                    }
                 }
                 else if (item.nameSW == txt_sw)
                 {
@@ -455,14 +470,33 @@ namespace SC_M4
                         string col = item.color_name == string.Empty ? "No color" : item.color_name;
                         color_error = col + " - " + color + " NG";
                     }
+
+                    if(IsMinMax(4.0,5.0,voltageV) &&  IsMinMax(450.0,850.0,ampB))
+                    {
+                        description += $"Voltage and Amp are OK";
+                    }else
+                    {
+                        if (!IsMinMax(4.0, 5.0, voltageV) && IsMinMax(450.0, 850.0, ampB))
+                        {
+                            description += $"Voltage NG : {voltageV}, Min : 4.0, Max : 5.0";
+                        }
+                        else if (!IsMinMax(450.0, 850.0, ampB) && IsMinMax(4.0, 5.0, voltageV))
+                        {
+                            description += $"Amp NG : {ampB}, Min : 450.0, Max : 850.0";
+                        }
+                        else
+                        {
+                            description += $"Voltage NG : {voltageV}, Min : 4.0, Max : 5.0";
+                            description += $"Amp NG : {ampB}, Min : 450.0, Max : 850.0";
+                        }
+                    }
                     break;
                 }
-
-
             }
             richTextBox2.Invoke(new Action(() =>
             {
                 this.richTextBox2.Text += $"\n Color name :{colorName[3]},{colorName[1]},{colorName[2]} ,{colorName[0]}, R{rgb.R} G{rgb.G} B{rgb.B}";
+                this.richTextBox2.Text += description;
             }));
             if(typeSelected == TypeAction.Manual){
                 UpdateUIAndInvoke("NG", Color.Red);

@@ -108,7 +108,7 @@ namespace SC_M4
             this.timerMain = new System.Windows.Forms.Timer(this.components);
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
+            this.lbLineCurrent = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerHomeMain)).BeginInit();
@@ -293,13 +293,12 @@ namespace SC_M4
             this.panelHeader.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelHeader.Controls.Add(this.label12);
-            this.panelHeader.Controls.Add(this.label13);
+            this.panelHeader.Controls.Add(this.lbLineCurrent);
             this.panelHeader.Controls.Add(this.label11);
             this.panelHeader.Controls.Add(this.lbVoltageV);
             this.panelHeader.Controls.Add(this.lbAmpV);
             this.panelHeader.Controls.Add(this.lbVoltageB);
             this.panelHeader.Controls.Add(this.lbAmpB);
-            this.panelHeader.Controls.Add(this.cbQrCode);
             this.panelHeader.Controls.Add(this.btStartStop);
             this.panelHeader.Controls.Add(this.lbTitle);
             this.panelHeader.Location = new System.Drawing.Point(12, 27);
@@ -329,7 +328,7 @@ namespace SC_M4
             this.lbAmpV.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.lbAmpV.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
             this.lbAmpV.ForeColor = System.Drawing.Color.Red;
-            this.lbAmpV.Location = new System.Drawing.Point(870, 9);
+            this.lbAmpV.Location = new System.Drawing.Point(888, 9);
             this.lbAmpV.Name = "lbAmpV";
             this.lbAmpV.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lbAmpV.Size = new System.Drawing.Size(45, 20);
@@ -359,7 +358,7 @@ namespace SC_M4
             this.lbAmpB.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.lbAmpB.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
             this.lbAmpB.ForeColor = System.Drawing.Color.Red;
-            this.lbAmpB.Location = new System.Drawing.Point(870, 38);
+            this.lbAmpB.Location = new System.Drawing.Point(888, 38);
             this.lbAmpB.Name = "lbAmpB";
             this.lbAmpB.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lbAmpB.Size = new System.Drawing.Size(45, 20);
@@ -373,7 +372,7 @@ namespace SC_M4
             this.cbQrCode.AutoSize = true;
             this.cbQrCode.Checked = true;
             this.cbQrCode.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbQrCode.Location = new System.Drawing.Point(955, 4);
+            this.cbQrCode.Location = new System.Drawing.Point(119, 17);
             this.cbQrCode.Name = "cbQrCode";
             this.cbQrCode.Size = new System.Drawing.Size(92, 17);
             this.cbQrCode.TabIndex = 9;
@@ -542,6 +541,7 @@ namespace SC_M4
             this.groupBox1.Controls.Add(this.cbDriveCam01);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.cbQrCode);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.comboBoxCOMPort);
@@ -550,7 +550,7 @@ namespace SC_M4
             this.groupBox1.Controls.Add(this.btConnect);
             this.groupBox1.Controls.Add(this.cbDriveCam02);
             this.groupBox1.Controls.Add(this.comboBoxBaud);
-            this.groupBox1.Location = new System.Drawing.Point(3, 6);
+            this.groupBox1.Location = new System.Drawing.Point(6, 6);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(217, 282);
             this.groupBox1.TabIndex = 0;
@@ -600,7 +600,7 @@ namespace SC_M4
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(2, 31);
+            this.label3.Location = new System.Drawing.Point(2, 43);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(73, 13);
             this.label3.TabIndex = 15;
@@ -609,7 +609,7 @@ namespace SC_M4
             // cbDriveCam01
             // 
             this.cbDriveCam01.FormattingEnabled = true;
-            this.cbDriveCam01.Location = new System.Drawing.Point(79, 28);
+            this.cbDriveCam01.Location = new System.Drawing.Point(79, 40);
             this.cbDriveCam01.Name = "cbDriveCam01";
             this.cbDriveCam01.Size = new System.Drawing.Size(132, 21);
             this.cbDriveCam01.TabIndex = 0;
@@ -645,7 +645,7 @@ namespace SC_M4
             // 
             this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.label1.Location = new System.Drawing.Point(80, 87);
+            this.label1.Location = new System.Drawing.Point(80, 99);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(131, 12);
             this.label1.TabIndex = 10;
@@ -661,7 +661,7 @@ namespace SC_M4
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(2, 63);
+            this.label5.Location = new System.Drawing.Point(2, 75);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(76, 13);
             this.label5.TabIndex = 14;
@@ -691,7 +691,7 @@ namespace SC_M4
             // cbDriveCam02
             // 
             this.cbDriveCam02.FormattingEnabled = true;
-            this.cbDriveCam02.Location = new System.Drawing.Point(79, 55);
+            this.cbDriveCam02.Location = new System.Drawing.Point(79, 67);
             this.cbDriveCam02.Name = "cbDriveCam02";
             this.cbDriveCam02.Size = new System.Drawing.Size(132, 21);
             this.cbDriveCam02.TabIndex = 1;
@@ -992,15 +992,15 @@ namespace SC_M4
             this.label12.TabIndex = 11;
             this.label12.Text = "B+ :";
             // 
-            // label13
+            // lbLineCurrent
             // 
-            this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label13.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
-            this.label13.Location = new System.Drawing.Point(804, 32);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(120, 3);
-            this.label13.TabIndex = 11;
+            this.lbLineCurrent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbLineCurrent.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lbLineCurrent.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            this.lbLineCurrent.Location = new System.Drawing.Point(804, 32);
+            this.lbLineCurrent.Name = "lbLineCurrent";
+            this.lbLineCurrent.Size = new System.Drawing.Size(200, 3);
+            this.lbLineCurrent.TabIndex = 11;
             // 
             // Main
             // 
@@ -1136,7 +1136,7 @@ namespace SC_M4
         private System.Windows.Forms.Label lbAmpV;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label lbLineCurrent;
     }
 }
 

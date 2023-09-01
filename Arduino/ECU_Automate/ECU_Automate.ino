@@ -11,7 +11,7 @@
  * Board 3: Address = 0x45 Offset = binary 00101 (bridge A0 & A1)
 */
 
-Adafruit_INA219 ina219_A(0x40);
+Adafruit_INA219 ina219_B(0x40);
 Adafruit_INA219 ina219_V(0x41);
 
 #define BUTTON_SELECTOR_AUTO_PIN 8
@@ -145,7 +145,7 @@ void serialEvent() {
 void setup() {
   Serial.begin(9600);
   Serial3.begin(9600);
-  ina219_A.begin();
+  ina219_B.begin();
   ina219_V.begin();
 
 
@@ -170,19 +170,14 @@ union DoubleToBytes {
   byte byteArray[4];
 };
 
-bool IsToggleCurrentVoltage = false;
-uint8_t countCurrentUpdate = 0;
+int countCurrentUpdate = 0;
 void UpdateCurrent() {
-  if (millis() - lastTimeUpdateCurrent > 500) {
-
-    IsToggleCurrentVoltage = !IsToggleCurrentVoltage;
+  if (millis() - lastTimeUpdateCurrent > 100) {
     //---------------------------------Update current -----------------------------------------//
     countCurrentUpdate++;
-    if(countCurrentUpdate >0){
+    if(countCurrentUpdate == 1){
       // Update Voltage B
-      double voltage = ina219_A.getBusVoltage_V();
-      // Check voltage is negative
-      
+      double voltage = ina219_B.getBusVoltage_V();
       DoubleToBytes doubleToBytes;
       doubleToBytes.doubleVal = voltage;
       // 02 55 43 00 00 00 00 03
@@ -196,10 +191,11 @@ void UpdateCurrent() {
       data[6] = doubleToBytes.byteArray[3];
       data[7] = 0x03;
       Serial.write(data, sizeof(data));
-
-    }else if(countCurrentUpdate > 1){
+      // Serial.print("VoltageB: ");
+      // Serial.println(voltage);
+    }else if(countCurrentUpdate == 2){
       // Update Amp B
-      double current = ina219_A.getCurrent_mA();
+      double current = ina219_B.getCurrent_mA();
       DoubleToBytes doubleToBytes;
       doubleToBytes.doubleVal = current;
       // 02 55 43 00 00 00 00 03
@@ -213,7 +209,9 @@ void UpdateCurrent() {
       data[6] = doubleToBytes.byteArray[3];
       data[7] = 0x03;
       Serial.write(data, sizeof(data));
-    }else if(countCurrentUpdate > 2){
+      // Serial.print("CurrentB: ");
+      // Serial.println(current);
+    }else if(countCurrentUpdate== 3){
       // Update Voltage V
        double voltage = ina219_V.getBusVoltage_V();
       DoubleToBytes doubleToBytes;
@@ -229,7 +227,9 @@ void UpdateCurrent() {
       data[6] = doubleToBytes.byteArray[3];
       data[7] = 0x03;
       Serial.write(data, sizeof(data));
-    }else if(countCurrentUpdate > 3){
+      // Serial.print("VoltageV: ");
+      // Serial.println(voltage);
+    }else if(countCurrentUpdate == 4){
       // Update Amp V
       double current = ina219_V.getCurrent_mA();
       DoubleToBytes doubleToBytes;
@@ -245,14 +245,10 @@ void UpdateCurrent() {
       data[6] = doubleToBytes.byteArray[3];
       data[7] = 0x03;
       Serial.write(data, sizeof(data));
-      
-      countCurrentUpdate = 0;
-    }
+      // Serial.print("CurrentV: ");
+      // Serial.println(current);
 
-    if (IsToggleCurrentVoltage) {
-     
-    } else {
-     
+      countCurrentUpdate = 0;
     }
     //---------------------------------End Update current -----------------------------------------//
 
