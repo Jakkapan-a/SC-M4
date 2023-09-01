@@ -182,11 +182,11 @@ namespace SC_M4
 
         private void DataReceived(byte[] data)
         {
-            if (InvokeRequired)
-            {
-                Invoke(new UpdateDataReceived(DataReceived), data);
-                return;
-            }
+            // if (InvokeRequired)
+            // {
+            //     Invoke(new UpdateDataReceived(DataReceived), data);
+            //     return;
+            // }
 
             // Find data is STX and EOT 
             if (data.Any<byte>(d => d == 0x02) && data.Any<byte>(d => d == 0x03))
@@ -276,6 +276,13 @@ namespace SC_M4
         {
             try
             {
+
+                if (InvokeRequired)
+                {
+                    Invoke(new Action(() => VoltageUpdate(dataReceived))) ;
+                    return;
+                }
+
                 if (dataReceived.Length >= 7)
                 {
                     byte[] voltageByte = new byte[4] { dataReceived[3], dataReceived[4], dataReceived[5], dataReceived[6] };
@@ -295,6 +302,13 @@ namespace SC_M4
         private void AmpUpdate(byte[] dataReceived)
         {
             try{
+
+                if (InvokeRequired)
+                {
+                    Invoke(new Action(() => AmpUpdate(dataReceived)));
+                    return;
+                }
+
                 if (dataReceived.Length >= 7)
                 {
                     byte[] ampByte = new byte[4] { dataReceived[3], dataReceived[4], dataReceived[5], dataReceived[6] };
@@ -310,9 +324,17 @@ namespace SC_M4
         private ManualTest manualTest;
         private void ModeSelector(byte[] dataReceived)
         {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => ModeSelector(dataReceived)));
+                return;
+            }
+
+
             // Check data is Mode Auto or not 
             if (dataReceived[6] == 0x40)
             {
+      
                 typeSelected = TypeAction.None;
                 stopwatchManualTest.Stop();
                 manualTest?.Close();
@@ -354,8 +376,13 @@ namespace SC_M4
 
         private void ModeReset(byte[] dataReceived)
         {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => ModeReset(dataReceived)));
+                return;
+            }
             // Check data is reset
-            if(dataReceived[3] == 0x52)
+            if (dataReceived[3] == 0x52)
             {
                 isStateReset = true;
                 is_Blink_NG = false;
