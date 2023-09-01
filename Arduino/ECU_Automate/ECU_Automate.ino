@@ -1,8 +1,6 @@
 #include <TcBUTTON.h>
 #include <TcPINOUT.h>
 #include <Servo.h>
-#include <Adafruit_INA219.h>
-
 #define BUTTON_SELECTOR_AUTO_PIN 8
 
 void ASK_ECU_VER(void);
@@ -32,17 +30,6 @@ TcBUTTON btnAskSoftwareVer(BUTTON_ASK_SOFTWARE_VER_PIN, btnAskSoftwareVerPressed
 void btnTouchViewPressed(void);
 void btnTouchViewReleased(void);
 TcBUTTON btnTouchView(BUTTON_TOUCH_VIEW_PIN, btnTouchViewPressed, btnTouchViewReleased);
-//*********************** INPUT Sensor ***********************//
-/* 
- * Up to 4 boards may be connected. Addressing is as follows:
- * Board 0: Address = 0x40 Offset = binary 00000 (no jumpers required)
- * Board 1: Address = 0x41 Offset = binary 00001 (bridge A0 as in the photo above)
- * Board 2: Address = 0x44 Offset = binary 00100 (bridge A1)
- * Board 3: Address = 0x45 Offset = binary 00101 (bridge A0 & A1)
-*/
-Adafruit_INA219 ina219_A(0x40);
-
-
 
 #define SERVO_PIN 6
 Servo servo;
@@ -80,7 +67,6 @@ TcPINOUT solenoid(SOLENOID_PIN);
 TcPINOUT mes(MES_PIN);
 
 // ------------------- Variable -------------------
-const byte UpdateByte[8] = { 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03 };
 const byte UpdateModeNone[8] = { 0x02, 0x55, 0x4D, 0x00, 0x00, 0x00, 0x40, 0x03 };
 const byte UpdateModeAuto[8] = { 0x02, 0x55, 0x4D, 0x00, 0x00, 0x00, 0x41, 0x03 };
 const byte UpdateModeManual[8] = { 0x02, 0x55, 0x4D, 0x00, 0x00, 0x00, 0x42, 0x03 };
@@ -97,14 +83,13 @@ byte TPMS_temps[9];
 uint8_t view_mode_flag = 0;
 
 unsigned long lastTimeBtnStart = 0;
-unsigned long lastTimeUpdateCurrent = 0;
 unsigned long lastTimeServoPosition = 0;
 uint8_t servoPosition = 100;
 uint8_t servoPositionOld = 100;
 uint8_t speedServo = 200;
 const uint8_t servoDiscrepancy = 30;
 const uint8_t servoSlow = 20;
-const uint8_t servoFast = 5;
+const uint8_t servoFast = 2;
 uint8_t GetSpeed(uint8_t servoPositionOld, uint8_t servoPosition);
 
 int countBtnStart = 0;
@@ -147,7 +132,7 @@ void serialEvent() {
 void setup() {
   Serial.begin(9600);
   Serial3.begin(9600);
-  ina219_A.begin();
+
 
   servo.attach(SERVO_PIN);
   servo.write(servoPosition);
@@ -163,28 +148,8 @@ void loop() {
   btnStartOnPush();
   ServoControl();
   UpdateCurrent();
-  // UpdateStatus();
 }
-void UpdateStatus() {
-  if (isUpdateSelectorStatus) {
-    delay(100);
-    if (btnAutoSelector.getState() || btnManualSelector.getState()) {
 
-      if (btnAutoSelector.getState()) {
-        // Serial.write(ResponseModeAuto, sizeof(ResponseModeAuto));
-        // Serial.write(UpdateModeAuto, sizeof(UpdateModeAuto));
-       
-      } else {
-        // Serial.write(ResponseModeManual, sizeof(ResponseModeManual));
-        Serial.write(UpdateModeManual, sizeof(UpdateModeManual));
-      }
-    } else {
-      // Serial.write(ResponseModeNone, sizeof(ResponseModeNone));
-      Serial.write(UpdateModeNone, sizeof(UpdateModeNone));
-    }
-    isUpdateSelectorStatus = false;
-  }
-}
 union DoubleToBytes {
   double doubleVal;
   byte byteArray[4];
@@ -192,14 +157,18 @@ union DoubleToBytes {
 
 bool IsToggleCurrentVoltage = false;
 void UpdateCurrent() {
-  
+  //   double current = ina219_A.getCurrent_mA();
+  // double voltage = ina219_A.getBusVoltage_V();
+  // double power = ina219_A.getPower_mW();
+  // double shuntvoltage = ina219_A.getShuntVoltage_mV();
   if (millis() - lastTimeUpdateCurrent > 500) {
+    
     IsToggleCurrentVoltage = !IsToggleCurrentVoltage;
-     if (IsToggleCurrentVoltage) {
+    if (IsToggleCurrentVoltage) {
       double voltage = ina219_A.getBusVoltage_V();
       DoubleToBytes doubleToBytes;
       doubleToBytes.doubleVal = voltage;
-      // 02 55 56 00 00 00 00 03
+      // 02 55 43 00 00 00 00 03
       byte data[8];
       data[0] = 0x02;
       data[1] = 0x55;
@@ -209,6 +178,7 @@ void UpdateCurrent() {
       data[5] = doubleToBytes.byteArray[2];
       data[6] = doubleToBytes.byteArray[3];
       data[7] = 0x03;
+
       Serial.write(data, sizeof(data));
     } else {
       double current = ina219_A.getCurrent_mA();
@@ -227,65 +197,7 @@ void UpdateCurrent() {
 
       Serial.write(data, sizeof(data));
     }
-
-
-    if (isUpdateSelectorStatus) {
-      if (btnAutoSelector.getState() || btnManualSelector.getState()) {
-         if (btnAutoSelector.getState()) {
-          // Serial.write(ResponseModeAuto, sizeof(ResponseModeAuto));
-          // Serial.write(UpdateModeAuto, sizeof(UpdateModeAuto));
-          // 02, 52, 4D, 00, 00, 00, 40, 03
-          byte data[8];
-          data[0] = 0x02;
-          data[1] = 0x52;
-          data[2] = 0x4D;
-          data[3] = 0x00;
-          data[4] = 0x00;
-          data[5] = 0x00;
-          data[6] = 0x41;
-          data[7] = 0x03;
-          Serial.write(data, sizeof(data));
-          // btnSelectorAutoChanged(true);
-          // btnSelectorAutoChanged(true);
-
-        } else {
-          // Serial.write(ResponseModeManual, sizeof(ResponseModeManual));
-          // Serial.write(UpdateModeManual, sizeof(UpdateModeManual));
-          byte data[8];
-          data[0] = 0x02;
-          data[1] = 0x52;
-          data[2] = 0x4D;
-          data[3] = 0x00;
-          data[4] = 0x00;
-          data[5] = 0x00;
-          data[6] = 0x42;
-          data[7] = 0x03;
-          Serial.write(data, sizeof(data));
-          // btnSelectorManualChanged(true);
-          // btnSelectorManualChanged(true);
-
-        }
-      } else {
-        // Serial.write(ResponseModeNone, sizeof(ResponseModeNone));
-        // Serial.write(UpdateModeNone, sizeof(UpdateModeNone));
-          byte data[8];
-          data[0] = 0x02;
-          data[1] = 0x52;
-          data[2] = 0x4D;
-          data[3] = 0x00;
-          data[4] = 0x00;
-          data[5] = 0x00;
-          data[6] = 0x40;
-          data[7] = 0x03;
-          Serial.write(data, sizeof(data));
-          // btnSelectorAutoChanged(false);
-          // btnSelectorAutoChanged(false);
-
-      }
-      isUpdateSelectorStatus = false;
-    }
-
-
+    
     lastTimeUpdateCurrent = millis();
   }
 }
@@ -539,8 +451,9 @@ void DecodeData(byte data[]) {
 
     } else if (command == 0x1A) {  // 26
       if (action == 0x01) {
-        btnTouchViewReleased();
+         btnTouchViewReleased();
       } else if (action == 0x00) {
+
       }
 
       // btnTouchViewReleased(void);

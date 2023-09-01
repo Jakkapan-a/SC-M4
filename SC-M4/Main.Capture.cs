@@ -136,8 +136,6 @@ namespace SC_M4
                 stopwatchManualTest = new Stopwatch();
             }
 
-            return;
-
 
             if (!IsCapture)
             {
