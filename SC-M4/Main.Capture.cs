@@ -72,7 +72,6 @@ namespace SC_M4
                     using (Graphics g = Graphics.FromImage(scrollablePictureBoxCamera02.Image))
                     {
                         g.DrawRectangle(new Pen(Color.Red, 2), rectangle);
-
                     }
 
                     rectangle = new Rectangle(Properties.Settings.Default.color_x + 2, Properties.Settings.Default.color_y + 2, Properties.Settings.Default.color_width - 6, Properties.Settings.Default.color_high - 6);
